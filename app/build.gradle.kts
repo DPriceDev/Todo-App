@@ -104,54 +104,25 @@ android {
 
 dependencies {
 
-    implementation("com.google.android.material:material:1.4.0")
-//    implementation "androidx.compose.ui:ui:$compose_version"
-//    implementation "androidx.compose.material:material:$compose_version"
-//    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-
     /* Kotlin */
-    implementation(Dependencies.Kotlin.datetime)
-//    implementation(Dependencies.Kotlin.jsonSerialization)
+    implementation(libs.bundles.kotlin)
 
     /* Android */
-    implementation(Dependencies.Android.coreKtx)
-    implementation(Dependencies.Android.appCompat)
-    implementation(Dependencies.Android.runtimeKtx)
-    implementation(Dependencies.Android.fragmentKtx)
-    implementation(Dependencies.Android.workerKtx)
+    implementation(libs.bundles.android)
 
     /* Compose */
-    implementation(Dependencies.Compose.ui)
-    implementation(Dependencies.Compose.material)
-    implementation(Dependencies.Compose.navigation)
-    implementation(Dependencies.Compose.animation)
-    implementation("androidx.activity:activity-compose:1.3.0")
-
-    implementation(Dependencies.Compose.uiTooling)
+    implementation(libs.bundles.compose)
 
     /* Hilt */
-    implementation(Dependencies.Hilt.android)
-    implementation(Dependencies.Hilt.navigation)
-    implementation(Dependencies.Hilt.navigationFragment)
-    kapt(Dependencies.Hilt.androidCompiler)
+    implementation(libs.bundles.hilt)
+    kapt(libs.hiltCompiler)
 
-    /* Unit Test Dependencies */
-    testImplementation(Dependencies.Junit.api)
-    testImplementation(Dependencies.Junit.engine)
-    testImplementation(Dependencies.Junit.parameterized)
-    testImplementation(Dependencies.Mockito.core)
-    testImplementation(Dependencies.Mockito.kotlin)
-    testImplementation(Dependencies.Kotlin.test)
-    testImplementation(Dependencies.Kotlin.testJunit5)
-    debugImplementation(Dependencies.Android.fragmentTesting)
-    testImplementation(Dependencies.Kotlin.coroutineTest)
+    /* Logging */
+    implementation(libs.timber)
 
-    /* UI Test Dependencies */
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation(Dependencies.Kotlin.test)
-    androidTestImplementation(Dependencies.Mockito.core)
-    androidTestImplementation(Dependencies.Mockito.kotlin)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${ Version.compose }")
+    /* Testing */
+    testImplementation(libs.bundles.unitTest)
+    debugImplementation(libs.fragmentTesting)
+
+    androidTestImplementation(libs.bundles.uiTest)
 }

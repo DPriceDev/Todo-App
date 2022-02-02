@@ -16,6 +16,7 @@ materialThree = "1.0.0-alpha04"
 
 # Compose
 compose = "1.2.0-alpha02"
+composeActivity = "1.4.0"
 composeNavigation = "2.5.0-alpha01"
 composeViewModel = "2.5.0-alpha01"
 
@@ -64,7 +65,7 @@ coroutineTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", vers
 
 # Compose
 composeUi = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-composeActivity = { module = "androidx.activity:activity-compose", version.ref = "compose" }
+composeActivity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
 uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 composeMaterial = { module = "androidx.compose.material:material", version.ref = "compose" }
