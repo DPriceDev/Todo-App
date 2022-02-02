@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.theme
+package dev.dprice.productivity.todo.platform.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

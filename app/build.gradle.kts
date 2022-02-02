@@ -9,11 +9,11 @@ plugins {
 
 android {
 
-    compileSdk = 30
+    compileSdk = 31
     defaultConfig {
         applicationId = "dev.dprice.productivity.todo"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -111,7 +111,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
     /* Kotlin */
-//    implementation(Dependencies.Kotlin.datetime)
+    implementation(Dependencies.Kotlin.datetime)
 //    implementation(Dependencies.Kotlin.jsonSerialization)
 
     /* Android */
