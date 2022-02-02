@@ -122,7 +122,7 @@ android = ["coreKtx", "appCompat", "runtimeKtx", "fragmentKtx", "material"]
 compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation"]
 hilt = ["hiltAndroid", "hiltComposeNavigation"]
 uiTest = ["fragmentTesting", "composeUiTest", "junit", "espresso", "test", "mockitoCore", "mockitoKotlin"]
-unitTest = ["test", "junit", "junit5", "junitApi", "junitEngine", "junitParameterized", "coroutineTest", "mockitoCore", "mockitoKotlin"]
+unitTest = ["junit", "junit5", "junitApi", "junitEngine", "junitParameterized", "coroutineTest", "mockitoCore", "mockitoKotlin"]
 
 [plugins]
 hilt = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }

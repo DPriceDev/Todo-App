@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import dev.dprice.productivity.todo.main.ui.MainScreen
-import dev.dprice.productivity.todo.platform.theme.TodoAppTheme
+import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

@@ -8,7 +8,6 @@ plugins {
 }
 
 android {
-
     compileSdk = Config.compileSdk
     defaultConfig {
         applicationId = "dev.dprice.productivity.todo"
@@ -103,6 +102,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.ui)
+    implementation(projects.platform)
+    implementation(projects.features.tasks)
+    implementation(projects.core)
 
     /* Kotlin */
     implementation(libs.bundles.kotlin)

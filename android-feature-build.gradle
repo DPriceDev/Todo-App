@@ -1,0 +1,125 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'de.mannodermaus.android-junit5'
+
+android {
+    compileSdkVersion Config.compileSdk
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion Config.minSdk
+        targetSdkVersion Config.targetSdk
+        versionCode Config.versionCode
+        versionName Config.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        shared {
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            initWith shared
+            debuggable true
+            testCoverageEnabled true
+        }
+
+        espresso {
+            initWith shared
+            debuggable true
+            matchingFallbacks = ['debug']
+        }
+
+        release {
+            initWith shared
+            minifyEnabled true
+            debuggable false
+        }
+    }
+
+    flavorDimensions "env"
+    testBuildType "espresso"
+
+    productFlavors {
+        local {
+            dimension "env"
+        }
+
+        integration {
+            dimension "env"
+        }
+
+        prod {
+            dimension "env"
+        }
+    }
+
+    variantFilter { variant ->
+        def flavorNames = variant.flavors*.name
+        def buildTypeNames = variant.buildType.name
+
+        if (variant.buildType.name in ["shared"]) {
+            setIgnore(true)
+        }
+
+        if (flavorNames.contains("local") && buildTypeNames in ["release"]) {
+            setIgnore(true)
+        }
+
+        if (flavorNames.contains("integration") && buildTypeNames in ["release", "espresso"]) {
+            setIgnore(true)
+        }
+        if (flavorNames.contains("prod") && buildTypeNames in ["debug", "espresso"]) {
+            setIgnore(true)
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+//    packagingOptions {
+//        exclude("META-INF/AL2.0")
+//        exclude("META-INF/LGPL2.1")
+//    }
+}
+
+dependencies {
+    implementation(projects.ui)
+    implementation(projects.platform)
+    implementation(projects.core)
+
+    /* Kotlin */
+    implementation(libs.bundles.kotlin)
+
+    /* Android */
+    implementation(libs.bundles.android)
+
+    /* Compose */
+    implementation(libs.bundles.compose)
+
+    /* Hilt */
+    implementation(libs.bundles.hilt)
+    kapt(libs.hiltCompiler)
+
+    /* Logging */
+    implementation(libs.timber)
+
+    /* Testing */
+    testImplementation(libs.bundles.unitTest)
+    debugImplementation(libs.fragmentTesting)
+
+    androidTestImplementation(libs.bundles.uiTest)
+}
