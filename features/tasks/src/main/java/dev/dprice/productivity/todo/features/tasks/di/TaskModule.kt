@@ -1,21 +1,30 @@
 package dev.dprice.productivity.todo.features.tasks.di
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.dprice.productivity.todo.features.tasks.data.TaskRepositoryImpl
+import dev.dprice.productivity.todo.features.tasks.data.TaskService
+import dev.dprice.productivity.todo.features.tasks.data.TaskServiceImpl
 import dev.dprice.productivity.todo.features.tasks.model.TaskRepository
 import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCaseImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class TaskModule {
+class TaskModule {
 
-    @Binds
-    abstract fun TaskRepositoryImpl.bindTaskRepository() : TaskRepository
+    @Provides
+    fun provideTaskRepository(taskService: TaskService) : TaskRepository = TaskRepositoryImpl(taskService)
 
-    @Binds
-    abstract fun GetTaskListUseCaseImpl.bindGetTaskListUseCase() : GetTaskListUseCase
+    @Provides
+    fun provideGetTaskListUseCase(taskRepository: TaskRepository) : GetTaskListUseCase {
+        return GetTaskListUseCaseImpl(taskRepository)
+    }
+
+    @Provides
+    fun provideTaskService() : TaskService = TaskServiceImpl()
+
+    // todo: task api
 }

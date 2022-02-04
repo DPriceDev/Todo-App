@@ -3,6 +3,7 @@ package dev.dprice.productivity.todo.features.tasks.ui.list
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.features.tasks.model.Task
+import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Clock
@@ -15,7 +16,10 @@ interface TaskListViewModel {
 }
 
 @HiltViewModel
-class TaskListViewModelImpl @Inject constructor() : ViewModel(), TaskListViewModel {
+class TaskListViewModelImpl @Inject constructor(
+    private val getTaskListUseCase: GetTaskListUseCase
+) : ViewModel(),
+    TaskListViewModel {
 
     override val tasks: Flow<List<Task>> = flowOf(
         listOf(
