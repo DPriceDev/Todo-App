@@ -110,6 +110,8 @@ dependencies {
     /* Compose */
     implementation(libs.bundles.compose)
 
+    implementation(libs.bundles.aws)
+
     /* Hilt */
     implementation(libs.bundles.hilt)
     kapt(libs.hiltCompiler)

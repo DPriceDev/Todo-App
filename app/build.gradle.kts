@@ -120,6 +120,8 @@ dependencies {
     implementation(libs.bundles.hilt)
     kapt(libs.hiltCompiler)
 
+    implementation(libs.bundles.aws)
+
     /* Logging */
     implementation(libs.timber)
 

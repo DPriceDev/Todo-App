@@ -26,6 +26,10 @@ composeActivity = "1.4.0"
 composeNavigation = "2.5.0-alpha01"
 composeViewModel = "2.5.0-alpha01"
 
+# AWS
+awsAmplify = "0.15.3"
+awsCognito = "1.31.3"
+
 # Repository
 sqlDelight = "1.5.3"
 
@@ -90,6 +94,10 @@ composeNavigation = { module = "androidx.navigation:navigation-compose", version
 
 composeUiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 
+# AWS
+aws-amplify = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAmplify" }
+aws-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsCognito" }
+
 # Hilt
 hiltAndroid = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
@@ -121,6 +129,7 @@ kotlin = ["stdlib", "reflect", "datetime", "serialization", "coroutine"]
 android = ["coreKtx", "appCompat", "runtimeKtx", "fragmentKtx", "material"]
 compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation"]
 hilt = ["hiltAndroid", "hiltComposeNavigation"]
+aws = ["aws-amplify", "aws-cognito"]
 uiTest = ["fragmentTesting", "composeUiTest", "junit", "espresso", "test", "mockitoCore", "mockitoKotlin"]
 unitTest = ["junit", "junit5", "junitApi", "junitEngine", "junitParameterized", "coroutineTest", "mockitoCore", "mockitoKotlin"]
 
