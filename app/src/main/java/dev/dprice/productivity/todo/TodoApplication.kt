@@ -33,9 +33,9 @@ class TodoApplication @Inject constructor() : Application() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val session = Amplify.Auth.fetchAuthSession()
-                Timber.d("AmplifyQuickstart", "Auth session = $session")
+                Timber.d("AAuth session = $session")
             } catch (error: AuthException) {
-                Timber.e("AmplifyQuickstart", "Failed to fetch auth session", error)
+                Timber.e("AmplifyQuickstart", "auth session", error)
             }
         }
     }
