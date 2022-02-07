@@ -105,7 +105,8 @@ dependencies {
     implementation(projects.ui)
     implementation(projects.platform)
     implementation(projects.features.tasks)
-    implementation(projects.features.auth)
+    implementation(projects.features.auth.feature)
+    implementation(projects.features.auth.library)
     implementation(projects.core)
 
     /* Kotlin */

@@ -3,6 +3,8 @@ include(":ui")
 include(":platform")
 include(":core")
 include(":features:tasks")
+include(":features:auth:feature")
+include(":features:auth:library")
 
 rootProject.name = "TodoApp"
 
@@ -24,4 +26,3 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include(":features:auth")
