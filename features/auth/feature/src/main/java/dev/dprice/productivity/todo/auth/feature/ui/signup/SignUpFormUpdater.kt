@@ -25,15 +25,13 @@ class SignUpFormUpdaterImpl @Inject constructor() : SignUpFormUpdater {
             )
             SignUpAction.Type.UPDATE_PASSWORD -> form.copy(
                 password = updateEntry(form.password, action.value, action.focus) {
-                    validate(it, passwordRegex, minimumPasswordLength)
+                    validate(it, passwordRegex)
                 }
             )
         }
     }
 
-    private fun validate(value: String, regex: Regex, minLength: Int = 0) : Boolean {
-        return value.length >= minLength && value.matches(regex)
-    }
+    private fun validate(value: String, regex: Regex) : Boolean = value.matches(regex)
 
     private fun updateEntry(
         entry: EntryField,
@@ -49,16 +47,14 @@ class SignUpFormUpdaterImpl @Inject constructor() : SignUpFormUpdater {
         return entry.copy(
             value = shortenedValue,
             hasFocus = newFocus,
-            isValid = if(shouldValidate || entry.shouldValidate) isValid else entry.isValid,
+            isValid = isValid,
             shouldValidate = if(lostFocus) shouldValidate else entry.shouldValidate
         )
     }
 
     companion object {
-        // todo: Add valid regex
-        private val emailRegex = """""".toRegex()
-        private val usernameRegex = """([A-Z])\w+""".toRegex()
-        private val passwordRegex = """""".toRegex()
-        private const val minimumPasswordLength = 8
+        private val emailRegex = """[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,8}""".toRegex()
+        private val usernameRegex = """[A-Z0-9a-z_-]{3,64}""".toRegex()
+        private val passwordRegex = """^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@${'$'} %^&*-]).{8,}""".toRegex()
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction
+import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
 import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
 import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCase
@@ -25,7 +26,7 @@ interface SignUpViewModel {
 
 @HiltViewModel
 class SignUpViewModelImpl @Inject constructor(
-    private val signUpCredentialsUpdater: SignUpFormUpdater,
+    private val signUpFormUpdater: SignUpFormUpdater,
     private val signUpUserUseCase: SignUpUserUseCase
 ) : ViewModel(), SignUpViewModel {
 
@@ -33,8 +34,10 @@ class SignUpViewModelImpl @Inject constructor(
     override val viewState: SignUpState by mutableViewState
 
     override fun onFormChanged(action: SignUpAction) {
+        val signUpForm = signUpFormUpdater.updateEntry(viewState.form, action)
         mutableViewState.value = viewState.copy(
-            form = signUpCredentialsUpdater.updateEntry(viewState.form, action)
+            form = signUpForm,
+            canSubmit = signUpForm.isValid
         )
     }
 
@@ -61,4 +64,7 @@ class SignUpViewModelImpl @Inject constructor(
             // re-enable button
         }
     }
+
+    private val SignUpForm.isValid
+        get() = email.isValid && username.isValid && password.isValid
 }

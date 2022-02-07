@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction.*
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpForm
+import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
 import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.components.WavyScaffold
@@ -56,6 +57,7 @@ fun SignUp(
                 )
                 Form(
                     signUpForm = viewModel.viewState.form,
+                    canSubmit = viewModel.viewState.canSubmit,
                     onEntryChanged = viewModel::onFormChanged,
                     onSignInClicked = viewModel::goToSignIn,
                     onSubmitForm = viewModel::submitForm
@@ -87,6 +89,7 @@ private fun TitleBlock(
 @Composable
 private fun Form(
     signUpForm: SignUpForm,
+    canSubmit: Boolean,
     onEntryChanged: (SignUpAction) -> Unit,
     onSubmitForm: () -> Unit,
     onSignInClicked: () -> Unit
@@ -97,7 +100,6 @@ private fun Form(
         modifier = Modifier
             .padding(32.dp)
             .fillMaxWidth(),
-        //verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         RoundedEntryCard(
@@ -123,23 +125,25 @@ private fun Form(
         RoundedEntryCard(
             entry = signUpForm.password,
             modifier = Modifier.onFocusChanged {
-                onEntryChanged(SignUpAction(signUpForm.password.value, it.hasFocus, Type.UPDATE_PASSWORD))
+                onEntryChanged(
+                    SignUpAction(signUpForm.password.value, it.hasFocus, Type.UPDATE_PASSWORD)
+                )
             },
             onImeAction = { focusManager.clearFocus() },
             onTextChanged = {
-                onEntryChanged(SignUpAction(it, signUpForm.password.hasFocus, Type.UPDATE_PASSWORD))
+                onEntryChanged(
+                    SignUpAction(it, signUpForm.password.hasFocus, Type.UPDATE_PASSWORD)
+                )
             }
         )
 
         RoundedButton(
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
-            contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp)
+            contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
+            enabled = canSubmit,
         ) {
-            Text(
-                text = "Create Account",
-                color = TextColour
-            )
+            Text(text = "Create Account")
         }
 
         SignInText(onSignInClicked)
@@ -171,10 +175,30 @@ private fun SignInText(onSignInClicked: () -> Unit) {
     )
 }
 
+/**
+ * Preview
+ */
+
+private val previewViewModel = object: SignUpViewModel {
+    override val viewState: SignUpState = SignUpState()
+
+    override fun onFormChanged(action: SignUpAction) {
+        /* Stub */
+    }
+
+    override fun submitForm() {
+        /* Stub */
+    }
+
+    override fun goToSignIn() {
+        /* Stub */
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun PreviewSignUp() {
     TodoAppTheme {
-        SignUp()
+        SignUp(previewViewModel)
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.dprice.productivity.todo.auth.feature.navigation.authNavGraph
 import dev.dprice.productivity.todo.auth.feature.ui.signup.SignUp
 import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListUi
 import dev.dprice.productivity.todo.platform.model.NavLocation
@@ -15,11 +16,9 @@ fun MainScreen() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = NavLocation.Auth.SignUp.route
+        startDestination = "auth"
     ) {
-        composable(NavLocation.Auth.SignUp.route) {
-            SignUp()
-        }
+        authNavGraph(navController)
 
         composable(NavLocation.Notes.route) {
             TaskListUi()

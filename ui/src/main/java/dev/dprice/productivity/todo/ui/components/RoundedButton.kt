@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.theme.TextColour
+import dev.dprice.productivity.todo.ui.theme.buttonDisabledColour
+import dev.dprice.productivity.todo.ui.theme.buttonDisabledTextColour
 
 @Composable
 fun RoundedButton(
@@ -22,7 +25,11 @@ fun RoundedButton(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: ButtonElevation? = ButtonDefaults.elevation(),
     border: BorderStroke? = null,
-    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        contentColor = TextColour,
+        disabledBackgroundColor = buttonDisabledColour,
+        disabledContentColor = buttonDisabledTextColour
+    ),
     contentPadding: PaddingValues = PaddingValues(
         vertical = 16.dp,
         horizontal = 48.dp

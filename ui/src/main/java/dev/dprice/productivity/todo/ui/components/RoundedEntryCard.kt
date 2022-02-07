@@ -48,14 +48,14 @@ fun RoundedEntryCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .then(modifier),
-            isError = !entry.isValid,
+            isError = !entry.isValid && entry.shouldValidate,
             singleLine = true,
             shape = RoundedCornerShape(percent = 50),
             visualTransformation = entry.visualTransformation,
             keyboardActions = KeyboardActions { onImeAction() },
             keyboardOptions = KeyboardOptions(imeAction = entry.imeAction),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = if(entry.isValid) TextBackground else ErrorBackgroundColour,
+                backgroundColor = if(!entry.isValid && entry.shouldValidate) ErrorBackgroundColour else TextBackground,
                 textColor = TextColour,
                 leadingIconColor = TextColour,
                 errorBorderColor = ErrorTextColour
@@ -77,7 +77,7 @@ fun RoundedEntryCard(
             }
         )
 
-        if(!entry.isValid && entry.errorText != null) {
+        if(!entry.isValid && entry.shouldValidate && entry.errorText != null) {
             Text(
                 text = entry.errorText,
                 color = ErrorTextColour,
