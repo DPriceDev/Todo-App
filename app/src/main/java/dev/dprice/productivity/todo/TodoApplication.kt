@@ -1,11 +1,9 @@
 package dev.dprice.productivity.todo
 
 import android.app.Application
-import com.amplifyframework.AmplifyException
-import com.amplifyframework.auth.AuthException
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
-import com.amplifyframework.kotlin.core.Amplify
 import dagger.hilt.android.HiltAndroidApp
+import dev.dprice.productivity.todo.auth.data.AwsAmplifySource
+import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +11,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-class TodoApplication @Inject constructor() : Application() {
+class TodoApplication : Application() {
+
+    @Inject
+    lateinit var awsAmplifySource: AwsAmplifySource
 
     override fun onCreate() {
         super.onCreate()
@@ -22,20 +23,13 @@ class TodoApplication @Inject constructor() : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        try {
-            Amplify.addPlugin(AWSCognitoAuthPlugin())
-            Amplify.configure(applicationContext)
-            Timber.d("Amplify Initialized")
-        } catch (exception: AmplifyException) {
-            Timber.e("Could not initialize Amplify", exception)
-        }
-
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val session = Amplify.Auth.fetchAuthSession()
-                Timber.d("AAuth session = $session")
-            } catch (error: AuthException) {
-                Timber.e("AmplifyQuickstart", "auth session", error)
+            awsAmplifySource.getCurrentSession().collect {
+                when(it) {
+                    is DataState.Data -> Timber.d("AAuth session = ${ it.value }")
+                    is DataState.Error -> Timber.e("Amplify session error: ${ it.throwable }")
+                    DataState.Loading -> Timber.d("Amplify Loading")
+                }
             }
         }
     }

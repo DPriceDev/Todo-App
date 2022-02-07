@@ -10,9 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.dprice.productivity.todo.auth.model.SignUpResponse
 import dev.dprice.productivity.todo.auth.usecase.SignUpUserUseCase
 import dev.dprice.productivity.todo.ui.components.EntryField
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SignUpForm(
@@ -80,10 +83,20 @@ class SignUpViewModelImpl @Inject constructor(
     }
 
     override fun goToSignIn() {
-        // TODO("Not yet implemented")
+        // TODO("Not yet implemented") // navigate to verify
     }
 
     override fun submitForm() {
-        // TODO("Not yet implemented")
+        // disable button
+        viewModelScope.launch {
+            when(signUpUserUseCase.invoke(viewState.form)) {
+                is SignUpResponse.Code -> TODO() // navigate to verify
+                SignUpResponse.Done -> TODO() // navigate to app
+                is SignUpResponse.Error -> TODO() // show error
+                is SignUpResponse.UserExists -> TODO() // show user already exists error todo: extra information for email or username?
+            }
+
+            // re-enable button
+        }
     }
 }
