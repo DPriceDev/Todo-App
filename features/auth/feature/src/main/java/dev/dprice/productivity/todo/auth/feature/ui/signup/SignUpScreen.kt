@@ -24,6 +24,7 @@ import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction.*
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
+import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.components.WavyScaffold
@@ -36,7 +37,7 @@ fun SignUp(
 ) {
     val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.verticalScroll(scrollState)
+        //modifier = Modifier.verticalScroll(scrollState)
     ) {
         WavyScaffold(
             topContent = {
@@ -64,25 +65,6 @@ fun SignUp(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun TitleBlock(
-    colour: Color
-) {
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier
-            .height(128.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = "Create Account",
-            style = MaterialTheme.typography.h2,
-            color = colour,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
     }
 }
 

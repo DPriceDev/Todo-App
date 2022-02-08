@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
+import dev.dprice.productivity.todo.auth.feature.ui.landing.AuthLanding
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignIn
 import dev.dprice.productivity.todo.auth.feature.ui.signup.SignUp
 
@@ -12,10 +13,13 @@ fun NavGraphBuilder.authNavGraph(
     navController: NavHostController
 ) {
     // todo move route to class
-    navigation(route = "auth", startDestination = AuthNavLocation.SignUp.route) {
+    navigation(route = "auth", startDestination = AuthNavLocation.Landing.route) {
 
         composable(route = AuthNavLocation.Landing.route) {
-
+            AuthLanding(
+                goToSignUp = { navController.navigate(AuthNavLocation.SignUp.route) },
+                goToSignIn = { navController.navigate(AuthNavLocation.SignIn.route) }
+            )
         }
 
         composable(route = AuthNavLocation.SignUp.route) {

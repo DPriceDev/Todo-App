@@ -10,9 +10,6 @@ val Teal200 = Color(0xFF03DAC5)
 val DarkBlue = Color(0xFF1F306D)
 val Yellow = Color(0xFFFFB41B)
 
-val DarkBlueTwo = Color(0xFF2d3282)
-val YellowTwo = Color(0xFFffc040)
-
 val buttonDisabledColour = Color(0xFF777777)
 val buttonDisabledTextColour = Color.White
 
