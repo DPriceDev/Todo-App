@@ -35,16 +35,15 @@ fun AuthLanding(
                 FloatingCircles()
             }
         },
-        wavePosition = WavePosition.Percentage(0.45f),
-        waveHeight = 32.dp,
-        waveFrequency = 0.45f
+        wavePosition = WavePosition.Wrap,
+        waveHeight = 48.dp,
+        waveFrequency = 0.3f
     ) { topPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = topPadding + 8.dp, bottom = 8.dp)
+                .padding(top = topPadding + 8.dp, bottom = 32.dp)
         ) {
             TextBlock(goToSignUp, goToSignIn)
         }
@@ -79,8 +78,10 @@ private fun TextBlock(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally)
         ) {
             RoundedButton(onClick = goToSignIn) {
                 Text(text = "Sign In")

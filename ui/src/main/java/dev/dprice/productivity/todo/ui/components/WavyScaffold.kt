@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 sealed class WavePosition {
     data class Top(val padding: Dp) : WavePosition()
     data class Percentage(val percent: Float) : WavePosition()
+    object Wrap: WavePosition()
 }
 
 @Composable
@@ -30,6 +32,7 @@ fun WavyScaffold(
         val padding = when(wavePosition) {
             is WavePosition.Percentage -> (maxHeight * wavePosition.percent) - (waveHeight / 2)
             is WavePosition.Top -> wavePosition.padding
+            is WavePosition.Wrap -> Dp.Infinity
         }
 
         val transition = rememberInfiniteTransition()
@@ -45,8 +48,19 @@ fun WavyScaffold(
         )
 
         Surface {
-            Box {
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                // need to pass the correct padding here
                 topContent(padding)
+            }
+
+            val cardModifier = if(wavePosition == WavePosition.Wrap) {
+                Modifier.align(Alignment.BottomCenter)
+            } else {
+                Modifier
+                    .fillMaxHeight()
+                    .padding(top = padding)
             }
 
             WaveToppedCard(
@@ -54,9 +68,7 @@ fun WavyScaffold(
                 waveOffset = waveOffset.value,
                 frequency = waveFrequency,
                 backgroundColor = MaterialTheme.colors.background,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(top = padding),
+                modifier = cardModifier,
                 content = {
                     bottomContent(waveHeight)
                 }
