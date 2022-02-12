@@ -18,3 +18,6 @@ val TextHintColour = Color(0x48292929)
 val ErrorBackgroundColour = Color(0xFFFFBCBC)
 val TextBackground = Color.White
 val ErrorTextColour = Color(0xFFE60000)
+val completeColour = Color(0xFF8CE625)
+val inProgressColour = Color(0xFF33A4FF)
+val incompleteColour = Color(0xFFFF3021)
