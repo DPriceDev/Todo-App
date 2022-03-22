@@ -14,10 +14,11 @@ import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.ui.landing.AuthLanding
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignIn
 import dev.dprice.productivity.todo.auth.feature.ui.signup.SignUp
+import dev.dprice.productivity.todo.auth.feature.ui.verifycode.VerifyCode
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldConfig
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import kotlin.math.floor
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -98,6 +99,13 @@ fun AuthNavGraph(
              }
         }
 
+        val config = WavyScaffoldConfig(
+            animatedPosition.value,
+            animatedHeight.value,
+            animatedFrequency.value,
+            correctedOffset,
+        )
+
         // todo move route to class
         AnimatedNavHost(
             authNavController,
@@ -123,11 +131,16 @@ fun AuthNavGraph(
                     animatedPosition.value,
                     animatedFrequency.value,
                     animatedHeight.value,
+                    goToVerifyCode = { authNavController.navigate(AuthNavLocation.VerifySignUp.route) },
+                    goToSignIn = { authNavController.navigate(AuthNavLocation.SignIn.route) }
                 )
             }
 
             composable(route = AuthNavLocation.VerifySignUp.route) {
+                VerifyCode(
+                    config = config,
 
+                )
             }
 
             composable(route = AuthNavLocation.SignIn.route) {

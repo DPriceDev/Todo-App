@@ -28,6 +28,31 @@ data class WavyScaffoldState(
     var waveDuration: MutableState<Int> = mutableStateOf(15_000),
 )
 
+data class WavyScaffoldConfig(
+    val backDropHeight: Dp,
+    val waveHeight: Dp,
+    val waveFrequency: Float,
+    val waveOffsetPercent: Float,
+)
+
+@Composable
+fun WavyBackdropScaffold(
+    config: WavyScaffoldConfig,
+    modifier: Modifier = Modifier,
+    backContent: @Composable BoxScope.(height: Dp) -> Unit,
+    frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,
+) {
+    WavyBackdropScaffold(
+        backRevealHeight = config.backDropHeight,
+        waveHeight = config.waveHeight,
+        waveFrequency = config.waveFrequency,
+        waveOffsetPercent = config.waveOffsetPercent,
+        modifier = modifier,
+        backContent = backContent,
+        frontContent = frontContent
+    )
+}
+
 @Composable
 fun WavyBackdropScaffold(
     backRevealHeight: Dp,

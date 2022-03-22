@@ -36,6 +36,8 @@ fun SignUp(
     position: Dp,
     frequency: Float,
     waveHeight: Dp,
+    goToVerifyCode: () -> Unit,
+    goToSignIn: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
     LaunchedEffect(key1 = wavyScaffoldState.targetPosition) {
@@ -68,8 +70,10 @@ fun SignUp(
                 signUpForm = viewModel.viewState.form,
                 canSubmit = viewModel.viewState.canSubmit,
                 onEntryChanged = viewModel::onFormChanged,
-                onSignInClicked = viewModel::goToSignIn,
-                onSubmitForm = viewModel::submitForm
+                onSignInClicked = goToSignIn,
+                onSubmitForm = {
+                    viewModel.submitForm(goToVerifyCode)
+                }
             )
         }
     }
@@ -175,11 +179,7 @@ private val previewViewModel = object : SignUpViewModel {
         /* Stub */
     }
 
-    override fun submitForm() {
-        /* Stub */
-    }
-
-    override fun goToSignIn() {
+    override fun submitForm(goToVerifyCode: () -> Unit) {
         /* Stub */
     }
 }
@@ -199,6 +199,8 @@ private fun PreviewSignUp() {
             128.dp,
             0.3f,
             128.dp,
+            { },
+            { },
             previewViewModel
         )
     }

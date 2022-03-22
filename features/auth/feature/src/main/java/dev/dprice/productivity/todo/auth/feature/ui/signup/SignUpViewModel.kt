@@ -19,9 +19,9 @@ interface SignUpViewModel {
 
     fun onFormChanged(action: SignUpAction)
 
-    fun submitForm()
-
-    fun goToSignIn()
+    fun submitForm(
+        goToVerifyCode: () -> Unit
+    )
 }
 
 @HiltViewModel
@@ -41,11 +41,9 @@ class SignUpViewModelImpl @Inject constructor(
         )
     }
 
-    override fun goToSignIn() {
-        // TODO("Not yet implemented") // navigate to verify
-    }
-
-    override fun submitForm() {
+    override fun submitForm(
+        goToVerifyCode: () -> Unit
+    ) {
         // disable button
         viewModelScope.launch {
             val response = signUpUserUseCase.invoke(
@@ -55,7 +53,7 @@ class SignUpViewModelImpl @Inject constructor(
             )
 
             when(response) {
-                is SignUpResponse.Code -> TODO() // navigate to verify
+                is SignUpResponse.Code -> goToVerifyCode()
                 SignUpResponse.Done -> TODO() // navigate to app
                 is SignUpResponse.Error -> TODO() // show error
                 is SignUpResponse.UserExists -> TODO() // show user already exists error todo: extra information for email or username?
