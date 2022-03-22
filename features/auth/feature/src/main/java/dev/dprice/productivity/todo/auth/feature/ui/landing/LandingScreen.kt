@@ -23,54 +23,50 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.RoundedButton
-import dev.dprice.productivity.todo.ui.components.WavePosition
-import dev.dprice.productivity.todo.ui.components.WavyScaffold
+import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.*
-import kotlinx.coroutines.delay
 
 @Composable
 fun AuthLanding(
+    wavyScaffoldState: WavyScaffoldState,
+    offset: Float,
+    wavePosition: Dp,
+    frequency: Float,
+    waveHeight: Dp,
     goToSignUp: () -> Unit,
     goToSignIn: () -> Unit
 ) {
+    BoxWithConstraints {
+        val position = maxHeight - 264.dp
 
-    var positionState : WavePosition by remember {
-        mutableStateOf(WavePosition.Percentage(0.6f))
-    }
-
-    LaunchedEffect(key1 = true) {
-        repeat(100) {
-            delay(4000)
-            positionState = WavePosition.Top(150.dp)
-            delay(4000)
-            positionState = WavePosition.Percentage(0.6f)
+        LaunchedEffect(key1 = wavyScaffoldState.targetPosition) {
+            wavyScaffoldState.targetPosition.value = position
+            wavyScaffoldState.targetFrequency.value = 0.3f
+            wavyScaffoldState.targetHeight.value = 48.dp
         }
-    }
 
-    // todo need to make scaffold with variable wave height
-    // todo or use offset padding?
-    WavyScaffold(
-        backContent = { height ->
-            Box(
-                modifier = Modifier.height(height + 64.dp)
-            ) {
-                Circles()
-            }
-        },
-        position = positionState,
-        waveHeight = 48.dp,
-        waveFrequency = 0.3f
-    ) { topPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = topPadding + 8.dp, bottom = 32.dp)
+        WavyBackdropScaffold(
+            backRevealHeight = wavePosition,
+            waveHeight = waveHeight,
+            waveFrequency = frequency,
+            waveOffsetPercent = offset,
+            backContent = {
+                Circles(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(position)
+                )
+            },
         ) {
-            TextBlock(goToSignUp, goToSignIn)
+            TextBlock(
+                goToSignUp,
+                goToSignIn,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }
@@ -78,12 +74,15 @@ fun AuthLanding(
 @Composable
 private fun TextBlock(
     goToSignUp: () -> Unit,
-    goToSignIn: () -> Unit
+    goToSignIn: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier.padding(horizontal = 32.dp)
+        modifier = Modifier
+            .padding(32.dp)
+            .then(modifier)
     ) {
         Text(
             text = "Much Todo About Nothing",
@@ -121,9 +120,8 @@ private fun TextBlock(
 
 @Composable
 private fun Circles(
-
+    modifier: Modifier
 ) {
-
     val cross = rememberVectorPainter(image = Icons.Rounded.Clear) to incompleteColour
     val progress = rememberVectorPainter(image = Icons.Rounded.MoreHoriz) to inProgressColour
     val complete = rememberVectorPainter(image = Icons.Rounded.Check) to completeColour
@@ -141,7 +139,7 @@ private fun Circles(
     )
 
     Canvas(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         val diameter = size.width / 4.5f
         val width = size.width - diameter
@@ -267,7 +265,19 @@ private fun DrawScope.circleIcon(
 @Preview
 @Composable
 private fun PreviewAuthLanding() {
+    val state = WavyScaffoldState(
+        targetPosition = remember{ mutableStateOf(400.dp) },
+        targetHeight = remember{ mutableStateOf(48.dp) },
+    )
+
     TodoAppTheme {
-        AuthLanding({ }) { }
+        AuthLanding(
+            state,
+            0f,
+            400.dp,
+            0.3f,
+            128.dp,
+            { }
+        ) { }
     }
 }

@@ -25,6 +25,7 @@ compose = "1.2.0-alpha02"
 composeActivity = "1.4.0"
 composeNavigation = "2.5.0-alpha01"
 composeViewModel = "2.5.0-alpha01"
+animatedComposeNavigation = "0.24.4-alpha"
 
 # AWS
 awsAmplify = "0.15.3"
@@ -91,6 +92,7 @@ composeAnimation = { module = "androidx.compose.animation:animation", version.re
 composeMaterialThree = { module = "androidx.compose.material3:material3", version.ref = "materialThree" }
 composeViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeViewModel" }
 composeNavigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+composeAnimatedNavigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "animatedComposeNavigation" }
 
 composeUiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 
@@ -127,7 +129,7 @@ mockitoKotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "m
 [bundles]
 kotlin = ["stdlib", "reflect", "datetime", "serialization", "coroutine"]
 android = ["coreKtx", "appCompat", "runtimeKtx", "fragmentKtx", "material"]
-compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation"]
+compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation", "composeAnimatedNavigation"]
 hilt = ["hiltAndroid", "hiltComposeNavigation"]
 aws = ["aws-amplify", "aws-cognito"]
 uiTest = ["fragmentTesting", "composeUiTest", "junit", "espresso", "test", "mockitoCore", "mockitoKotlin"]

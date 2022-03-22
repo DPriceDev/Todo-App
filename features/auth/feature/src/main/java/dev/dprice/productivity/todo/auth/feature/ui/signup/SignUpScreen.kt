@@ -1,10 +1,9 @@
 package dev.dprice.productivity.todo.auth.feature.ui.signup
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -15,6 +14,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,44 +25,51 @@ import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
 import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
-import dev.dprice.productivity.todo.ui.components.WavePosition
-import dev.dprice.productivity.todo.ui.components.WavyScaffold
+import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
 fun SignUp(
+    wavyScaffoldState: WavyScaffoldState,
+    offset: Float,
+    position: Dp,
+    frequency: Float,
+    waveHeight: Dp,
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
-    val scrollState = rememberScrollState()
-    BoxWithConstraints(
-        //modifier = Modifier.verticalScroll(scrollState)
+    LaunchedEffect(key1 = wavyScaffoldState.targetPosition) {
+        wavyScaffoldState.targetPosition.value = 128.dp
+        wavyScaffoldState.targetFrequency.value = 0.3f
+        wavyScaffoldState.targetHeight.value = 128.dp
+    }
+
+    WavyBackdropScaffold(
+        backRevealHeight = position,
+        waveHeight = waveHeight,
+        waveFrequency = frequency,
+        waveOffsetPercent = offset,
+        backContent = {
+            TitleBlock(colour = MaterialTheme.colors.background)
+        }
     ) {
-        WavyScaffold(
-            position = WavePosition.Top(128.dp),
-            backContent = {
-                Box(modifier = Modifier.padding(top = 16.dp)) {
-                    TitleBlock(colour = MaterialTheme.colors.background)
-                }
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TitleBlock(colour = MaterialTheme.colors.primary)
-                Text(
-                    text = "Sign up for a free account today!",
-                    modifier = Modifier.padding(top = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp
-                )
-                Form(
-                    signUpForm = viewModel.viewState.form,
-                    canSubmit = viewModel.viewState.canSubmit,
-                    onEntryChanged = viewModel::onFormChanged,
-                    onSignInClicked = viewModel::goToSignIn,
-                    onSubmitForm = viewModel::submitForm
-                )
-            }
+            TitleBlock(colour = MaterialTheme.colors.primary)
+            Text(
+                text = "Sign up for a free account today!",
+                modifier = Modifier.padding(top = 16.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp
+            )
+            Form(
+                signUpForm = viewModel.viewState.form,
+                canSubmit = viewModel.viewState.canSubmit,
+                onEntryChanged = viewModel::onFormChanged,
+                onSignInClicked = viewModel::goToSignIn,
+                onSubmitForm = viewModel::submitForm
+            )
         }
     }
 }
@@ -160,7 +167,7 @@ private fun SignInText(onSignInClicked: () -> Unit) {
  * Preview
  */
 
-private val previewViewModel = object: SignUpViewModel {
+private val previewViewModel = object : SignUpViewModel {
     override val viewState: SignUpState = SignUpState()
 
     override fun onFormChanged(action: SignUpAction) {
@@ -179,7 +186,19 @@ private val previewViewModel = object: SignUpViewModel {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewSignUp() {
+    val state = WavyScaffoldState(
+        targetPosition = remember{ mutableStateOf(128.dp) },
+        targetHeight = remember{ mutableStateOf(128.dp) }
+    )
+
     TodoAppTheme {
-        SignUp(previewViewModel)
+        SignUp(
+            state,
+            0f,
+            128.dp,
+            0.3f,
+            128.dp,
+            previewViewModel
+        )
     }
 }

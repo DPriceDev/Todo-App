@@ -13,15 +13,14 @@ import dev.dprice.productivity.todo.auth.feature.model.signin.SignInForm
 import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModel
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModelImpl
-import dev.dprice.productivity.todo.ui.components.WavePosition
-import dev.dprice.productivity.todo.ui.components.WavyScaffold
+import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 
 @Composable
 fun VerifyCode(
     viewModel: SignInViewModel = hiltViewModel<SignInViewModelImpl>()
 ) {
-    WavyScaffold(
-        position = WavePosition.Top(16.dp),
+    WavyBackdropScaffold(
+        backRevealHeight = 16.dp,
         backContent = {
             Box(modifier = Modifier.padding(top = 16.dp)) {
                 TitleBlock(colour = MaterialTheme.colors.background)

@@ -1,23 +1,29 @@
 package dev.dprice.productivity.todo.main.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.dprice.productivity.todo.auth.feature.navigation.authNavGraph
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import dev.dprice.productivity.todo.auth.feature.navigation.AuthNavGraph
 import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListUi
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "auth"
+        startDestination = "Auth"
     ) {
-        authNavGraph(navController)
+        composable("Auth") {
+            AuthNavGraph(navController = navController)
+        }
 
         composable(NavLocation.Notes.route) {
             TaskListUi()
