@@ -47,6 +47,7 @@ fun AuthLanding(
             wavyScaffoldState.targetPosition.value = position
             wavyScaffoldState.targetFrequency.value = 0.3f
             wavyScaffoldState.targetHeight.value = 48.dp
+            wavyScaffoldState.waveDuration.value = 15_000
         }
 
         WavyBackdropScaffold(

@@ -42,6 +42,7 @@ fun SignUp(
         wavyScaffoldState.targetPosition.value = 128.dp
         wavyScaffoldState.targetFrequency.value = 0.3f
         wavyScaffoldState.targetHeight.value = 128.dp
+        wavyScaffoldState.waveDuration.value = 15_000
     }
 
     WavyBackdropScaffold(
