@@ -3,20 +3,13 @@ package dev.dprice.productivity.todo.auth.feature.ui.landing
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Dangerous
-import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -26,18 +19,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.drawscope.withTransform
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.WavePosition
 import dev.dprice.productivity.todo.ui.components.WavyScaffold
 import dev.dprice.productivity.todo.ui.theme.*
+import kotlinx.coroutines.delay
 
 @Composable
 fun AuthLanding(
@@ -45,24 +36,38 @@ fun AuthLanding(
     goToSignIn: () -> Unit
 ) {
 
+    var positionState : WavePosition by remember {
+        mutableStateOf(WavePosition.Percentage(0.6f))
+    }
+
+    LaunchedEffect(key1 = true) {
+        repeat(100) {
+            delay(4000)
+            positionState = WavePosition.Top(150.dp)
+            delay(4000)
+            positionState = WavePosition.Percentage(0.6f)
+        }
+    }
+
     // todo need to make scaffold with variable wave height
     // todo or use offset padding?
     WavyScaffold(
-        topContent = { height ->
+        backContent = { height ->
             Box(
                 modifier = Modifier.height(height + 64.dp)
             ) {
                 Circles()
             }
         },
-        wavePosition = WavePosition.Wrap,
+        position = positionState,
         waveHeight = 48.dp,
         waveFrequency = 0.3f
     ) { topPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
+                .fillMaxSize()
                 .padding(top = topPadding + 8.dp, bottom = 32.dp)
         ) {
             TextBlock(goToSignUp, goToSignIn)

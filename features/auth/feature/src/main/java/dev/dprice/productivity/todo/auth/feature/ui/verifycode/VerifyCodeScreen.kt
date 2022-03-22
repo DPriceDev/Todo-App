@@ -10,12 +10,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.feature.model.signin.SignInAction
 import dev.dprice.productivity.todo.auth.feature.model.signin.SignInForm
-import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction
 import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModel
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModelImpl
-import dev.dprice.productivity.todo.auth.feature.ui.signup.SignUpViewModel
-import dev.dprice.productivity.todo.auth.feature.ui.signup.SignUpViewModelImpl
+import dev.dprice.productivity.todo.ui.components.WavePosition
 import dev.dprice.productivity.todo.ui.components.WavyScaffold
 
 @Composable
@@ -23,7 +21,8 @@ fun VerifyCode(
     viewModel: SignInViewModel = hiltViewModel<SignInViewModelImpl>()
 ) {
     WavyScaffold(
-        topContent = {
+        position = WavePosition.Top(16.dp),
+        backContent = {
             Box(modifier = Modifier.padding(top = 16.dp)) {
                 TitleBlock(colour = MaterialTheme.colors.background)
             }

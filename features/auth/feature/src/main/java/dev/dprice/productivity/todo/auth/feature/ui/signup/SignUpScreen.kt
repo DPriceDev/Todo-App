@@ -3,14 +3,12 @@ package dev.dprice.productivity.todo.auth.feature.ui.signup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,8 +25,8 @@ import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
 import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
+import dev.dprice.productivity.todo.ui.components.WavePosition
 import dev.dprice.productivity.todo.ui.components.WavyScaffold
-import dev.dprice.productivity.todo.ui.theme.TextColour
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
@@ -36,11 +34,12 @@ fun SignUp(
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
     val scrollState = rememberScrollState()
-    Column(
+    BoxWithConstraints(
         //modifier = Modifier.verticalScroll(scrollState)
     ) {
         WavyScaffold(
-            topContent = {
+            position = WavePosition.Top(128.dp),
+            backContent = {
                 Box(modifier = Modifier.padding(top = 16.dp)) {
                     TitleBlock(colour = MaterialTheme.colors.background)
                 }

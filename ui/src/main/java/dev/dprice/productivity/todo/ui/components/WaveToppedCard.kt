@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.shapes.waveBottomedShape
 import dev.dprice.productivity.todo.ui.shapes.waveToppedShape
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
@@ -43,13 +44,35 @@ fun WaveToppedCard(
             elevation = elevation,
             content = content
         )
-//        ) {
-//            Box(
-//                modifier = Modifier.padding(top = waveHeight)
-//            ) {
-//                content()
-//            }
-//        }
+    }
+}
+
+@Composable
+fun WaveBottomCard(
+    modifier: Modifier = Modifier,
+    waveOffset: Float = 0f,
+    waveHeight: Dp = 8.dp,
+    frequency: Float = 1f,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    border: BorderStroke? = null,
+    elevation: Dp = 1.dp,
+    content: @Composable () -> Unit
+) {
+    with(LocalDensity.current) {
+        Card(
+            modifier = modifier,
+            shape = waveBottomedShape(
+                height = waveHeight.toPx(),
+                offset = waveOffset,
+                frequency = frequency
+            ),
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+            border = border,
+            elevation = elevation,
+            content = content
+        )
     }
 }
 
@@ -58,6 +81,19 @@ fun WaveToppedCard(
 fun PreviewFluidTopCard() {
     TodoAppTheme {
         WaveToppedCard {
+            Text(
+                text = "Example Body",
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewFluidBottomCard() {
+    TodoAppTheme {
+        WaveBottomCard {
             Text(
                 text = "Example Body",
                 modifier = Modifier.padding(8.dp)

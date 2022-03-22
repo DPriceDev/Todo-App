@@ -3,7 +3,7 @@
 # Config
 
 # Gradle
-gradle = "7.1.1"
+gradle = "7.1.2"
 
 # Kotlin
 kotlin = "1.6.10"
