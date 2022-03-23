@@ -26,3 +26,8 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+include(":features:auth:landing")
+include(":features:auth:ui")
+include(":features:auth:signup")
+include(":features:auth:signin")
+include(":features:auth:verify")
