@@ -1,18 +1,12 @@
 package dev.dprice.productivity.todo.ui.components
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
@@ -20,24 +14,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
-data class WavyScaffoldState(
-    val duration: Int = 500,
-    var targetPosition: MutableState<Dp> = mutableStateOf(0.dp),
-    var targetFrequency: MutableState<Float> = mutableStateOf(1f),
-    var targetHeight: MutableState<Dp> = mutableStateOf(0.dp),
-    var waveDuration: MutableState<Int> = mutableStateOf(15_000),
-)
-
-data class WavyScaffoldConfig(
-    val backDropHeight: Dp,
-    val waveHeight: Dp,
-    val waveFrequency: Float,
-    val waveOffsetPercent: Float,
-)
-
 @Composable
 fun WavyBackdropScaffold(
-    config: WavyScaffoldConfig,
+    config: WavyScaffoldState.Config,
     modifier: Modifier = Modifier,
     backContent: @Composable BoxScope.(height: Dp) -> Unit,
     frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,

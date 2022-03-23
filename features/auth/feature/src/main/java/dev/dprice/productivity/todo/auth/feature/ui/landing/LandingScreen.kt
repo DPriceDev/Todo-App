@@ -26,49 +26,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.RoundedButton
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.*
 
 @Composable
-fun AuthLanding(
+fun AuthLandingTopContent(
+    backDropHeight: Dp,
+    modifier: Modifier = Modifier
+) {
+    Circles(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(backDropHeight)
+            .then(modifier)
+    )
+}
+
+@Composable
+fun AuthLandingBottomContent(
     wavyScaffoldState: WavyScaffoldState,
-    offset: Float,
-    wavePosition: Dp,
-    frequency: Float,
-    waveHeight: Dp,
     goToSignUp: () -> Unit,
     goToSignIn: () -> Unit
 ) {
-    BoxWithConstraints {
-        val position = maxHeight - 264.dp
-
-        LaunchedEffect(key1 = wavyScaffoldState.targetPosition) {
-            wavyScaffoldState.targetPosition.value = position
-            wavyScaffoldState.targetFrequency.value = 0.3f
-            wavyScaffoldState.targetHeight.value = 48.dp
-            wavyScaffoldState.waveDuration.value = 15_000
-        }
-
-        WavyBackdropScaffold(
-            backRevealHeight = wavePosition,
-            waveHeight = waveHeight,
-            waveFrequency = frequency,
-            waveOffsetPercent = offset,
-            backContent = {
-                Circles(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(position)
-                )
-            },
-        ) {
-            TextBlock(
-                goToSignUp,
-                goToSignIn,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        TextBlock(
+            goToSignUp,
+            goToSignIn,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -272,12 +260,8 @@ private fun PreviewAuthLanding() {
     )
 
     TodoAppTheme {
-        AuthLanding(
+        AuthLandingBottomContent(
             state,
-            0f,
-            400.dp,
-            0.3f,
-            128.dp,
             { }
         ) { }
     }

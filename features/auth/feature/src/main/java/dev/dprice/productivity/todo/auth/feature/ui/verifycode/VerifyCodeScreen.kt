@@ -15,11 +15,11 @@ import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModel
 import dev.dprice.productivity.todo.auth.feature.ui.signin.SignInViewModelImpl
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldConfig
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @Composable
 fun VerifyCode(
-    config: WavyScaffoldConfig,
+    config: WavyScaffoldState.Config,
     viewModel: SignInViewModel = hiltViewModel<SignInViewModelImpl>()
 ) {
     WavyBackdropScaffold(

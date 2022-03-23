@@ -23,59 +23,39 @@ import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpAction.*
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.model.signup.SignUpState
 import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
-import dev.dprice.productivity.todo.ui.components.RoundedButton
-import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
+fun SignUpTopContent() {
+    TitleBlock(colour = MaterialTheme.colors.background)
+}
+
+@Composable
 fun SignUp(
-    wavyScaffoldState: WavyScaffoldState,
-    offset: Float,
-    position: Dp,
-    frequency: Float,
-    waveHeight: Dp,
     goToVerifyCode: () -> Unit,
     goToSignIn: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
-    LaunchedEffect(key1 = wavyScaffoldState.targetPosition) {
-        wavyScaffoldState.targetPosition.value = 128.dp
-        wavyScaffoldState.targetFrequency.value = 0.3f
-        wavyScaffoldState.targetHeight.value = 128.dp
-        wavyScaffoldState.waveDuration.value = 15_000
-    }
-
-    WavyBackdropScaffold(
-        backRevealHeight = position,
-        waveHeight = waveHeight,
-        waveFrequency = frequency,
-        waveOffsetPercent = offset,
-        backContent = {
-            TitleBlock(colour = MaterialTheme.colors.background)
-        }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TitleBlock(colour = MaterialTheme.colors.primary)
-            Text(
-                text = "Sign up for a free account today!",
-                modifier = Modifier.padding(top = 16.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp
-            )
-            Form(
-                signUpForm = viewModel.viewState.form,
-                canSubmit = viewModel.viewState.canSubmit,
-                onEntryChanged = viewModel::onFormChanged,
-                onSignInClicked = goToSignIn,
-                onSubmitForm = {
-                    viewModel.submitForm(goToVerifyCode)
-                }
-            )
-        }
+        TitleBlock(colour = MaterialTheme.colors.primary)
+        Text(
+            text = "Sign up for a free account today!",
+            modifier = Modifier.padding(top = 16.dp),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp
+        )
+        Form(
+            signUpForm = viewModel.viewState.form,
+            canSubmit = viewModel.viewState.canSubmit,
+            onEntryChanged = viewModel::onFormChanged,
+            onSignInClicked = goToSignIn,
+            onSubmitForm = {
+                viewModel.submitForm(goToVerifyCode)
+            }
+        )
     }
 }
 
@@ -187,18 +167,8 @@ private val previewViewModel = object : SignUpViewModel {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewSignUp() {
-    val state = WavyScaffoldState(
-        targetPosition = remember{ mutableStateOf(128.dp) },
-        targetHeight = remember{ mutableStateOf(128.dp) }
-    )
-
     TodoAppTheme {
         SignUp(
-            state,
-            0f,
-            128.dp,
-            0.3f,
-            128.dp,
             { },
             { },
             previewViewModel
