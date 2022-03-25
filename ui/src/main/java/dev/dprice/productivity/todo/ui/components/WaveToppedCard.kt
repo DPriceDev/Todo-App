@@ -1,7 +1,6 @@
 package dev.dprice.productivity.todo.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -9,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +32,9 @@ fun WaveToppedCard(
 ) {
     with(LocalDensity.current) {
         Card(
-            modifier = modifier,
+            modifier = Modifier
+                .clipToBounds()
+                .then(modifier),
             shape = waveToppedShape(
                 height = waveHeight.toPx(),
                 offset = waveOffset,

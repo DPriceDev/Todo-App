@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TitleBlock(
-    colour: Color
+    colour: Color,
+    title: String = "Create Account"
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter,
@@ -23,7 +24,7 @@ fun TitleBlock(
             .fillMaxWidth()
     ) {
         Text(
-            text = "Create Account",
+            text = title,
             style = MaterialTheme.typography.h2,
             color = colour,
             modifier = Modifier.padding(bottom = 16.dp)

@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.feature.ui.signup
+package dev.dprice.productivity.todo.auth.signup.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction.Type
@@ -27,42 +26,45 @@ import dev.dprice.productivity.todo.auth.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.signup.model.SignUpState
 import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpViewModel
 import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpViewModelImpl
-import dev.dprice.productivity.todo.ui.components.RoundedButton
-import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
-import dev.dprice.productivity.todo.ui.components.TitleBlock
+import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
-fun SignUpTopContent() {
-    TitleBlock(colour = MaterialTheme.colors.background)
-}
-
-@Composable
 fun SignUp(
+    state: WavyScaffoldState,
     goToVerifyCode: () -> Unit,
     goToSignIn: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TitleBlock(colour = MaterialTheme.colors.primary)
-        Text(
-            text = "Sign up for a free account today!",
-            modifier = Modifier.padding(top = 16.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp
-        )
-        Form(
-            signUpForm = viewModel.viewState.form,
-            canSubmit = viewModel.viewState.canSubmit,
-            onEntryChanged = viewModel::onFormChanged,
-            onSignInClicked = goToSignIn,
-            onSubmitForm = {
-                viewModel.submitForm(goToVerifyCode)
+    WavyBackdropScaffold(
+        state = state,
+        backContent = {
+            TitleBlock(colour = MaterialTheme.colors.background)
+        },
+        frontContent = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TitleBlock(colour = MaterialTheme.colors.primary)
+                Text(
+                    text = "Sign up for a free account today!",
+                    modifier = Modifier.padding(top = 16.dp),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.body1,
+                )
+                Form(
+                    signUpForm = viewModel.viewState.form,
+                    canSubmit = viewModel.viewState.canSubmit,
+                    onEntryChanged = viewModel::onFormChanged,
+                    onSignInClicked = goToSignIn,
+                    onSubmitForm = {
+                        goToVerifyCode()
+                        //viewModel.submitForm(goToVerifyCode)
+                    }
+                )
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -77,7 +79,7 @@ private fun Form(
 
     Column(
         modifier = Modifier
-            .padding(32.dp)
+            .padding(horizontal = 32.dp, vertical = 24.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -120,7 +122,7 @@ private fun Form(
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-            enabled = canSubmit,
+            enabled = true,
         ) {
             Text(text = "Create Account")
         }
@@ -144,6 +146,7 @@ private fun SignInText(onSignInClicked: () -> Unit) {
 
     ClickableText(
         text = submitText,
+        style = MaterialTheme.typography.body1,
         onClick = { offset ->
             submitText.getStringAnnotations("signIn", offset, offset)
                 .firstOrNull()
@@ -174,7 +177,10 @@ private val previewViewModel = object : SignUpViewModel {
 @Composable
 private fun PreviewSignUp() {
     TodoAppTheme {
+        val state = WavyScaffoldState()
+
         SignUp(
+            state,
             { },
             { },
             previewViewModel

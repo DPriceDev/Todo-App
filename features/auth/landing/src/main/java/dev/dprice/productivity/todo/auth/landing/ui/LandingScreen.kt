@@ -9,7 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -23,39 +23,35 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.RoundedButton
+import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.*
 
 @Composable
-fun AuthLandingTopContent(
-    backDropHeight: Dp,
-    modifier: Modifier = Modifier
-) {
-    Circles(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(backDropHeight)
-            .then(modifier)
-    )
-}
-
-@Composable
-fun AuthLandingBottomContent(
-    wavyScaffoldState: WavyScaffoldState,
+fun AuthLanding(
+    state: WavyScaffoldState,
     goToSignUp: () -> Unit,
     goToSignIn: () -> Unit
 ) {
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        TextBlock(
-            goToSignUp,
-            goToSignIn,
-            modifier = Modifier.align(Alignment.BottomCenter)
+    BoxWithConstraints() {
+        WavyBackdropScaffold(
+            state = state,
+            backContent = {
+                Circles(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(this@BoxWithConstraints.maxHeight - 248.dp)
+                )
+            },
+            frontContent = {
+                TextBlock(
+                    goToSignUp = goToSignUp,
+                    goToSignIn = goToSignIn,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         )
     }
 }
@@ -74,8 +70,8 @@ private fun TextBlock(
             .then(modifier)
     ) {
         Text(
-            text = "Much Todo About Nothing",
-            style = MaterialTheme.typography.h2,
+            text = "Much Todo",
+            style = MaterialTheme.typography.h1,
             textAlign = TextAlign.Center,
             color = Yellow
         )
@@ -255,12 +251,12 @@ private fun DrawScope.circleIcon(
 @Composable
 private fun PreviewAuthLanding() {
     val state = WavyScaffoldState(
-        targetPosition = remember{ mutableStateOf(400.dp) },
-        targetHeight = remember{ mutableStateOf(48.dp) },
+        initialBackDropHeight = 400.dp,
+        initialWaveHeight = 48.dp,
     )
 
     TodoAppTheme {
-        AuthLandingBottomContent(
+        AuthLanding(
             state,
             { }
         ) { }
