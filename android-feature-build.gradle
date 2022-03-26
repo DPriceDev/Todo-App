@@ -34,6 +34,7 @@ android {
         }
 
         release {
+            shrinkResources true
             initWith shared
             minifyEnabled true
             debuggable false
