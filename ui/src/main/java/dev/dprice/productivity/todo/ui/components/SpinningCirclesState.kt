@@ -30,6 +30,7 @@ class SpinningCirclesState {
         val x: Float,
         val y: Float,
         private val initialScaleDelay: Int,
+        private val scaleStartOffsetPercent: Float,
         private val initialRotation: Float,
         private val rotationDirection: RotationDirection,
         val type: Type,
@@ -40,7 +41,7 @@ class SpinningCirclesState {
 
         suspend fun start() = coroutineScope {
             launch { animateRotation(rotationDirection) }
-            launch { animateScale(initialScaleDelay + 300) }
+            launch { animateScale(scaleStartOffsetPercent) }
             launch { animateInitialScale(initialScaleDelay) }
         }
 
@@ -55,16 +56,14 @@ class SpinningCirclesState {
             )
         }
 
-        private suspend fun animateScale(delay: Int) {
+        private suspend fun animateScale(startOffsetPercent: Float) {
             animatableScale.animateTo(0.75f, animationSpec = tween(0))
             animatableScale.animateTo(
                 targetValue = 1.0f,
                 animationSpec = infiniteRepeatable(
-                    animation = tween(
-                        durationMillis = 2000,
-                        delayMillis = delay
-                    ),
-                    repeatMode = RepeatMode.Reverse
+                    animation = tween(durationMillis = 2000),
+                    repeatMode = RepeatMode.Reverse,
+                    initialStartOffset = StartOffset((2000 * startOffsetPercent).toInt(), StartOffsetType.FastForward)
                 )
             )
         }
@@ -94,18 +93,18 @@ class SpinningCirclesState {
 
     companion object {
         private val circles = listOf(
-            Circle(-0.1f, -0.1f, 700, 90f, RotationDirection.CW, Type.CROSS),
-            Circle(0.5f, 0.05f, 800, 20f, RotationDirection.CCW, Type.PROGRESS),
-            Circle(0.9f, 0.2f, 400,  140f, RotationDirection.CCW, Type.COMPLETE),
-            Circle(-0.14f, 0.3f, 0,  60f, RotationDirection.CW, Type.CROSS),
-            Circle(0.4f, 0.35f, 650,  20f, RotationDirection.CCW, Type.CROSS),
-            Circle(0.7f, 0.5f, 550, 110f, RotationDirection.CW, Type.PROGRESS),
-            Circle(0.2f, 0.6f, 200,  40f, RotationDirection.CW, Type.COMPLETE),
-            Circle(1.1f, 0.7f, 0,  20f, RotationDirection.CW, Type.CROSS),
-            Circle(0.8f, 0.8f, 300,  150f, RotationDirection.CCW, Type.COMPLETE),
-            Circle(0.45f, 0.9f, 750,  30f, RotationDirection.CCW, Type.PROGRESS),
-            Circle(0.8f, 1.15f, 600,  70f, RotationDirection.CW, Type.CROSS),
-            Circle(0.1f, 1.05f, 0,  160f, RotationDirection.CCW, Type.COMPLETE),
+            Circle(-0.1f, -0.1f, 700, 0.1f, 90f, RotationDirection.CW, Type.CROSS),
+            Circle(0.5f, 0.05f, 800, 0.9f, 20f, RotationDirection.CCW, Type.PROGRESS),
+            Circle(0.9f, 0.2f, 400, 0.1f, 140f, RotationDirection.CCW, Type.COMPLETE),
+            Circle(-0.14f, 0.3f, 0, 0.5f, 60f, RotationDirection.CW, Type.CROSS),
+            Circle(0.4f, 0.35f, 650, 0.3f, 20f, RotationDirection.CCW, Type.CROSS),
+            Circle(0.7f, 0.5f, 1500, 0.7f, 110f, RotationDirection.CW, Type.PROGRESS),
+            Circle(0.2f, 0.6f, 200, 0.2f, 40f, RotationDirection.CW, Type.COMPLETE),
+            Circle(1.1f, 0.7f, 1400, 0.5f, 20f, RotationDirection.CW, Type.CROSS),
+            Circle(0.8f, 0.8f, 300, 0.8f, 150f, RotationDirection.CCW, Type.COMPLETE),
+            Circle(0.45f, 0.9f, 1000, 0f, 30f, RotationDirection.CCW, Type.PROGRESS),
+            Circle(0.8f, 1.15f, 600, 0.25f, 70f, RotationDirection.CW, Type.CROSS),
+            Circle(0.1f, 1.05f, 1700, 0.6f, 160f, RotationDirection.CCW, Type.COMPLETE),
         )
     }
 }

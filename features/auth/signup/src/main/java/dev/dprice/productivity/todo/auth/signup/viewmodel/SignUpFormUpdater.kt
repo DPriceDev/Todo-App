@@ -39,7 +39,7 @@ class SignUpFormUpdaterImpl @Inject constructor() : SignUpFormUpdater {
         newFocus: Boolean,
         validator: (String) -> Boolean
     ): EntryField {
-        val shortenedValue = newValue.take(entry.maxLength)
+        val shortenedValue = newValue.take(entry.maxLength).trim()
         val lostFocus = entry.hasFocus && !newFocus
         val isValid = validator(shortenedValue)
         val shouldValidate = entry.hasFocus && !newFocus && !isValid

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
@@ -20,6 +21,8 @@ fun WavyBackdropScaffold(
     state: WavyScaffoldState,
     modifier: Modifier = Modifier,
     phaseOffset: Float = 0.0f,
+    backgroundColour: Color = MaterialTheme.colors.surface,
+    foregroundColour: Color = MaterialTheme.colors.background,
     backContent: @Composable BoxScope.(height: Dp) -> Unit,
     frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,
 ) {
@@ -28,6 +31,8 @@ fun WavyBackdropScaffold(
         waveHeight = state.getWaveHeight().value,
         waveFrequency = state.getFrequency().value,
         waveOffsetPercent = state.getPhase().value + phaseOffset,
+        backgroundColour = backgroundColour,
+        foregroundColour = foregroundColour,
         modifier = modifier,
         backContent = backContent,
         frontContent = frontContent
@@ -41,6 +46,8 @@ fun WavyBackdropScaffold(
     waveHeight: Dp = 128.dp,
     waveFrequency: Float = 0.3f,
     waveOffsetPercent: Float = 0.0f,
+    backgroundColour: Color = MaterialTheme.colors.surface,
+    foregroundColour: Color = MaterialTheme.colors.background,
     backContent: @Composable BoxScope.(height: Dp) -> Unit,
     frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,
 ) {
@@ -53,7 +60,7 @@ fun WavyBackdropScaffold(
             modifier = Modifier
                 .width(maxWidth)
                 .height(maxHeight),
-            color = MaterialTheme.colors.background
+            color = foregroundColour,
         ) {
             Box(
                 modifier = Modifier.size(maxWidth, maxHeight)
@@ -67,6 +74,7 @@ fun WavyBackdropScaffold(
         ) {
             WaveBottomCard(
                 modifier = Modifier.size(this@BoxWithConstraints.maxWidth, backDropHeight),
+                backgroundColor = backgroundColour,
                 waveHeight = waveHeight,
                 frequency = waveFrequency,
                 waveOffset = waveOffsetPercent

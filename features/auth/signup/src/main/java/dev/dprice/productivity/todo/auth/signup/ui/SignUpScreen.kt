@@ -50,12 +50,11 @@ fun SignUp(
                 )
                 Form(
                     signUpForm = viewModel.viewState.form,
-                    canSubmit = viewModel.viewState.canSubmit,
+                    buttonEnablement = viewModel.viewState.buttonEnablement,
                     onEntryChanged = viewModel::onFormChanged,
                     onSignInClicked = goToSignIn,
                     onSubmitForm = {
-                        goToVerifyCode()
-                        //viewModel.submitForm(goToVerifyCode)
+                        viewModel.submitForm(goToVerifyCode)
                     }
                 )
             }
@@ -66,7 +65,7 @@ fun SignUp(
 @Composable
 private fun Form(
     signUpForm: SignUpForm,
-    canSubmit: Boolean,
+    buttonEnablement: ButtonEnablement,
     onEntryChanged: (SignUpAction) -> Unit,
     onSubmitForm: () -> Unit,
     onSignInClicked: () -> Unit
@@ -115,13 +114,12 @@ private fun Form(
         )
 
         RoundedButton(
+            text = "Create Account",
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-            enabled = true,
-        ) {
-            Text(text = "Create Account")
-        }
+            buttonEnablement = buttonEnablement,
+        )
 
         TextWithClickableSuffix(
             text = "Already have an account? ",
@@ -151,7 +149,11 @@ private val previewViewModel = object : SignUpViewModel {
 @Composable
 private fun PreviewSignUp() {
     TodoAppTheme {
-        val state = WavyScaffoldState()
+        val state = WavyScaffoldState(
+            initialBackDropHeight = 128.dp,
+            initialWaveHeight = 128.dp,
+            initialFrequency = 0.3f
+        )
 
         SignUp(
             state,

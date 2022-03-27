@@ -8,8 +8,8 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -24,19 +24,16 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import dev.dprice.productivity.todo.ui.theme.completeColour
 import dev.dprice.productivity.todo.ui.theme.inProgressColour
 import dev.dprice.productivity.todo.ui.theme.incompleteColour
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun SpinningCircles(
     modifier: Modifier = Modifier,
-    scope: CoroutineScope = rememberCoroutineScope(),
-    state: SpinningCirclesState = remember {
-        SpinningCirclesState().apply {
-            scope.launch { this@apply.initialize() }
-        }
-    },
+    state: SpinningCirclesState = remember { SpinningCirclesState() },
 ) {
+    LaunchedEffect(key1 = state) {
+        state.initialize()
+    }
+
     BoxWithConstraints(
         modifier = modifier
     ) {
@@ -58,7 +55,7 @@ fun SpinningCircles(
                 ) {
                     rotate(
                         degrees = circle.getRotation().value,
-                        pivot = Offset(diameter / 2, diameter / 2)
+                        pivot = Offset(diameter / 3, diameter / 3)
                     ) {
                         scale(
                             scale = circle.getScale().value * circle.getInitialScale().value,

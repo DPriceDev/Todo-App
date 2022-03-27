@@ -39,10 +39,11 @@ fun VerifyCode(
                 TitleBlock(colour = MaterialTheme.colors.primary, title = "Verify Sign Up")
 
                 Text(
-                    text = "Please enter the verification code sent to your email",
+                    text = "Please enter the verification code that has been sent to your email address",
                     modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onBackground
                 )
 
                 CodeEntry()
@@ -59,6 +60,14 @@ fun VerifyCode(
                 ) {
                     Text(text = "Verify")
                 }
+
+                Text(
+                    text = "Not received your verification code yet?",
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onBackground
+                )
 
                 TextWithClickableSuffix(
                     text = "",
@@ -110,7 +119,9 @@ fun CodeEntry() {
 @Composable
 private fun PreviewVerifyCode() {
     val state = WavyScaffoldState(
-
+        initialBackDropHeight = 128.dp,
+        initialWaveHeight = 128.dp,
+        initialFrequency = 0.3f
     )
     TodoAppTheme() {
         VerifyCode(state = state)

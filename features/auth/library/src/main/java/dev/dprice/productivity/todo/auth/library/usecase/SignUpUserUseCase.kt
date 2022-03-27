@@ -24,7 +24,7 @@ class SignUpUserUseCaseImpl @Inject constructor(
         password: String
     ) : SignUpResponse {
         // todo remove auth reference here
-        val attributes = mapOf(AuthUserAttributeKey.email() to username)
+        val attributes = mapOf(AuthUserAttributeKey.email() to email)
         return awsAmplifySource.createUser(username, password, attributes)
     }
 }

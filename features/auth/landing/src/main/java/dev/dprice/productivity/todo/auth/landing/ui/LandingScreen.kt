@@ -80,13 +80,14 @@ private fun TextBlock(
                 .padding(top = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally)
         ) {
-            RoundedButton(onClick = goToSignIn) {
-                Text(text = "Sign In")
-            }
-
-            RoundedButton(onClick = goToSignUp) {
-                Text(text = "Sign Up")
-            }
+            RoundedButton(
+                text = "Sign In",
+                onClick = goToSignIn
+            )
+            RoundedButton(
+                text = "Sign Up",
+                onClick = goToSignUp
+            )
         }
     }
 }
