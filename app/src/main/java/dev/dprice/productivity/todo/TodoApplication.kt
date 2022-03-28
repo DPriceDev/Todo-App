@@ -2,7 +2,7 @@ package dev.dprice.productivity.todo
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import dev.dprice.productivity.todo.auth.library.data.AwsAmplifySource
+import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class TodoApplication : Application() {
 
     @Inject
-    lateinit var awsAmplifySource: AwsAmplifySource
+    lateinit var authenticationSource: AuthenticationSource
 
     override fun onCreate() {
         super.onCreate()
@@ -24,7 +24,7 @@ class TodoApplication : Application() {
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            awsAmplifySource.getCurrentSession().collect {
+            authenticationSource.getCurrentSession().collect {
                 when(it) {
                     is DataState.Data -> Timber.d("AAuth session = ${ it.value }")
                     is DataState.Error -> Timber.e("Amplify session error: ${ it.throwable }")

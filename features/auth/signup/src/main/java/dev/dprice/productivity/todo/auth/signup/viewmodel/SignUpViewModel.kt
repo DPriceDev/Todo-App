@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
 import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCase
+import dev.dprice.productivity.todo.auth.signup.model.ErrorState
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction
 import dev.dprice.productivity.todo.auth.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.signup.model.SignUpState
@@ -22,7 +23,8 @@ interface SignUpViewModel {
     fun onFormChanged(action: SignUpAction)
 
     fun submitForm(
-        goToVerifyCode: () -> Unit
+        goToVerifyCode: (String) -> Unit,
+        goToMainApp: () -> Unit
     )
 }
 
@@ -48,9 +50,9 @@ class SignUpViewModelImpl @Inject constructor(
     }
 
     override fun submitForm(
-        goToVerifyCode: () -> Unit
+        goToVerifyCode: (String) -> Unit,
+        goToMainApp: () -> Unit
     ) {
-        // disable button
         mutableViewState.value = viewState.copy(buttonEnablement = ButtonEnablement.LOADING)
 
         Timber.tag("Sign Up ViewModel").d(
@@ -65,15 +67,21 @@ class SignUpViewModelImpl @Inject constructor(
             )
 
             when(response) {
-                is SignUpResponse.Code -> goToVerifyCode()
-                SignUpResponse.Done -> TODO() // navigate to app
-                is SignUpResponse.Error -> TODO() // show error
-                is SignUpResponse.UserExists -> TODO() // show user already exists error todo: extra information for email or username?
+                is SignUpResponse.Code -> goToVerifyCode(response.username)
+                SignUpResponse.Done -> goToMainApp()
+                is SignUpResponse.Error -> {
+                    mutableViewState.value = viewState.copy(
+                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        error = ErrorState.Message("Error Test!")
+                    )
+                }
+                is SignUpResponse.UserExists -> {
+                    mutableViewState.value = viewState.copy(
+                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        error = ErrorState.Message("Existing user error!")
+                    )
+                }
             }
-
-            // re-enable button
-            // todo: re-enable only for error cases?
-            mutableViewState.value = viewState.copy(buttonEnablement = ButtonEnablement.ENABLED)
         }
     }
 

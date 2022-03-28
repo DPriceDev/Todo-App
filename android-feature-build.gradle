@@ -78,6 +78,11 @@ android {
         }
     }
 
+    sourceSets {
+        integration.java.srcDirs("src/nonlocal/java")
+        prod.java.srcDirs("src/nonlocal/java")
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11

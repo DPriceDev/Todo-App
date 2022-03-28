@@ -17,7 +17,8 @@ fun MainScreen() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "Auth"
+        startDestination = "Auth",
+        route = "MainApp"
     ) {
         composable("Auth") {
             AuthScreen(navController = navController)

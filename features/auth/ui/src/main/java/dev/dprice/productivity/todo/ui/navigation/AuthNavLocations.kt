@@ -5,7 +5,10 @@ sealed class AuthNavLocation(
 ) {
     object Landing : AuthNavLocation("auth-landing")
     object SignUp : AuthNavLocation("auth-sign-up")
-    object VerifySignUp : AuthNavLocation("auth-sign-up-verify")
+    object VerifySignUp : AuthNavLocation("auth-sign-up-verify/{username}") {
+        const val username = "username"
+        fun location(username: String) = "auth-sign-up-verify/$username"
+    }
     object SignIn : AuthNavLocation("auth-sign-in")
     object MultiFactor : AuthNavLocation("auth-mfa")
     object ForgotPassword : AuthNavLocation("auth-forgot")

@@ -1,10 +1,10 @@
 package dev.dprice.productivity.todo.auth.library.usecase
 
-import com.amplifyframework.auth.AuthUserAttributeKey
-import dev.dprice.productivity.todo.auth.library.data.AwsAmplifySource
+import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
 import javax.inject.Inject
 
+// todo: Redundant?
 interface SignUpUserUseCase {
 
     suspend operator fun invoke(
@@ -15,7 +15,7 @@ interface SignUpUserUseCase {
 }
 
 class SignUpUserUseCaseImpl @Inject constructor(
-    private val awsAmplifySource: AwsAmplifySource
+    private val authenticationSource: AuthenticationSource
 ) : SignUpUserUseCase {
 
     override suspend fun invoke(
@@ -23,8 +23,6 @@ class SignUpUserUseCaseImpl @Inject constructor(
         email: String,
         password: String
     ) : SignUpResponse {
-        // todo remove auth reference here
-        val attributes = mapOf(AuthUserAttributeKey.email() to email)
-        return awsAmplifySource.createUser(username, password, attributes)
+        return authenticationSource.createUser(username, email, password)
     }
 }

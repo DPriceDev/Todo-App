@@ -5,13 +5,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.outlined.Password
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,18 +35,20 @@ data class EntryField(
 fun RoundedEntryCard(
     entry: EntryField,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle =  LocalTextStyle.current,
     onImeAction: () -> Unit = { },
     onTextChanged: (String) -> Unit,
 ) {
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         OutlinedTextField(
             value = entry.value,
             onValueChange = onTextChanged,
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(modifier),
+            modifier = Modifier.fillMaxWidth(),
             isError = !entry.isValid && entry.shouldValidate,
             singleLine = true,
+            textStyle = textStyle,
             shape = RoundedCornerShape(percent = 50),
             visualTransformation = entry.visualTransformation,
             keyboardActions = KeyboardActions { onImeAction() },

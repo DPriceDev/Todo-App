@@ -10,9 +10,10 @@ import dev.dprice.productivity.todo.auth.landing.ui.AuthLanding
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.navigation.AuthNavLocation
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
+import javax.inject.Inject
 
 @OptIn(ExperimentalAnimationApi::class)
-class LandingAuthNavigationComponent : AuthNavigationComponent {
+class LandingAuthNavigationComponent @Inject constructor() : AuthNavigationComponent {
     override val navLocation: AuthNavLocation = AuthNavLocation.Landing
 
     override fun navigationContent(

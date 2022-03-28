@@ -9,12 +9,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import dev.dprice.productivity.todo.auth.feature.sdk.AWSAmplifySourceImpl
-import dev.dprice.productivity.todo.auth.library.data.AwsAmplifySource
-import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCase
-import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCaseImpl
-import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdater
-import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdaterImpl
+import dev.dprice.productivity.todo.auth.feature.sdk.AWSAmplifySource
+import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
@@ -27,8 +23,8 @@ class AuthModule {
     fun provideAwsAmplifySource(
         @ApplicationContext context: Context,
         plugins: Set<@JvmSuppressWildcards Plugin<*>>
-    ): AwsAmplifySource {
-        return AWSAmplifySourceImpl(
+    ): AuthenticationSource {
+        return AWSAmplifySource(
             context,
             plugins,
             Dispatchers.IO
@@ -38,10 +34,4 @@ class AuthModule {
     @Provides
     @IntoSet
     fun provideAwsAmplifyAuthPlugin(): Plugin<*> = AWSCognitoAuthPlugin()
-
-    @Provides
-    fun provideSignUpFormUpdater() : SignUpFormUpdater = SignUpFormUpdaterImpl()
-
-    @Provides
-    fun provideSignUpUserUseCase(awsAmplifySource: AwsAmplifySource) : SignUpUserUseCase = SignUpUserUseCaseImpl(awsAmplifySource)
 }

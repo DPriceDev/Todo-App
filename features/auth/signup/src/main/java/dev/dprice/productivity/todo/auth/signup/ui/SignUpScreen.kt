@@ -28,8 +28,9 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 @Composable
 fun SignUp(
     state: WavyScaffoldState,
-    goToVerifyCode: () -> Unit,
+    goToVerifyCode: (String) -> Unit,
     goToSignIn: () -> Unit,
+    goToMainApp: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
 ) {
     WavyBackdropScaffold(
@@ -54,7 +55,10 @@ fun SignUp(
                     onEntryChanged = viewModel::onFormChanged,
                     onSignInClicked = goToSignIn,
                     onSubmitForm = {
-                        viewModel.submitForm(goToVerifyCode)
+                        viewModel.submitForm(
+                            goToVerifyCode,
+                            goToMainApp
+                        )
                     }
                 )
             }
@@ -140,7 +144,7 @@ private val previewViewModel = object : SignUpViewModel {
         /* Stub */
     }
 
-    override fun submitForm(goToVerifyCode: () -> Unit) {
+    override fun submitForm(goToVerifyCode: (String) -> Unit, goToMainApp: () -> Unit) {
         /* Stub */
     }
 }
@@ -157,6 +161,7 @@ private fun PreviewSignUp() {
 
         SignUp(
             state,
+            { },
             { },
             { },
             previewViewModel

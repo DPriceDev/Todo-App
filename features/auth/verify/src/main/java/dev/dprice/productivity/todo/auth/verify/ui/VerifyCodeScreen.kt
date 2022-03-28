@@ -1,18 +1,19 @@
 package dev.dprice.productivity.todo.auth.verify.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.verify.viewmodel.VerifyCodeViewModel
 import dev.dprice.productivity.todo.auth.verify.viewmodel.VerifyCodeViewModelImpl
@@ -22,6 +23,8 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 @Composable
 fun VerifyCode(
     state: WavyScaffoldState,
+    username: String,
+    goToMainApp: () -> Unit,
     viewModel: VerifyCodeViewModel = hiltViewModel<VerifyCodeViewModelImpl>()
 ) {
     WavyBackdropScaffold(
@@ -46,20 +49,36 @@ fun VerifyCode(
                     color = MaterialTheme.colors.onBackground
                 )
 
-                CodeEntry()
+                RoundedEntryCard(
+                    entry = viewModel.viewState.code,
+                    textStyle = MaterialTheme.typography.h2.copy(
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .width(256.dp)
+                        .onFocusChanged {
+                            viewModel.updateCode(viewModel.viewState.code.value, it.hasFocus)
+                        },
+                    onImeAction = {
+                        focusManager.clearFocus()
+                        viewModel.onSubmit(username, goToMainApp)
+                    },
+                    onTextChanged = {
+                        viewModel.updateCode(it, viewModel.viewState.code.hasFocus)
+                    },
 
-                // todo: 6 squares
-                // circle around focused
-                // move focus to each one selected
+                )
 
                 RoundedButton(
-                    onClick = viewModel::onSubmit,
+                    text = "Verify",
+                    onClick = {
+                          viewModel.onSubmit(username, goToMainApp = goToMainApp)
+                    },
                     modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
                     contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-                    enabled = viewModel.canSubmit,
-                ) {
-                    Text(text = "Verify")
-                }
+                    buttonEnablement = viewModel.viewState.buttonEnablement,
+                )
 
                 Text(
                     text = "Not received your verification code yet?",
@@ -80,37 +99,6 @@ fun VerifyCode(
     )
 }
 
-@Composable
-fun CodeEntry() {
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier.padding(horizontal = 32.dp, vertical = 24.dp)
-    ) {
-        repeat(2) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-                repeat(3) {
-                    Surface(
-                        shape = RoundedCornerShape(24.dp),
-                        modifier = Modifier.size(56.dp)
-                    ) {
-                        Box(
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "6",
-                                fontSize = 24.sp
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 /**
  * Preview
  */
@@ -124,6 +112,6 @@ private fun PreviewVerifyCode() {
         initialFrequency = 0.3f
     )
     TodoAppTheme() {
-        VerifyCode(state = state)
+        VerifyCode(state = state, "testUser", { })
     }
 }

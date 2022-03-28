@@ -12,9 +12,10 @@ import dev.dprice.productivity.todo.auth.verify.ui.VerifyCode
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.navigation.AuthNavLocation
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
+import javax.inject.Inject
 
 @OptIn(ExperimentalAnimationApi::class)
-class VerifyAuthNavigationComponent : AuthNavigationComponent {
+class VerifyAuthNavigationComponent @Inject constructor(): AuthNavigationComponent {
     override val navLocation: AuthNavLocation = AuthNavLocation.VerifySignUp
 
     override fun navigationContent(
@@ -39,8 +40,15 @@ class VerifyAuthNavigationComponent : AuthNavigationComponent {
                     animationSpec = tween(durationMillis = 700)
                 )
             }
-        ) {
-            VerifyCode(state)
+        ) { backStackEntry ->
+            VerifyCode(
+                state = state,
+                username = backStackEntry
+                    .arguments
+                    ?.getString(AuthNavLocation.VerifySignUp.username)
+                    ?: throw Throwable("Missing username provided to verify code"),
+                goToMainApp = { appNavHostController.navigate("MainApp") }
+            )
         }
     }
 

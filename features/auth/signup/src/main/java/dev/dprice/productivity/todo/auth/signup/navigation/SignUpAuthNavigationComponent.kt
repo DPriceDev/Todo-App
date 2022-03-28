@@ -12,9 +12,10 @@ import dev.dprice.productivity.todo.auth.signup.ui.SignUp
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.navigation.AuthNavLocation
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
+import javax.inject.Inject
 
 @OptIn(ExperimentalAnimationApi::class)
-class SignUpAuthNavigationComponent : AuthNavigationComponent {
+class SignUpAuthNavigationComponent @Inject constructor() : AuthNavigationComponent {
     override val navLocation: AuthNavLocation = AuthNavLocation.SignUp
 
     override fun navigationContent(
@@ -48,8 +49,9 @@ class SignUpAuthNavigationComponent : AuthNavigationComponent {
         ) {
             SignUp(
                 state = state,
-                goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.route) },
-                goToSignIn = { authNavHostController.navigate(AuthNavLocation.SignIn.route) }
+                goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.location(it)) },
+                goToSignIn = { authNavHostController.navigate(AuthNavLocation.SignIn.route) },
+                goToMainApp = { appNavHostController.navigate("MainApp") }
             )
         }
     }
