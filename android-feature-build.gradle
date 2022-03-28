@@ -13,7 +13,7 @@ android {
         targetSdkVersion Config.targetSdk
         versionCode Config.versionCode
         versionName Config.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "dev.dprice.productivity.todo.ui.test.UiTestRunner"
     }
 
     buildTypes {
@@ -109,6 +109,7 @@ dependencies {
     implementation(projects.ui)
     implementation(projects.platform)
     implementation(projects.core)
+    androidTestImplementation(projects.ui.test)
 
     /* Kotlin */
     implementation(libs.bundles.kotlin)
@@ -133,4 +134,6 @@ dependencies {
     debugImplementation(libs.fragmentTesting)
 
     androidTestImplementation(libs.bundles.uiTest)
+
+    kaptAndroidTest(libs.hiltKaptTest)
 }
