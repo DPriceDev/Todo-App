@@ -1,6 +1,8 @@
 package dev.dprice.productivity.todo.auth.landing.navigation
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
@@ -24,7 +26,18 @@ class LandingAuthNavigationComponent @Inject constructor() : AuthNavigationCompo
         maxHeight: Dp,
         maxWidth: Dp,
     ) {
-        builder.composable(route = AuthNavLocation.Landing.route) {
+        builder.composable(
+            route = AuthNavLocation.Landing.route,
+            enterTransition = {
+                when(initialState.destination.route) {
+                    AuthNavLocation.VerifySignUp.route -> slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(durationMillis = 700)
+                    )
+                    else -> null
+                }
+            }
+        ) {
             AuthLanding(
                 state = state,
                 goToSignUp = { authNavHostController.navigate(AuthNavLocation.SignUp.route) },

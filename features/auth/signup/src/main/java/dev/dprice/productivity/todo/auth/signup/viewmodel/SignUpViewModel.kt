@@ -32,7 +32,8 @@ interface SignUpViewModel {
 class SignUpViewModelImpl @Inject constructor(
     private val signUpFormUpdater: SignUpFormUpdater,
     private val signUpUserUseCase: SignUpUserUseCase
-) : ViewModel(), SignUpViewModel {
+) : ViewModel(),
+    SignUpViewModel {
 
     private val mutableViewState: MutableState<SignUpState> = mutableStateOf(SignUpState())
     override val viewState: SignUpState by mutableViewState
@@ -75,7 +76,7 @@ class SignUpViewModelImpl @Inject constructor(
                         error = ErrorState.Message("Error Test!")
                     )
                 }
-                is SignUpResponse.UserExists -> {
+                is SignUpResponse.UsernameExists -> {
                     mutableViewState.value = viewState.copy(
                         buttonEnablement =  ButtonEnablement.ENABLED,
                         error = ErrorState.Message("Existing user error!")

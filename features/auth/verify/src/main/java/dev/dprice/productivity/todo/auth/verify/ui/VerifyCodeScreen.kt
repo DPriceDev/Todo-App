@@ -1,5 +1,6 @@
 package dev.dprice.productivity.todo.auth.verify.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -25,8 +29,11 @@ fun VerifyCode(
     state: WavyScaffoldState,
     username: String,
     goToMainApp: () -> Unit,
+    goBack: () -> Unit,
     viewModel: VerifyCodeViewModel = hiltViewModel<VerifyCodeViewModelImpl>()
 ) {
+    OnBackDialog(onConfirm = goBack)
+
     WavyBackdropScaffold(
         state = state,
         phaseOffset = 0.3f,
@@ -91,12 +98,34 @@ fun VerifyCode(
                 TextWithClickableSuffix(
                     text = "",
                     suffixText = "Resend verification code",
-                    onClick = { /* todo: on click */ }
+                    onClick = {
+                        viewModel.resendVerificationCode(username)
+                    }
                 )
 
             }
         }
     )
+}
+
+@Composable
+fun OnBackDialog(
+    onConfirm: () -> Unit
+) {
+    val isDialogShown: MutableState<Boolean> = remember { mutableStateOf(false) }
+
+    BackHandler(enabled = !isDialogShown.value) {
+        isDialogShown.value = true
+    }
+
+    if (isDialogShown.value) {
+       AppDialog(
+           title = "Are you sure you want to leave?",
+           message = "Your account can be verified at a later date when signing in.",
+           onConfirm = onConfirm,
+           isDialogShown = isDialogShown
+       )
+    }
 }
 
 /**
@@ -112,6 +141,6 @@ private fun PreviewVerifyCode() {
         initialFrequency = 0.3f
     )
     TodoAppTheme() {
-        VerifyCode(state = state, "testUser", { })
+        VerifyCode(state = state, "testUser", { }, { })
     }
 }

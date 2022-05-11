@@ -6,13 +6,12 @@ import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.auth.result.step.AuthSignUpStep
 import com.amplifyframework.core.plugin.Plugin
 import com.amplifyframework.kotlin.core.Amplify
 import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.Session
-import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
-import dev.dprice.productivity.todo.auth.library.model.VerifyUserResponse
+import dev.dprice.productivity.todo.auth.library.model.*
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +64,23 @@ class AWSAmplifySource(
         SignUpResponse.Error(throwable)
     }
 
+    override suspend fun signInUser(username: String, password: String): SignInResponse {
+        return try {
+
+            val result = Amplify.Auth.signIn(username, password)
+            when(result.nextStep.signInStep) {
+                AuthSignInStep.CONFIRM_SIGN_UP -> SignInResponse.Code(username)
+                AuthSignInStep.DONE -> SignInResponse.Done
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE -> TODO()
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE -> TODO()
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD -> TODO()
+                AuthSignInStep.RESET_PASSWORD -> TODO()
+            }
+        } catch (throwable: AuthException) {
+            SignInResponse.Error(throwable)
+        }
+    }
+
     override suspend fun verifyNewUser(code: String, username: String) : VerifyUserResponse {
         return try {
             val result = Amplify.Auth.confirmSignUp(username, code)
@@ -89,4 +105,12 @@ class AWSAmplifySource(
         }
     }
 
+    override suspend fun resendVerificationCode(username: String) : ResendCodeResponse {
+        return try {
+            Amplify.Auth.resendSignUpCode(username)
+            ResendCodeResponse.Done
+        } catch (throwable: Throwable) {
+            ResendCodeResponse.Error(throwable)
+        }
+    }
 }

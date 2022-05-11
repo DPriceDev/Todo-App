@@ -50,7 +50,11 @@ class SignUpAuthNavigationComponent @Inject constructor() : AuthNavigationCompon
             SignUp(
                 state = state,
                 goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.location(it)) },
-                goToSignIn = { authNavHostController.navigate(AuthNavLocation.SignIn.route) },
+                goToSignIn = {
+                    authNavHostController.navigate(AuthNavLocation.SignIn.route) {
+                        popUpTo(AuthNavLocation.SignUp.route) { inclusive = true }
+                    }
+                },
                 goToMainApp = { appNavHostController.navigate("MainApp") }
             )
         }

@@ -26,7 +26,19 @@ class SignInAuthNavigationComponent @Inject constructor() : AuthNavigationCompon
         maxWidth: Dp
     ) {
         builder.composable(route = AuthNavLocation.SignIn.route) {
-            SignIn(state, { })
+            SignIn(
+                state = state,
+                goToMainApp = { appNavHostController.navigate("MainApp") },
+                goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.location(it)) },
+                goToSignUp = {
+                    authNavHostController.navigate(AuthNavLocation.SignUp.route) {
+                       popUpTo(AuthNavLocation.SignIn.route) { inclusive = true }
+                    }
+                },
+                goToForgotPassword = {
+
+                }
+            )
         }
     }
 

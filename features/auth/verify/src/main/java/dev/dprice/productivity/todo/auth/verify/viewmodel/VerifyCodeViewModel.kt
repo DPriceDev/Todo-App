@@ -6,12 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.dprice.productivity.todo.auth.library.model.ResendCodeResponse
 import dev.dprice.productivity.todo.auth.library.model.VerifyUserResponse
+import dev.dprice.productivity.todo.auth.library.usecase.ResendVerificationCodeUseCase
 import dev.dprice.productivity.todo.auth.library.usecase.VerifySignUpCodeUseCase
 import dev.dprice.productivity.todo.auth.verify.model.VerifyErrorState
 import dev.dprice.productivity.todo.auth.verify.model.VerifyState
 import dev.dprice.productivity.todo.ui.components.ButtonEnablement
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 interface VerifyCodeViewModel {
@@ -20,12 +23,15 @@ interface VerifyCodeViewModel {
     fun updateCode(code: String, focus: Boolean)
 
     fun onSubmit(username: String, goToMainApp: () -> Unit)
+
+    fun resendVerificationCode(username: String)
 }
 
 @HiltViewModel
 class VerifyCodeViewModelImpl @Inject constructor(
     private val verifyUserCodeUpdater: VerifyUserCodeUpdater,
-    private val verifySignUpCodeUseCase: VerifySignUpCodeUseCase
+    private val verifySignUpCodeUseCase: VerifySignUpCodeUseCase,
+    private val resendVerificationCodeUseCase: ResendVerificationCodeUseCase
 ) : ViewModel(),
     VerifyCodeViewModel {
 
@@ -60,7 +66,17 @@ class VerifyCodeViewModelImpl @Inject constructor(
                     )
                 }
             }
+        }
+    }
 
+    override fun resendVerificationCode(username: String) {
+        viewModelScope.launch {
+            // todo: reflect in UI?
+            val response = resendVerificationCodeUseCase(username)
+            when(response) {
+                ResendCodeResponse.Done -> Timber.i("Code Resent")
+                is ResendCodeResponse.Error -> Timber.e(response.throwable, "Code resend error!")
+            }
         }
     }
 }

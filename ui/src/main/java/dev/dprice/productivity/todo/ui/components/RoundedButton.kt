@@ -1,6 +1,7 @@
 package dev.dprice.productivity.todo.ui.components
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -61,6 +62,7 @@ enum class ButtonEnablement {
     DISABLED
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun RoundedButton(
     text: String,
@@ -82,7 +84,7 @@ fun RoundedButton(
     ),
 ) {
     Button(
-        if(buttonEnablement == ButtonEnablement.ENABLED) onClick else ({ /* do nothing */ }),
+        if (buttonEnablement == ButtonEnablement.ENABLED) onClick else ({ /* do nothing */ }),
         modifier,
         buttonEnablement != ButtonEnablement.DISABLED,
         interactionSource,
@@ -96,8 +98,8 @@ fun RoundedButton(
             modifier = Modifier.height(20.dp),
             contentAlignment = Alignment.Center
         ) {
-            Crossfade(targetState = buttonEnablement) { enabledState ->
-                when(enabledState) {
+            AnimatedContent(targetState = buttonEnablement) { enabledState ->
+                when (enabledState) {
                     ButtonEnablement.LOADING -> LoadingDots()
                     else -> Text(text = text)
                 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,10 @@ import dev.dprice.productivity.todo.ui.components.*
 @Composable
 fun SignIn(
     state: WavyScaffoldState,
+    goToMainApp: () -> Unit,
+    goToVerifyCode: (String) -> Unit,
     goToSignUp: () -> Unit,
+    goToForgotPassword: () -> Unit,
     viewModel: SignInViewModel = hiltViewModel<SignInViewModelImpl>()
 ) {
     WavyBackdropScaffold(
@@ -43,15 +45,23 @@ fun SignIn(
                     colour = MaterialTheme.colors.primary,
                     title = "Sign in"
                 )
+
+                // todo: Show password in entry field
                 Form(
                     signInForm = viewModel.viewState.form,
-                    canSubmit = viewModel.viewState.canSubmit,
+                    buttonEnablement = viewModel.viewState.buttonEnablement,
                     onEntryChanged = viewModel::onFormChanged,
                     onSignUpClicked = goToSignUp,
+                    onForgotPasswordClicked = goToForgotPassword,
                     onSubmitForm = {
-                        viewModel.submitForm() // todo: navigate
+                        viewModel.submitForm(
+                            goToMainApp = goToMainApp,
+                            goToVerifyCode = goToVerifyCode
+                        )
                     }
                 )
+
+                // todo forgot password
             }
         }
     )
@@ -60,10 +70,11 @@ fun SignIn(
 @Composable
 private fun Form(
     signInForm: SignInForm,
-    canSubmit: Boolean,
+    buttonEnablement: ButtonEnablement,
     onEntryChanged: (SignInAction) -> Unit,
     onSubmitForm: () -> Unit,
-    onSignUpClicked: () -> Unit
+    onSignUpClicked: () -> Unit,
+    onForgotPasswordClicked: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -103,19 +114,18 @@ private fun Form(
         )
 
         RoundedButton(
+            text = "Sign in",
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-            enabled = canSubmit,
-        ) {
-            Text(text = "Sign in")
-        }
+            buttonEnablement = buttonEnablement,
+        )
 
         TextWithClickableSuffix(
             text = "",
             modifier = Modifier.padding(bottom = 24.dp),
             suffixText = "Forgot password?",
-            onClick = { /* todo link */ }
+            onClick = onForgotPasswordClicked
         )
 
         TextWithClickableSuffix(
