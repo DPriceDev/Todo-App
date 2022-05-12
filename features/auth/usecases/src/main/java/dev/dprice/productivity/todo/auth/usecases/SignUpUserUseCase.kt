@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.auth.usecases
 
 import dev.dprice.productivity.todo.auth.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.data.model.SignUpResponse
+import dev.dprice.productivity.todo.auth.data.model.SignUp
 import javax.inject.Inject
 
 // todo: Redundant?
@@ -11,7 +11,7 @@ interface SignUpUserUseCase {
         username: String,
         email: String,
         password: String
-    ): SignUpResponse
+    ): SignUp
 }
 
 class SignUpUserUseCaseImpl @Inject constructor(
@@ -22,7 +22,7 @@ class SignUpUserUseCaseImpl @Inject constructor(
         username: String,
         email: String,
         password: String
-    ): SignUpResponse {
+    ): SignUp {
         return authenticationSource.createUser(username, email, password)
     }
 }

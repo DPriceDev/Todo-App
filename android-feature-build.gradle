@@ -5,14 +5,14 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
-    compileSdkVersion Config.compileSdk
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion Config.minSdk
-        targetSdkVersion Config.targetSdk
-        versionCode Config.versionCode
-        versionName Config.versionName
+        minSdkVersion 23
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0.0"
         testInstrumentationRunner "dev.dprice.productivity.todo.ui.test.UiTestRunner"
     }
 

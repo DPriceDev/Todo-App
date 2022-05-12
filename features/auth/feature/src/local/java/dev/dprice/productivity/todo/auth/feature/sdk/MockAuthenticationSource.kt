@@ -10,39 +10,39 @@ import javax.inject.Inject
 
 class MockAuthenticationSource @Inject constructor(): AuthenticationSource {
     var responseDelay: Long = 1000L
-    var createUserResponse: SignUpResponse = SignUpResponse.Code("testUsername")
-    var verifyUserResponse: VerifyUserResponse = VerifyUserResponse.Done
-    var resendCodeResponse: ResendCodeResponse = ResendCodeResponse.Done
-    var signInResponse: SignInResponse = SignInResponse.Done
-    var forgotPasswordResponse: ForgotPasswordResponse = ForgotPasswordResponse.Done
+    var createUserResponse: SignUp = SignUp.Code("testUsername")
+    var verifyUser: VerifyUser = VerifyUser.Done
+    var resendCode: ResendCode = ResendCode.Done
+    var signIn: SignIn = SignIn.Done
+    var forgotPassword: ForgotPassword = ForgotPassword.Done
 
     override fun getCurrentSession(): Flow<DataState<Session>> = flow {
         emit(DataState.Loading)
         emit(DataState.Data(Session(false)))
     }
 
-    override suspend fun createUser(username: String, email: String, password: String): SignUpResponse {
+    override suspend fun createUser(username: String, email: String, password: String): SignUp {
         delay(responseDelay)
         return createUserResponse
     }
 
-    override suspend fun verifyNewUser(code: String, username: String): VerifyUserResponse {
+    override suspend fun verifyNewUser(code: String, username: String): VerifyUser {
         delay(responseDelay)
-        return verifyUserResponse
+        return verifyUser
     }
 
-    override suspend fun resendVerificationCode(username: String): ResendCodeResponse {
+    override suspend fun resendVerificationCode(username: String): ResendCode {
         delay(responseDelay)
-        return resendCodeResponse
+        return resendCode
     }
 
-    override suspend fun signInUser(username: String, password: String): SignInResponse {
+    override suspend fun signInUser(username: String, password: String): SignIn {
         delay(responseDelay)
-        return signInResponse
+        return signIn
     }
 
-    override suspend fun sendForgotPassword(email: String): ForgotPasswordResponse {
+    override suspend fun sendForgotPassword(email: String): ForgotPassword {
         delay(responseDelay)
-        return forgotPasswordResponse
+        return forgotPassword
     }
 }

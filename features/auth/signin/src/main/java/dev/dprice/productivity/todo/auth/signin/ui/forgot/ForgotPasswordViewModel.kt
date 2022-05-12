@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.auth.data.model.ForgotPasswordResponse
+import dev.dprice.productivity.todo.auth.data.model.ForgotPassword
 import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
@@ -67,13 +67,14 @@ class ForgotPasswordViewModelImpl @Inject constructor(
             // todo: either send toast or animate spinner into tick
             // go to verify code and new password screen
             when (response) {
-                ForgotPasswordResponse.Done -> goToResetPassword()
-                is ForgotPasswordResponse.Error -> {
+                ForgotPassword.Done -> goToResetPassword()
+                is ForgotPassword.Error -> {
                     viewModelState.value = viewState.copy(
                         errorState = ErrorState.Error("error!"),
                         buttonState = ButtonState.ENABLED
                     )
                 }
+                ForgotPassword.ConnectionError -> TODO()
             }
         }
     }

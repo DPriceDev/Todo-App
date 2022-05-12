@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.auth.data.model.SignInResponse
+import dev.dprice.productivity.todo.auth.data.model.SignIn
 import dev.dprice.productivity.todo.auth.usecases.SignInUserUseCase
 import dev.dprice.productivity.todo.auth.signin.model.ErrorState
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction
@@ -63,15 +63,15 @@ class SignInViewModelImpl @Inject constructor(
             )
 
             when (response) {
-                is SignInResponse.Code -> goToVerifyCode(response.username)
-                SignInResponse.Done -> goToMainApp()
-                is SignInResponse.Error -> {
+                is SignIn.Code -> goToVerifyCode(response.username)
+                SignIn.Done -> goToMainApp()
+                is SignIn.Error -> {
                     mutableViewState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
-                is SignInResponse.AccountDisabled -> {
+                is SignIn.AccountDisabled -> {
                     mutableViewState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Account Disabled")

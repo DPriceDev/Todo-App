@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.auth.data.model.SignUpResponse
+import dev.dprice.productivity.todo.auth.data.model.SignUp
 import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
 import dev.dprice.productivity.todo.auth.signup.model.ErrorState
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction
@@ -68,15 +68,15 @@ class SignUpViewModelImpl @Inject constructor(
             )
 
             when(response) {
-                is SignUpResponse.Code -> goToVerifyCode(response.username)
-                SignUpResponse.Done -> goToMainApp()
-                is SignUpResponse.Error -> {
+                is SignUp.Code -> goToVerifyCode(response.username)
+                SignUp.Done -> goToMainApp()
+                is SignUp.Error -> {
                     mutableViewState.value = viewState.copy(
                         buttonState =  ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
-                is SignUpResponse.UsernameExists -> {
+                is SignUp.UsernameExists -> {
                     mutableViewState.value = viewState.copy(
                         buttonState =  ButtonState.ENABLED,
                         error = ErrorState.Message("Existing user error!")
