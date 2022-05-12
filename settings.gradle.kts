@@ -4,7 +4,7 @@ include(":platform")
 include(":core")
 include(":features:tasks")
 include(":features:auth:feature")
-include(":features:auth:library")
+include(":features:auth:data")
 
 rootProject.name = "TodoApp"
 

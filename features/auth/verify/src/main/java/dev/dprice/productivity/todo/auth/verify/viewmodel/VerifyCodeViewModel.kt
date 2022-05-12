@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.auth.library.model.ResendCodeResponse
-import dev.dprice.productivity.todo.auth.library.model.VerifyUserResponse
+import dev.dprice.productivity.todo.auth.data.model.ResendCodeResponse
+import dev.dprice.productivity.todo.auth.data.model.VerifyUserResponse
 import dev.dprice.productivity.todo.auth.usecases.ResendVerificationCodeUseCase
 import dev.dprice.productivity.todo.auth.usecases.VerifySignUpCodeUseCase
 import dev.dprice.productivity.todo.auth.verify.model.VerifyErrorState

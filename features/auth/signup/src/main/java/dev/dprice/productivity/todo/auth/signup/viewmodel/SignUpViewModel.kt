@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
+import dev.dprice.productivity.todo.auth.data.model.SignUpResponse
 import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
 import dev.dprice.productivity.todo.auth.signup.model.ErrorState
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction

@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.library
+package dev.dprice.productivity.todo.auth.data
 
 import org.junit.Test
 

@@ -2,7 +2,7 @@ package dev.dprice.productivity.todo
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

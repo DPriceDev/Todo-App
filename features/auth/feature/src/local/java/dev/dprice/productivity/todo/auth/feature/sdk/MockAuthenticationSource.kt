@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.auth.feature.sdk
 
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.*
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.model.*
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class MockAuthenticationSource @Inject constructor(): AuthenticationSource {
-    var responseDelay : Long = 1000L
+    var responseDelay: Long = 1000L
     var createUserResponse: SignUpResponse = SignUpResponse.Code("testUsername")
     var verifyUserResponse: VerifyUserResponse = VerifyUserResponse.Done
     var resendCodeResponse: ResendCodeResponse = ResendCodeResponse.Done

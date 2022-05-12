@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.auth.usecases
 
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.model.SignUpResponse
 import javax.inject.Inject
 
 // todo: Redundant?

@@ -1,6 +1,6 @@
-package dev.dprice.productivity.todo.auth.library.data
+package dev.dprice.productivity.todo.auth.data
 
-import dev.dprice.productivity.todo.auth.library.model.*
+import dev.dprice.productivity.todo.auth.data.model.*
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.flow.Flow
 
@@ -12,12 +12,12 @@ interface AuthenticationSource {
         username: String,
         email: String,
         password: String
-    ) : SignUpResponse
+    ): SignUpResponse
 
     suspend fun signInUser(
         username: String,
         password: String
-    ) : SignInResponse
+    ): SignInResponse
 
     suspend fun verifyNewUser(code: String, username: String) : VerifyUserResponse
 

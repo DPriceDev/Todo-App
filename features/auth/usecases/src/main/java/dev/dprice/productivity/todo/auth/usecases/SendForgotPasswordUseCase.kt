@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.auth.usecases
 
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.ForgotPasswordResponse
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.model.ForgotPasswordResponse
 import javax.inject.Inject
 
 interface SendForgotPasswordUseCase {

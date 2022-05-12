@@ -3,5 +3,5 @@ apply {
 }
 
 dependencies {
-    "implementation"(projects.features.auth.library)
+    "implementation"(projects.features.auth.data)
 }

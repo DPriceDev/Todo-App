@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.dprice.productivity.todo.auth.feature.sdk.MockAuthenticationSource
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
 
 @Module
 @InstallIn(SingletonComponent::class)

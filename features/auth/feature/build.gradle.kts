@@ -9,5 +9,5 @@ dependencies {
     "implementation"(projects.features.auth.signin)
     "implementation"(projects.features.auth.verify)
     "implementation"(projects.features.auth.usecases)
-    "implementation"(projects.features.auth.library)
+    "implementation"(projects.features.auth.data)
 }

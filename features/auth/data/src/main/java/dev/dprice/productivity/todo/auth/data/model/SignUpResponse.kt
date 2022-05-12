@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.library.model
+package dev.dprice.productivity.todo.auth.data.model
 
 sealed class SignUpResponse {
     object Done : SignUpResponse()
