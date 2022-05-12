@@ -29,7 +29,7 @@ class LandingAuthNavigationComponent @Inject constructor() : AuthNavigationCompo
         builder.composable(
             route = AuthNavLocation.Landing.route,
             enterTransition = {
-                when(initialState.destination.route) {
+                when (initialState.destination.route) {
                     AuthNavLocation.VerifySignUp.route -> slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(durationMillis = 700)

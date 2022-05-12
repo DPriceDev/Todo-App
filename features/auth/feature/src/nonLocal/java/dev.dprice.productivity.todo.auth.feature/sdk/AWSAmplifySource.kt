@@ -10,8 +10,8 @@ import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.auth.result.step.AuthSignUpStep
 import com.amplifyframework.core.plugin.Plugin
 import com.amplifyframework.kotlin.core.Amplify
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.*
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
+import dev.dprice.productivity.todo.auth.data.model.*
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +24,7 @@ import timber.log.Timber
 class AWSAmplifySource(
     private val context: Context,
     private val plugins: Set<Plugin<*>>,
-    private val ioDispatcher: CoroutineDispatcher
+    ioDispatcher: CoroutineDispatcher
 ) : AuthenticationSource {
 
     private var auth: Deferred<Boolean> = CoroutineScope(ioDispatcher).async {
@@ -45,7 +45,7 @@ class AWSAmplifySource(
         username: String,
         email: String,
         password: String
-    ): SignUpResponse = try {
+    ): SignUp = try {
         val attributes = listOf(
             AuthUserAttribute(AuthUserAttributeKey.email(), email)
         )
@@ -56,39 +56,39 @@ class AWSAmplifySource(
         val result = Amplify.Auth.signUp(username, password, signUpOptions)
         Timber.d("Sign up returned: $result")
         when (result.nextStep.signUpStep) {
-            AuthSignUpStep.CONFIRM_SIGN_UP_STEP -> SignUpResponse.Code(username)
-            AuthSignUpStep.DONE -> SignUpResponse.Done
+            AuthSignUpStep.CONFIRM_SIGN_UP_STEP -> SignUp.Code(username)
+            AuthSignUpStep.DONE -> SignUp.Done
         }
     } catch (throwable: AuthException) {
         Timber.e(throwable, "Sign up failed for user: $username")
-        SignUpResponse.Error(throwable)
+        SignUp.Error(throwable)
     }
 
-    override suspend fun signInUser(username: String, password: String): SignInResponse {
+    override suspend fun signInUser(username: String, password: String): SignIn {
         return try {
 
             val result = Amplify.Auth.signIn(username, password)
             when(result.nextStep.signInStep) {
-                AuthSignInStep.CONFIRM_SIGN_UP -> SignInResponse.Code(username)
-                AuthSignInStep.DONE -> SignInResponse.Done
+                AuthSignInStep.CONFIRM_SIGN_UP -> SignIn.Code(username)
+                AuthSignInStep.DONE -> SignIn.Done
                 AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE -> TODO()
                 AuthSignInStep.CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE -> TODO()
                 AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD -> TODO()
                 AuthSignInStep.RESET_PASSWORD -> TODO()
             }
         } catch (throwable: AuthException) {
-            SignInResponse.Error(throwable)
+            SignIn.Error(throwable)
         }
     }
 
-    override suspend fun verifyNewUser(code: String, username: String) : VerifyUserResponse {
+    override suspend fun verifyNewUser(code: String, username: String) : VerifyUser {
         return try {
             val result = Amplify.Auth.confirmSignUp(username, code)
             Timber.i("AuthQuickstart", "Confirmed signin: $result")
-            VerifyUserResponse.Done
+            VerifyUser.Done
         } catch (error: AuthException) {
             Timber.e("AuthQuickstart", "Failed to confirm signin", error)
-            VerifyUserResponse.Error(error)
+            VerifyUser.Error(error)
         }
     }
 
@@ -105,22 +105,22 @@ class AWSAmplifySource(
         }
     }
 
-    override suspend fun resendVerificationCode(username: String) : ResendCodeResponse {
+    override suspend fun resendVerificationCode(username: String) : ResendCode {
         return try {
             Amplify.Auth.resendSignUpCode(username)
-            ResendCodeResponse.Done
+            ResendCode.Done
         } catch (throwable: Throwable) {
-            ResendCodeResponse.Error(throwable)
+            ResendCode.Error(throwable)
         }
     }
 
     // todo: might need to be username?
-    override suspend fun sendForgotPassword(email: String): ForgotPasswordResponse {
+    override suspend fun sendForgotPassword(email: String): ForgotPassword {
         return try {
             Amplify.Auth.resetPassword(email)
-            ForgotPasswordResponse.Done
+            ForgotPassword.Done
         } catch (throwable: Throwable) {
-            ForgotPasswordResponse.Error(throwable)
+            ForgotPassword.Error(throwable)
         }
     }
 

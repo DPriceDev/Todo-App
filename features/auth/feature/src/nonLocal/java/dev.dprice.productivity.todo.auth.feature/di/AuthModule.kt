@@ -9,9 +9,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import dev.dprice.productivity.todo.auth.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.feature.sdk.AWSAmplifySource
-import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import kotlinx.coroutines.Dispatchers
+import dev.dprice.productivity.todo.platform.di.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -22,12 +23,13 @@ class AuthModule {
     @Singleton
     fun provideAwsAmplifySource(
         @ApplicationContext context: Context,
+        @IO ioDispatcher: CoroutineDispatcher,
         plugins: Set<@JvmSuppressWildcards Plugin<*>>
     ): AuthenticationSource {
         return AWSAmplifySource(
             context,
             plugins,
-            Dispatchers.IO
+            ioDispatcher
         )
     }
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class MockAuthenticationSource @Inject constructor(): AuthenticationSource {
+class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
     var responseDelay: Long = 1000L
     var createUserResponse: SignUp = SignUp.Code("testUsername")
     var verifyUser: VerifyUser = VerifyUser.Done

@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signup.viewmodel
+package dev.dprice.productivity.todo.auth.signup.ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -7,14 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.SignUp
-import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
 import dev.dprice.productivity.todo.auth.signup.model.ErrorState
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction
 import dev.dprice.productivity.todo.auth.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.signup.model.SignUpState
+import dev.dprice.productivity.todo.auth.usecases.auth.SignUpUserUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEmailEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 interface SignUpViewModel {
@@ -30,19 +32,44 @@ interface SignUpViewModel {
 
 @HiltViewModel
 class SignUpViewModelImpl @Inject constructor(
-    private val signUpFormUpdater: SignUpFormUpdater,
+    private val updateUsernameEntryUseCase: UpdateUsernameEntryUseCase,
+    private val updateEmailEntryUseCase: UpdateEmailEntryUseCase,
+    private val updatePasswordEntryUseCase: UpdatePasswordEntryUseCase,
     private val signUpUserUseCase: SignUpUserUseCase
 ) : ViewModel(),
     SignUpViewModel {
 
-    private val mutableViewState: MutableState<SignUpState> = mutableStateOf(SignUpState())
-    override val viewState: SignUpState by mutableViewState
+    private val viewModelState: MutableState<SignUpState> = mutableStateOf(SignUpState())
+    override val viewState: SignUpState by viewModelState
 
     override fun onFormChanged(action: SignUpAction) {
-        val signUpForm = signUpFormUpdater.updateEntry(viewState.form, action)
-        mutableViewState.value = viewState.copy(
-            form = signUpForm,
-            buttonState = if(signUpForm.isValid) {
+        val updatedForm = when (action.type) {
+            SignUpAction.Type.UPDATE_EMAIL -> viewState.form.copy(
+                email = updateEmailEntryUseCase(
+                    viewState.form.email,
+                    action.value,
+                    action.focus
+                )
+            )
+            SignUpAction.Type.UPDATE_USERNAME -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(
+                    viewState.form.username,
+                    action.value,
+                    action.focus
+                )
+            )
+            SignUpAction.Type.UPDATE_PASSWORD -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(
+                    viewState.form.password,
+                    action.value,
+                    action.focus
+                )
+            )
+        }
+
+        viewModelState.value = viewState.copy(
+            form = updatedForm,
+            buttonState = if (updatedForm.isValid) {
                 ButtonState.ENABLED
             } else {
                 ButtonState.DISABLED
@@ -54,11 +81,7 @@ class SignUpViewModelImpl @Inject constructor(
         goToVerifyCode: (String) -> Unit,
         goToMainApp: () -> Unit
     ) {
-        mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
-
-        Timber.tag("Sign Up ViewModel").d(
-            "user: ${ viewState.form.username.value } email: ${ viewState.form.email.value } pass: ${ viewState.form.password.value }"
-        )
+        viewModelState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
         viewModelScope.launch {
             val response = signUpUserUseCase.invoke(
@@ -67,18 +90,18 @@ class SignUpViewModelImpl @Inject constructor(
                 viewState.form.password.value,
             )
 
-            when(response) {
+            when (response) {
                 is SignUp.Code -> goToVerifyCode(response.username)
                 SignUp.Done -> goToMainApp()
                 is SignUp.Error -> {
-                    mutableViewState.value = viewState.copy(
-                        buttonState =  ButtonState.ENABLED,
+                    viewModelState.value = viewState.copy(
+                        buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
                 is SignUp.UsernameExists -> {
-                    mutableViewState.value = viewState.copy(
-                        buttonState =  ButtonState.ENABLED,
+                    viewModelState.value = viewState.copy(
+                        buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Existing user error!")
                     )
                 }

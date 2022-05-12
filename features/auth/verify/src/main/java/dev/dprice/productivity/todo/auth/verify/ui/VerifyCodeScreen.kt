@@ -19,8 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.verify.viewmodel.VerifyCodeViewModel
-import dev.dprice.productivity.todo.auth.verify.viewmodel.VerifyCodeViewModelImpl
 import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 

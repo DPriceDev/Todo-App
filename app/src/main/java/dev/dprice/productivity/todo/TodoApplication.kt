@@ -4,6 +4,8 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import dev.dprice.productivity.todo.auth.data.AuthenticationSource
 import dev.dprice.productivity.todo.core.DataState
+import dev.dprice.productivity.todo.platform.di.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +18,10 @@ class TodoApplication : Application() {
     @Inject
     lateinit var authenticationSource: AuthenticationSource
 
+    @Inject
+    @IO
+    lateinit var ioDispatcher: CoroutineDispatcher
+
     override fun onCreate() {
         super.onCreate()
 
@@ -23,9 +29,9 @@ class TodoApplication : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             authenticationSource.getCurrentSession().collect {
-                when(it) {
+                when (it) {
                     is DataState.Data -> Timber.d("AAuth session = ${ it.value }")
                     is DataState.Error -> Timber.e("Amplify session error: ${ it.throwable }")
                     DataState.Loading -> Timber.d("Amplify Loading")

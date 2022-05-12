@@ -5,11 +5,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
-import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCaseImpl
 import dev.dprice.productivity.todo.auth.signup.navigation.SignUpAuthNavigationComponent
-import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdater
-import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdaterImpl
+import dev.dprice.productivity.todo.auth.usecases.auth.SignUpUserUseCase
+import dev.dprice.productivity.todo.auth.usecases.auth.SignUpUserUseCaseImpl
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
 
 @Module
@@ -17,12 +15,6 @@ import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
 abstract class SignUpModule {
 
     @Binds
-    abstract fun SignUpUserUseCaseImpl.bindSignUpUserUseCase() : SignUpUserUseCase
-
-    @Binds
-    abstract fun SignUpFormUpdaterImpl.bindSignUpFormUpdater() : SignUpFormUpdater
-
-    @Binds
     @IntoSet
-    abstract fun SignUpAuthNavigationComponent.bindSignUpAuthNavigationComponent() : AuthNavigationComponent
+    abstract fun SignUpAuthNavigationComponent.bindSignUpAuthNavigationComponent(): AuthNavigationComponent
 }

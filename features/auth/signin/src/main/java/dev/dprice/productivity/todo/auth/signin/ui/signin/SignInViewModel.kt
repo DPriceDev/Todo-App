@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.SignIn
-import dev.dprice.productivity.todo.auth.usecases.SignInUserUseCase
 import dev.dprice.productivity.todo.auth.signin.model.ErrorState
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction
 import dev.dprice.productivity.todo.auth.signin.model.SignInForm
 import dev.dprice.productivity.todo.auth.signin.model.SignInState
+import dev.dprice.productivity.todo.auth.usecases.auth.SignInUserUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,19 +31,37 @@ interface SignInViewModel {
 
 @HiltViewModel
 class SignInViewModelImpl @Inject constructor(
-    private val signInFormUpdater: SignInFormUpdater,
+    private val updateUsernameEntryUseCase: UpdateUsernameEntryUseCase,
+    private val updatePasswordEntryUseCase: UpdatePasswordEntryUseCase,
     private val signInUserUseCase: SignInUserUseCase
 ) : ViewModel(),
     SignInViewModel {
 
-    private val mutableViewState: MutableState<SignInState> = mutableStateOf(SignInState())
-    override val viewState: SignInState by mutableViewState
+    private val viewModelState: MutableState<SignInState> = mutableStateOf(SignInState())
+    override val viewState: SignInState by viewModelState
 
     override fun onFormChanged(action: SignInAction) {
-        val signInForm = signInFormUpdater.updateEntry(viewState.form, action)
-        mutableViewState.value = viewState.copy(
-            form = signInForm,
-            buttonState = if (signInForm.isValid) {
+
+        val updatedForm = when (action.type) {
+            SignInAction.Type.UPDATE_USERNAME -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(
+                    viewState.form.username,
+                    action.value,
+                    action.focus
+                )
+            )
+            SignInAction.Type.UPDATE_PASSWORD -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(
+                    viewState.form.password,
+                    action.value,
+                    action.focus
+                )
+            )
+        }
+
+        viewModelState.value = viewState.copy(
+            form = updatedForm,
+            buttonState = if (updatedForm.isValid) {
                 ButtonState.ENABLED
             } else {
                 ButtonState.DISABLED
@@ -54,7 +74,7 @@ class SignInViewModelImpl @Inject constructor(
         goToVerifyCode: (String) -> Unit
     ) {
         if (!viewState.form.isValid) return
-        mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
+        viewModelState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
         viewModelScope.launch {
             val response = signInUserUseCase(
@@ -66,13 +86,13 @@ class SignInViewModelImpl @Inject constructor(
                 is SignIn.Code -> goToVerifyCode(response.username)
                 SignIn.Done -> goToMainApp()
                 is SignIn.Error -> {
-                    mutableViewState.value = viewState.copy(
+                    viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
                 is SignIn.AccountDisabled -> {
-                    mutableViewState.value = viewState.copy(
+                    viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Account Disabled")
                     )

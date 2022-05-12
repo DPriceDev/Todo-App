@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ForgotPassword
-import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCase
+import dev.dprice.productivity.todo.auth.usecases.auth.SendForgotPasswordUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEmailEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ interface ForgotPasswordViewModel {
 
 @HiltViewModel
 class ForgotPasswordViewModelImpl @Inject constructor(
-    private val verifyUserEmailUpdater: VerifyEmailEntryUseCase,
+    private val updateEmailEntryUseCase: UpdateEmailEntryUseCase,
     private val sendForgotPasswordUseCase: SendForgotPasswordUseCase
 ) : ViewModel(), ForgotPasswordViewModel {
 
@@ -49,7 +50,7 @@ class ForgotPasswordViewModelImpl @Inject constructor(
     override val viewState: ForgotPasswordState by viewModelState
 
     override fun updateEmail(email: String, focus: Boolean) {
-        val updatedEmail = verifyUserEmailUpdater(viewState.email, email, focus)
+        val updatedEmail = updateEmailEntryUseCase(viewState.email, email, focus)
         viewModelState.value = viewState.copy(
             email = updatedEmail,
             buttonState = if (updatedEmail.isValid) ButtonState.ENABLED else ButtonState.DISABLED

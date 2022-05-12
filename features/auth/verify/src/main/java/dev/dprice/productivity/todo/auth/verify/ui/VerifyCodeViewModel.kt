@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.verify.viewmodel
+package dev.dprice.productivity.todo.auth.verify.ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -8,8 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ResendCode
 import dev.dprice.productivity.todo.auth.data.model.VerifyUser
-import dev.dprice.productivity.todo.auth.usecases.ResendVerificationCodeUseCase
-import dev.dprice.productivity.todo.auth.usecases.VerifySignUpCodeUseCase
+import dev.dprice.productivity.todo.auth.usecases.auth.ResendVerificationCodeUseCase
+import dev.dprice.productivity.todo.auth.usecases.auth.VerifySignUpCodeUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.auth.verify.model.VerifyErrorState
 import dev.dprice.productivity.todo.auth.verify.model.VerifyState
 import dev.dprice.productivity.todo.ui.components.ButtonState
@@ -29,7 +30,7 @@ interface VerifyCodeViewModel {
 
 @HiltViewModel
 class VerifyCodeViewModelImpl @Inject constructor(
-    private val verifyUserCodeUpdater: VerifyUserCodeUpdater,
+    private val updateCodeEntryUseCase: UpdateCodeEntryUseCase,
     private val verifySignUpCodeUseCase: VerifySignUpCodeUseCase,
     private val resendVerificationCodeUseCase: ResendVerificationCodeUseCase
 ) : ViewModel(),
@@ -39,7 +40,7 @@ class VerifyCodeViewModelImpl @Inject constructor(
     override val viewState: VerifyState by mutableViewState
 
     override fun updateCode(code: String, focus: Boolean) {
-        val updatedCode = verifyUserCodeUpdater.updateCode(viewState.code, code, focus)
+        val updatedCode = updateCodeEntryUseCase(viewState.code, code, focus)
         mutableViewState.value = viewState.copy(
             code = updatedCode,
             buttonState = if (updatedCode.isValid) ButtonState.ENABLED else ButtonState.DISABLED
@@ -47,7 +48,7 @@ class VerifyCodeViewModelImpl @Inject constructor(
     }
 
     override fun onSubmit(username: String, goToMainApp: () -> Unit) {
-        if(!viewState.code.isValid) return
+        if (!viewState.code.isValid) return
 
         mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
@@ -65,6 +66,9 @@ class VerifyCodeViewModelImpl @Inject constructor(
                         buttonState = ButtonState.ENABLED
                     )
                 }
+                VerifyUser.ConnectionError -> TODO()
+                VerifyUser.ExpiredCode -> TODO()
+                VerifyUser.IncorrectCode -> TODO()
             }
         }
     }
@@ -73,7 +77,7 @@ class VerifyCodeViewModelImpl @Inject constructor(
         viewModelScope.launch {
             // todo: reflect in UI?
             val response = resendVerificationCodeUseCase(username)
-            when(response) {
+            when (response) {
                 ResendCode.Done -> Timber.i("Code Resent")
                 is ResendCode.Error -> Timber.e(response.throwable, "Code resend error!")
             }

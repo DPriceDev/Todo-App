@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.verify.ui
+package dev.dprice.productivity.todo.ui.transformers
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -25,14 +25,12 @@ class DashedEntryVisualTransformation(
             buildAnnotatedString {
                 append(newText)
                 addStyle(
-                    SpanStyle(
-                        color = TextHintColour
-                    ),
+                    SpanStyle(color = TextHintColour),
                     (text.length + text.length - 1).coerceAtLeast(0),
                     maxLength + maxLength - 1
                 )
             },
-            object: OffsetMapping {
+            object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int = minOf(
                     offset + offset,
                     maxLength + maxLength - 1
@@ -45,8 +43,3 @@ class DashedEntryVisualTransformation(
         )
     }
 }
-
-// 0 -> 0 ""
-// 1 -> 2 "6 "
-// 2 -> 4 "6 6 "
-// 3 -> 6 "6 6 6 "

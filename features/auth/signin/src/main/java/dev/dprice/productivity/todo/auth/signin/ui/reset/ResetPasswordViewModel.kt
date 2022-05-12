@@ -9,8 +9,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.transformers.DashedEntryVisualTransformation
 import javax.inject.Inject
 
 sealed class ErrorState {
@@ -23,7 +26,7 @@ data class ResetPasswordState(
         contentDescription = "Reset Code",
         errorText = "Please enter your 6 digit reset code",
         maxLength = 6,
-        // todo: visualTransformation = DashedEntryVisualTransformation(6)
+        visualTransformation = DashedEntryVisualTransformation(6)
     ),
     val password: EntryField = EntryField(
         icon = Icons.Outlined.Password,
@@ -48,7 +51,7 @@ interface ResetPasswordViewModel {
 @HiltViewModel
 class ResetPasswordViewModelImpl @Inject constructor(
     private val updatePasswordEntryUseCase: UpdatePasswordEntryUseCase,
-    private val updateCodeEntryUseCase: UpdateCodeEntryUseCase
+    private val updateCodeEntryUseCase: UpdateEntryUseCase
 ) : ViewModel(), ResetPasswordViewModel {
 
     private val viewModelState: MutableState<ResetPasswordState> = mutableStateOf(ResetPasswordState())
