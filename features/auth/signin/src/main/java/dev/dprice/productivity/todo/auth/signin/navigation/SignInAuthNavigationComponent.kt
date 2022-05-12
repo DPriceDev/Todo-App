@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
-import dev.dprice.productivity.todo.auth.signin.ui.signin.SignIn
+import dev.dprice.productivity.todo.auth.signin.ui.SignIn
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.navigation.AuthNavLocation
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent

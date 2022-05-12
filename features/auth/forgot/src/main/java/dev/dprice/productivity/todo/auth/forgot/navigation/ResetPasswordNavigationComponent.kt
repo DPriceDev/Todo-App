@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.navigation
+package dev.dprice.productivity.todo.auth.forgot.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -8,15 +8,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
-import dev.dprice.productivity.todo.auth.signin.ui.forgot.ForgotPassword
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.navigation.AuthNavLocation
 import dev.dprice.productivity.todo.ui.navigation.AuthNavigationComponent
 import javax.inject.Inject
 
-class ForgotPasswordNavigationComponent @Inject constructor() : AuthNavigationComponent {
+class ResetPasswordNavigationComponent @Inject constructor() : AuthNavigationComponent {
 
-    override val navLocation: AuthNavLocation = AuthNavLocation.ForgotPassword
+    override val navLocation: AuthNavLocation = AuthNavLocation.ResetPassword
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun navigationContent(
@@ -28,7 +27,7 @@ class ForgotPasswordNavigationComponent @Inject constructor() : AuthNavigationCo
         maxWidth: Dp
     ) {
         builder.composable(
-            route = AuthNavLocation.ForgotPassword.route,
+            route = AuthNavLocation.ResetPassword.route,
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Left,
@@ -42,10 +41,12 @@ class ForgotPasswordNavigationComponent @Inject constructor() : AuthNavigationCo
                 )
             }
         ) {
-            ForgotPassword(
+            dev.dprice.productivity.todo.auth.forgot.ui.reset.ResetPassword(
                 state = state,
-                goToResetPassword = {
-                    authNavHostController.navigate(AuthNavLocation.ResetPassword.route)
+                returnToSignIn = {
+                    authNavHostController.navigate(AuthNavLocation.SignIn.route) {
+                        popUpTo(AuthNavLocation.SignIn.route)
+                    }
                 }
             )
         }

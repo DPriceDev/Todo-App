@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.ui.forgot
+package dev.dprice.productivity.todo.auth.forgot.ui.forgot
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

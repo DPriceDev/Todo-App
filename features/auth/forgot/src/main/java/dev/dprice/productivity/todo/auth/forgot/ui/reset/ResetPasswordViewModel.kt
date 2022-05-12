@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.ui.reset
+package dev.dprice.productivity.todo.auth.forgot.ui.reset
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Password
