@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.library.model.ForgotPasswordResponse
-import dev.dprice.productivity.todo.auth.library.usecase.SendForgotPasswordUseCase
+import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
 import kotlinx.coroutines.launch

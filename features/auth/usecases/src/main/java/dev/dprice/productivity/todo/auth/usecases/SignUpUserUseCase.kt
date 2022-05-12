@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.library.usecase
+package dev.dprice.productivity.todo.auth.usecases
 
 import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
@@ -11,7 +11,7 @@ interface SignUpUserUseCase {
         username: String,
         email: String,
         password: String
-    ) : SignUpResponse
+    ): SignUpResponse
 }
 
 class SignUpUserUseCaseImpl @Inject constructor(
@@ -22,7 +22,7 @@ class SignUpUserUseCaseImpl @Inject constructor(
         username: String,
         email: String,
         password: String
-    ) : SignUpResponse {
+    ): SignUpResponse {
         return authenticationSource.createUser(username, email, password)
     }
 }

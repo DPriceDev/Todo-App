@@ -4,5 +4,6 @@ apply {
 
 dependencies {
     "implementation"(projects.features.auth.ui)
+    "implementation"(projects.features.auth.usecases)
     "implementation"(projects.features.auth.library)
 }

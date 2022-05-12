@@ -5,8 +5,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCase
-import dev.dprice.productivity.todo.auth.library.usecase.SignUpUserUseCaseImpl
+import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
+import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCaseImpl
 import dev.dprice.productivity.todo.auth.signup.navigation.SignUpAuthNavigationComponent
 import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdater
 import dev.dprice.productivity.todo.auth.signup.viewmodel.SignUpFormUpdaterImpl

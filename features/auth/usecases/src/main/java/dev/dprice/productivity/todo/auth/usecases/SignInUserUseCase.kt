@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.library.usecase
+package dev.dprice.productivity.todo.auth.usecases
 
 import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.library.model.SignInResponse
@@ -8,7 +8,7 @@ interface SignInUserUseCase {
     suspend operator fun invoke(
         username: String,
         password: String
-    ) : SignInResponse
+    ): SignInResponse
 }
 
 class SignInUserUseCaseImpl @Inject constructor(
@@ -18,7 +18,7 @@ class SignInUserUseCaseImpl @Inject constructor(
     override suspend operator fun invoke(
         username: String,
         password: String
-    ) : SignInResponse {
+    ): SignInResponse {
         return authenticationSource.signInUser(username, password)
     }
 }

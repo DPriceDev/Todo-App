@@ -5,10 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import dev.dprice.productivity.todo.auth.library.usecase.SendForgotPasswordUseCase
-import dev.dprice.productivity.todo.auth.library.usecase.SendForgotPasswordUseCaseImpl
-import dev.dprice.productivity.todo.auth.library.usecase.SignInUserUseCase
-import dev.dprice.productivity.todo.auth.library.usecase.SignInUserUseCaseImpl
+import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCase
+import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCaseImpl
+import dev.dprice.productivity.todo.auth.usecases.SignInUserUseCase
+import dev.dprice.productivity.todo.auth.usecases.SignInUserUseCaseImpl
 import dev.dprice.productivity.todo.auth.signin.navigation.ForgotPasswordNavigationComponent
 import dev.dprice.productivity.todo.auth.signin.navigation.ResetPasswordNavigationComponent
 import dev.dprice.productivity.todo.auth.signin.navigation.SignInAuthNavigationComponent

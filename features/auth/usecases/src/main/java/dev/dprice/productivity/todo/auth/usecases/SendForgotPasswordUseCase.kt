@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.library.usecase
+package dev.dprice.productivity.todo.auth.usecases
 
 import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.library.model.ForgotPasswordResponse
