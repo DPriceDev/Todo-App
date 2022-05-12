@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
 
 @Composable
@@ -40,7 +40,7 @@ fun ForgotPassword(
                 TitleBlock(colour = MaterialTheme.colors.primary, title = "Forgot Password")
 
                 Text(
-                    text = "Please enter the email address associated to your account and we will send you a email to reset your password.",
+                    text = "Please enter the username associated to your account and we will send an email to reset your password.",
                     modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.body1,
@@ -48,18 +48,18 @@ fun ForgotPassword(
                 )
 
                 RoundedEntryCard(
-                    entry = viewModel.viewState.email,
+                    entry = viewModel.viewState.username,
                     modifier = Modifier
                         .padding(top = 24.dp, start = 32.dp, end = 32.dp)
                         .onFocusChanged {
-                            viewModel.updateEmail(viewModel.viewState.email.value, it.hasFocus)
+                            viewModel.updateUsername(viewModel.viewState.username.value, it.hasFocus)
                         },
                     onImeAction = {
                         focusManager.clearFocus()
                         viewModel.submit(goToResetPassword = goToResetPassword)
                     },
                     onTextChanged = {
-                        viewModel.updateEmail(it, viewModel.viewState.email.hasFocus)
+                        viewModel.updateUsername(it, viewModel.viewState.username.hasFocus)
                     }
                 )
 

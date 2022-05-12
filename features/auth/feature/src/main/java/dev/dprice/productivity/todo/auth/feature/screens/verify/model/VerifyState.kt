@@ -1,6 +1,6 @@
 package dev.dprice.productivity.todo.auth.feature.screens.verify.model
 
-import dev.dprice.productivity.todo.auth.feature.ui.transformers.DashedEntryVisualTransformation
+import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
 

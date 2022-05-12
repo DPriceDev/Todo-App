@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.feature.ui.components
+package dev.dprice.productivity.todo.auth.feature.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

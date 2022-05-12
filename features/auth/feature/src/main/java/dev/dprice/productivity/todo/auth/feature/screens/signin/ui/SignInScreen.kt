@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInAction
 import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInAction.Type
 import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInForm
-import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
 
 @Composable

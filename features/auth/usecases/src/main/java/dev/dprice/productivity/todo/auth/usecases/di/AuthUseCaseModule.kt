@@ -24,4 +24,7 @@ interface AuthUseCaseModule {
 
     @Binds
     fun VerifySignUpCodeUseCaseImpl.bindVerifySignUpCodeUseCase(): VerifySignUpCodeUseCase
+
+    @Binds
+    fun ResetPasswordUseCaseImpl.bindResetPasswordUseCase(): ResetPasswordUseCase
 }

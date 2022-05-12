@@ -3,6 +3,7 @@ package dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,14 +15,15 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPasswordEvent.UPDATE_CODE
-import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPasswordEvent.UPDATE_PASSWORD
-import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPasswordEvent.*
+import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
 
-enum class ResetPasswordEvent {
-    UPDATE_PASSWORD,
-    UPDATE_CODE
+sealed class ResetPasswordEvent {
+    data class UpdatePasswordValue(val value: String) : ResetPasswordEvent()
+    data class UpdatePasswordFocus(val focus: Boolean) : ResetPasswordEvent()
+    data class UpdateCodeValue(val value: String) : ResetPasswordEvent()
+    data class UpdateCodeFocus(val focus: Boolean) : ResetPasswordEvent()
 }
 
 @Composable
@@ -54,8 +56,8 @@ fun ResetPassword(
                 )
 
                 ResetPasswordForm(
-                    viewModel.viewState.code,
-                    viewModel.viewState.password,
+                    viewModel.viewState.form.code,
+                    viewModel.viewState.form.password,
                     viewModel::update
                 ) {
                     viewModel.submit(returnToSignIn)
@@ -80,22 +82,26 @@ fun ResetPassword(
 private fun ResetPasswordForm(
     codeEntry: EntryField,
     passwordEntry: EntryField,
-    updateEntry: (ResetPasswordEvent, String, Boolean) -> Unit,
+    updateEntry: (ResetPasswordEvent) -> Unit,
     submitForm: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     RoundedEntryCard(
         entry = codeEntry,
+        textStyle = MaterialTheme.typography.h2.copy(
+            textAlign = TextAlign.Center
+        ),
         modifier = Modifier
+            .width(256.dp)
             .padding(top = 24.dp, start = 32.dp, end = 32.dp)
             .onFocusChanged {
-                updateEntry(UPDATE_CODE, codeEntry.value, it.hasFocus)
+                updateEntry(UpdateCodeFocus(it.hasFocus))
             },
         onImeAction = {
             focusManager.moveFocus(FocusDirection.Down)
         },
         onTextChanged = {
-            updateEntry(UPDATE_CODE, it, codeEntry.hasFocus)
+            updateEntry(UpdateCodeValue(it))
         }
     )
 
@@ -104,14 +110,14 @@ private fun ResetPasswordForm(
         modifier = Modifier
             .padding(top = 24.dp, start = 32.dp, end = 32.dp)
             .onFocusChanged {
-                updateEntry(UPDATE_PASSWORD, passwordEntry.value, it.hasFocus)
+                updateEntry(UpdatePasswordFocus(it.hasFocus))
             },
         onImeAction = {
             focusManager.clearFocus()
             submitForm()
         },
         onTextChanged = {
-            updateEntry(UPDATE_PASSWORD, it, passwordEntry.hasFocus)
+            updateEntry(UpdatePasswordValue(it))
         }
     )
 }

@@ -20,7 +20,7 @@ import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpActi
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpAction.Type
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpState
-import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.ui.components.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 

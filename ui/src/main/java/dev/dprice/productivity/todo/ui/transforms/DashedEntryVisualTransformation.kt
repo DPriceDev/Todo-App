@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.feature.ui.transformers
+package dev.dprice.productivity.todo.ui.transforms
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle

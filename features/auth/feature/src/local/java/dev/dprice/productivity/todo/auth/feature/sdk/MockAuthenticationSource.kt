@@ -15,6 +15,7 @@ class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
     var resendCode: ResendCode = ResendCode.Done
     var signIn: SignIn = SignIn.Done
     var forgotPassword: ForgotPassword = ForgotPassword.Done
+    var resetPassword: ResetPassword = ResetPassword.Done
 
     override fun getCurrentSession(): Flow<DataState<Session>> = flow {
         emit(DataState.Loading)
@@ -44,5 +45,10 @@ class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
     override suspend fun sendForgotPassword(email: String): ForgotPassword {
         delay(responseDelay)
         return forgotPassword
+    }
+
+    override suspend fun resetPassword(code: String, newPassword: String): ResetPassword {
+        delay(responseDelay)
+        return resetPassword
     }
 }
