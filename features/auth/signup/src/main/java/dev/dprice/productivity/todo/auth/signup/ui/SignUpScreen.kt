@@ -51,7 +51,7 @@ fun SignUp(
                 )
                 Form(
                     signUpForm = viewModel.viewState.form,
-                    buttonEnablement = viewModel.viewState.buttonEnablement,
+                    buttonState = viewModel.viewState.buttonState,
                     onEntryChanged = viewModel::onFormChanged,
                     onSignInClicked = goToSignIn,
                     onSubmitForm = {
@@ -69,7 +69,7 @@ fun SignUp(
 @Composable
 private fun Form(
     signUpForm: SignUpForm,
-    buttonEnablement: ButtonEnablement,
+    buttonState: ButtonState,
     onEntryChanged: (SignUpAction) -> Unit,
     onSubmitForm: () -> Unit,
     onSignInClicked: () -> Unit
@@ -122,7 +122,7 @@ private fun Form(
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-            buttonEnablement = buttonEnablement,
+            buttonState = buttonState,
         )
 
         TextWithClickableSuffix(

@@ -73,18 +73,17 @@ fun VerifyCode(
                     },
                     onTextChanged = {
                         viewModel.updateCode(it, viewModel.viewState.code.hasFocus)
-                    },
-
+                    }
                 )
 
                 RoundedButton(
                     text = "Verify",
                     onClick = {
-                          viewModel.onSubmit(username, goToMainApp = goToMainApp)
+                        viewModel.onSubmit(username, goToMainApp = goToMainApp)
                     },
                     modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
                     contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-                    buttonEnablement = viewModel.viewState.buttonEnablement,
+                    buttonState = viewModel.viewState.buttonState,
                 )
 
                 Text(

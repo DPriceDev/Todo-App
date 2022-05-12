@@ -6,7 +6,7 @@ import dev.dprice.productivity.todo.ui.components.EntryField
 import javax.inject.Inject
 
 interface SignUpFormUpdater {
-    fun updateEntry(form: SignUpForm, action: SignUpAction) : SignUpForm
+    fun updateEntry(form: SignUpForm, action: SignUpAction): SignUpForm
 }
 
 class SignUpFormUpdaterImpl @Inject constructor() : SignUpFormUpdater {
@@ -31,7 +31,7 @@ class SignUpFormUpdaterImpl @Inject constructor() : SignUpFormUpdater {
         }
     }
 
-    private fun validate(value: String, regex: Regex) : Boolean = value.matches(regex)
+    private fun validate(value: String, regex: Regex): Boolean = value.matches(regex)
 
     private fun updateEntry(
         entry: EntryField,

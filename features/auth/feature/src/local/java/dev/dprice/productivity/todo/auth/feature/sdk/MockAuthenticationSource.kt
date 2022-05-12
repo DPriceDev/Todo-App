@@ -1,9 +1,7 @@
 package dev.dprice.productivity.todo.auth.feature.sdk
 
 import dev.dprice.productivity.todo.auth.library.data.AuthenticationSource
-import dev.dprice.productivity.todo.auth.library.model.Session
-import dev.dprice.productivity.todo.auth.library.model.SignUpResponse
-import dev.dprice.productivity.todo.auth.library.model.VerifyUserResponse
+import dev.dprice.productivity.todo.auth.library.model.*
 import dev.dprice.productivity.todo.core.DataState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +12,9 @@ class MockAuthenticationSource @Inject constructor(): AuthenticationSource {
     var responseDelay : Long = 1000L
     var createUserResponse: SignUpResponse = SignUpResponse.Code("testUsername")
     var verifyUserResponse: VerifyUserResponse = VerifyUserResponse.Done
+    var resendCodeResponse: ResendCodeResponse = ResendCodeResponse.Done
+    var signInResponse: SignInResponse = SignInResponse.Done
+    var forgotPasswordResponse: ForgotPasswordResponse = ForgotPasswordResponse.Done
 
     override fun getCurrentSession(): Flow<DataState<Session>> = flow {
         emit(DataState.Loading)
@@ -30,7 +31,18 @@ class MockAuthenticationSource @Inject constructor(): AuthenticationSource {
         return verifyUserResponse
     }
 
-    override suspend fun resendVerificationCode() {
+    override suspend fun resendVerificationCode(username: String): ResendCodeResponse {
         delay(responseDelay)
+        return resendCodeResponse
+    }
+
+    override suspend fun signInUser(username: String, password: String): SignInResponse {
+        delay(responseDelay)
+        return signInResponse
+    }
+
+    override suspend fun sendForgotPassword(email: String): ForgotPasswordResponse {
+        delay(responseDelay)
+        return forgotPasswordResponse
     }
 }

@@ -22,4 +22,6 @@ interface AuthenticationSource {
     suspend fun verifyNewUser(code: String, username: String) : VerifyUserResponse
 
     suspend fun resendVerificationCode(username: String) : ResendCodeResponse
+
+    suspend fun sendForgotPassword(email: String) : ForgotPasswordResponse
 }

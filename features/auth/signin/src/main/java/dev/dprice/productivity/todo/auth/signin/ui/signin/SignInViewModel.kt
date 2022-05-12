@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.viewmodel
+package dev.dprice.productivity.todo.auth.signin.ui.signin
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -12,7 +12,7 @@ import dev.dprice.productivity.todo.auth.signin.model.ErrorState
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction
 import dev.dprice.productivity.todo.auth.signin.model.SignInForm
 import dev.dprice.productivity.todo.auth.signin.model.SignInState
-import dev.dprice.productivity.todo.ui.components.ButtonEnablement
+import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,10 +41,10 @@ class SignInViewModelImpl @Inject constructor(
         val signInForm = signInFormUpdater.updateEntry(viewState.form, action)
         mutableViewState.value = viewState.copy(
             form = signInForm,
-            buttonEnablement = if(signInForm.isValid) {
-                ButtonEnablement.ENABLED
+            buttonState = if (signInForm.isValid) {
+                ButtonState.ENABLED
             } else {
-                ButtonEnablement.DISABLED
+                ButtonState.DISABLED
             }
         )
     }
@@ -53,8 +53,8 @@ class SignInViewModelImpl @Inject constructor(
         goToMainApp: () -> Unit,
         goToVerifyCode: (String) -> Unit
     ) {
-        if(!viewState.form.isValid) return
-        mutableViewState.value = viewState.copy(buttonEnablement = ButtonEnablement.LOADING)
+        if (!viewState.form.isValid) return
+        mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
         viewModelScope.launch {
             val response = signInUserUseCase(
@@ -62,18 +62,18 @@ class SignInViewModelImpl @Inject constructor(
                 viewState.form.password.value,
             )
 
-            when(response) {
+            when (response) {
                 is SignInResponse.Code -> goToVerifyCode(response.username)
                 SignInResponse.Done -> goToMainApp()
                 is SignInResponse.Error -> {
                     mutableViewState.value = viewState.copy(
-                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
                 is SignInResponse.AccountDisabled -> {
                     mutableViewState.value = viewState.copy(
-                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        buttonState = ButtonState.ENABLED,
                         error = ErrorState.Message("Account Disabled")
                     )
                 }

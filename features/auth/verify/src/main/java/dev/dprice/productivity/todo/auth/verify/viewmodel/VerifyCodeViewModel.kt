@@ -12,7 +12,7 @@ import dev.dprice.productivity.todo.auth.library.usecase.ResendVerificationCodeU
 import dev.dprice.productivity.todo.auth.library.usecase.VerifySignUpCodeUseCase
 import dev.dprice.productivity.todo.auth.verify.model.VerifyErrorState
 import dev.dprice.productivity.todo.auth.verify.model.VerifyState
-import dev.dprice.productivity.todo.ui.components.ButtonEnablement
+import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,14 +42,14 @@ class VerifyCodeViewModelImpl @Inject constructor(
         val updatedCode = verifyUserCodeUpdater.updateCode(viewState.code, code, focus)
         mutableViewState.value = viewState.copy(
             code = updatedCode,
-            buttonEnablement = if(updatedCode.isValid) ButtonEnablement.ENABLED else ButtonEnablement.DISABLED
+            buttonState = if (updatedCode.isValid) ButtonState.ENABLED else ButtonState.DISABLED
         )
     }
 
     override fun onSubmit(username: String, goToMainApp: () -> Unit) {
         if(!viewState.code.isValid) return
 
-        mutableViewState.value = viewState.copy(buttonEnablement = ButtonEnablement.LOADING)
+        mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
         viewModelScope.launch {
             val response = verifySignUpCodeUseCase.invoke(
@@ -57,12 +57,12 @@ class VerifyCodeViewModelImpl @Inject constructor(
                 user = username
             )
 
-            when(response) {
+            when (response) {
                 VerifyUserResponse.Done -> goToMainApp()
                 is VerifyUserResponse.Error -> {
                     mutableViewState.value = viewState.copy(
                         errorState = VerifyErrorState.Error("error!"),
-                        buttonEnablement = ButtonEnablement.ENABLED
+                        buttonState = ButtonState.ENABLED
                     )
                 }
             }

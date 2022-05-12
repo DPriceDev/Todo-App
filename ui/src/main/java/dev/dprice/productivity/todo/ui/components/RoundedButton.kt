@@ -56,7 +56,7 @@ fun RoundedButton(
     )
 }
 
-enum class ButtonEnablement {
+enum class ButtonState {
     ENABLED,
     LOADING,
     DISABLED
@@ -68,7 +68,7 @@ fun RoundedButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    buttonEnablement: ButtonEnablement = ButtonEnablement.ENABLED,
+    buttonState: ButtonState = ButtonState.ENABLED,
     shape: Shape = RoundedCornerShape(percent = 50),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: ButtonElevation? = ButtonDefaults.elevation(),
@@ -84,9 +84,9 @@ fun RoundedButton(
     ),
 ) {
     Button(
-        if (buttonEnablement == ButtonEnablement.ENABLED) onClick else ({ /* do nothing */ }),
+        if (buttonState == ButtonState.ENABLED) onClick else ({ /* do nothing */ }),
         modifier,
-        buttonEnablement != ButtonEnablement.DISABLED,
+        buttonState != ButtonState.DISABLED,
         interactionSource,
         elevation,
         shape,
@@ -98,9 +98,9 @@ fun RoundedButton(
             modifier = Modifier.height(20.dp),
             contentAlignment = Alignment.Center
         ) {
-            AnimatedContent(targetState = buttonEnablement) { enabledState ->
+            AnimatedContent(targetState = buttonState) { enabledState ->
                 when (enabledState) {
-                    ButtonEnablement.LOADING -> LoadingDots()
+                    ButtonState.LOADING -> LoadingDots()
                     else -> Text(text = text)
                 }
             }

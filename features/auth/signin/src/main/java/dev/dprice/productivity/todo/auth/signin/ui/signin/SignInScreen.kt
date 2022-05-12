@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.ui
+package dev.dprice.productivity.todo.auth.signin.ui.signin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,8 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction.Type
 import dev.dprice.productivity.todo.auth.signin.model.SignInForm
-import dev.dprice.productivity.todo.auth.signin.viewmodel.SignInViewModel
-import dev.dprice.productivity.todo.auth.signin.viewmodel.SignInViewModelImpl
 import dev.dprice.productivity.todo.ui.components.*
 
 @Composable
@@ -49,7 +47,7 @@ fun SignIn(
                 // todo: Show password in entry field
                 Form(
                     signInForm = viewModel.viewState.form,
-                    buttonEnablement = viewModel.viewState.buttonEnablement,
+                    buttonState = viewModel.viewState.buttonState,
                     onEntryChanged = viewModel::onFormChanged,
                     onSignUpClicked = goToSignUp,
                     onForgotPasswordClicked = goToForgotPassword,
@@ -70,7 +68,7 @@ fun SignIn(
 @Composable
 private fun Form(
     signInForm: SignInForm,
-    buttonEnablement: ButtonEnablement,
+    buttonState: ButtonState,
     onEntryChanged: (SignInAction) -> Unit,
     onSubmitForm: () -> Unit,
     onSignUpClicked: () -> Unit,
@@ -118,7 +116,7 @@ private fun Form(
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-            buttonEnablement = buttonEnablement,
+            buttonState = buttonState,
         )
 
         TextWithClickableSuffix(

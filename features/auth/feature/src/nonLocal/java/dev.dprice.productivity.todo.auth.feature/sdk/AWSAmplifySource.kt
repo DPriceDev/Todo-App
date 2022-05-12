@@ -113,4 +113,16 @@ class AWSAmplifySource(
             ResendCodeResponse.Error(throwable)
         }
     }
+
+    // todo: might need to be username?
+    override suspend fun sendForgotPassword(email: String): ForgotPasswordResponse {
+        return try {
+            Amplify.Auth.resetPassword(email)
+            ForgotPasswordResponse.Done
+        } catch (throwable: Throwable) {
+            ForgotPasswordResponse.Error(throwable)
+        }
+    }
+
+    // todo: verify forgot password code?
 }

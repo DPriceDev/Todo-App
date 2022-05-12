@@ -12,7 +12,7 @@ import dev.dprice.productivity.todo.auth.signup.model.ErrorState
 import dev.dprice.productivity.todo.auth.signup.model.SignUpAction
 import dev.dprice.productivity.todo.auth.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.signup.model.SignUpState
-import dev.dprice.productivity.todo.ui.components.ButtonEnablement
+import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,10 +42,10 @@ class SignUpViewModelImpl @Inject constructor(
         val signUpForm = signUpFormUpdater.updateEntry(viewState.form, action)
         mutableViewState.value = viewState.copy(
             form = signUpForm,
-            buttonEnablement = if(signUpForm.isValid) {
-                ButtonEnablement.ENABLED
+            buttonState = if(signUpForm.isValid) {
+                ButtonState.ENABLED
             } else {
-                ButtonEnablement.DISABLED
+                ButtonState.DISABLED
             }
         )
     }
@@ -54,7 +54,7 @@ class SignUpViewModelImpl @Inject constructor(
         goToVerifyCode: (String) -> Unit,
         goToMainApp: () -> Unit
     ) {
-        mutableViewState.value = viewState.copy(buttonEnablement = ButtonEnablement.LOADING)
+        mutableViewState.value = viewState.copy(buttonState = ButtonState.LOADING)
 
         Timber.tag("Sign Up ViewModel").d(
             "user: ${ viewState.form.username.value } email: ${ viewState.form.email.value } pass: ${ viewState.form.password.value }"
@@ -72,13 +72,13 @@ class SignUpViewModelImpl @Inject constructor(
                 SignUpResponse.Done -> goToMainApp()
                 is SignUpResponse.Error -> {
                     mutableViewState.value = viewState.copy(
-                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        buttonState =  ButtonState.ENABLED,
                         error = ErrorState.Message("Error Test!")
                     )
                 }
                 is SignUpResponse.UsernameExists -> {
                     mutableViewState.value = viewState.copy(
-                        buttonEnablement =  ButtonEnablement.ENABLED,
+                        buttonState =  ButtonState.ENABLED,
                         error = ErrorState.Message("Existing user error!")
                     )
                 }

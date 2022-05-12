@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.auth.signin.viewmodel
+package dev.dprice.productivity.todo.auth.signin.ui.signin
 
 import dev.dprice.productivity.todo.auth.signin.model.SignInAction
 import dev.dprice.productivity.todo.auth.signin.model.SignInForm

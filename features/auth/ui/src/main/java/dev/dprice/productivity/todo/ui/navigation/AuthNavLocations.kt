@@ -12,4 +12,5 @@ sealed class AuthNavLocation(
     object SignIn : AuthNavLocation("auth-sign-in")
     object MultiFactor : AuthNavLocation("auth-mfa")
     object ForgotPassword : AuthNavLocation("auth-forgot")
+    object ResetPassword : AuthNavLocation("auth-reset")
 }
