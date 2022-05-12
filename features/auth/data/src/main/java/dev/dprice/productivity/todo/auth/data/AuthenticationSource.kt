@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationSource {
 
-    fun getCurrentSession(): Flow<DataState<Session>>
+    fun getCurrentSession(): Flow<DataState<SessionThirteen>>
 
     suspend fun createUser(
         username: String,
@@ -23,5 +23,5 @@ interface AuthenticationSource {
 
     suspend fun resendVerificationCode(username: String): ResendCode
 
-    suspend fun sendForgotPassword(email: String): ForgotPassword
+    suspend fun sendForgotPassword(email: String): ForgotPasswordThirteen
 }

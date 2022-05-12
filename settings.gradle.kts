@@ -4,7 +4,9 @@ include(":platform")
 include(":core")
 include(":features:tasks")
 include(":features:auth:feature")
+include(":features:auth:usecases")
 include(":features:auth:data")
+include(":ui:test")
 
 rootProject.name = "TodoApp"
 
@@ -26,11 +28,3 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include(":features:auth:landing")
-include(":features:auth:ui")
-include(":features:auth:signup")
-include(":features:auth:signin")
-include(":features:auth:verify")
-include(":ui:test")
-include(":features:auth:usecases")
-include(":features:auth:forgot")

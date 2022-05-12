@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.navigation
-import dev.dprice.productivity.todo.auth.feature.ui.AuthScreen
+import dev.dprice.productivity.todo.auth.feature.screens.base.AuthScreen
 import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListUi
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme

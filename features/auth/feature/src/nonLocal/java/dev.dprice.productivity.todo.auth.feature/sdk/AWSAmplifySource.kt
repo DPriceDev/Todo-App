@@ -31,11 +31,11 @@ class AWSAmplifySource(
         initializeAmplify()
     }
 
-    override fun getCurrentSession() : Flow<DataState<Session>> = flow {
+    override fun getCurrentSession() : Flow<DataState<SessionThirteen>> = flow {
         if(auth.await()) {
             emit(DataState.Loading)
             val session = Amplify.Auth.fetchAuthSession()
-            emit(DataState.Data(Session(session.isSignedIn)))
+            emit(DataState.Data(SessionThirteen(session.isSignedIn)))
         } else {
             emit(DataState.Error(AwsAmplifyNotInitializedException()))
         }
@@ -115,12 +115,12 @@ class AWSAmplifySource(
     }
 
     // todo: might need to be username?
-    override suspend fun sendForgotPassword(email: String): ForgotPassword {
+    override suspend fun sendForgotPassword(email: String): ForgotPasswordThirteen {
         return try {
             Amplify.Auth.resetPassword(email)
-            ForgotPassword.Done
+            ForgotPasswordThirteen.Done
         } catch (throwable: Throwable) {
-            ForgotPassword.Error(throwable)
+            ForgotPasswordThirteen.Error(throwable)
         }
     }
 
