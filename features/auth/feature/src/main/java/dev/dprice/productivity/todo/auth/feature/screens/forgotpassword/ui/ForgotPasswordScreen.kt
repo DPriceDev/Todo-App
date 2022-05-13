@@ -1,85 +1,70 @@
 package dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
-import dev.dprice.productivity.todo.ui.components.*
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordEvent
+import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordState
+import dev.dprice.productivity.todo.auth.feature.ui.AuthWavyScaffold
+import dev.dprice.productivity.todo.features.auth.feature.R
+import dev.dprice.productivity.todo.ui.components.RoundedButton
+import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
+import dev.dprice.productivity.todo.ui.components.TextWithClickableSuffix
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @Composable
 fun ForgotPassword(
-    state: WavyScaffoldState,
-    goToResetPassword: () -> Unit,
-    viewModel: ForgotPasswordViewModel = hiltViewModel<ForgotPasswordViewModelImpl>()
+    state: ForgotPasswordState,
+    wavyScaffoldState: WavyScaffoldState,
+    onEvent: (ForgotPasswordEvent) -> Unit,
+    onSubmit: () -> Unit,
+    goToResetPassword: () -> Unit
 ) {
-    WavyBackdropScaffold(
-        state = state,
-        phaseOffset = 0.3f,
-        backContent = {
-            TitleBlock(
-                colour = MaterialTheme.colors.background,
-                title = "Forgot Password"
-            )
-        },
+    AuthWavyScaffold(
+        state = wavyScaffoldState,
+        title = stringResource(id = R.string.forgot_password),
+        description = stringResource(id = R.string.forgot_password_description),
+        errorMessage = (state.errorState as? ErrorState.Message)?.let { stringResource(id = it.messageId) },
+        phaseOffset = 0.3f, // todo: pass in
         frontContent = {
             val focusManager = LocalFocusManager.current
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TitleBlock(colour = MaterialTheme.colors.primary, title = "Forgot Password")
-
-                Text(
-                    text = "Please enter the username associated to your account and we will send an email to reset your password.",
-                    modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onBackground
-                )
-
-                RoundedEntryCard(
-                    entry = viewModel.viewState.username,
-                    modifier = Modifier
-                        .padding(top = 24.dp, start = 32.dp, end = 32.dp)
-                        .onFocusChanged {
-                            viewModel.updateUsername(viewModel.viewState.username.value, it.hasFocus)
-                        },
-                    onImeAction = {
-                        focusManager.clearFocus()
-                        viewModel.submit(goToResetPassword = goToResetPassword)
+            RoundedEntryCard(
+                entry = state.username,
+                modifier = Modifier
+                    .padding(top = 24.dp, start = 32.dp, end = 32.dp)
+                    .onFocusChanged {
+                        onEvent(ForgotPasswordEvent.UpdateUsernameFocus(it.hasFocus))
                     },
-                    onTextChanged = {
-                        viewModel.updateUsername(it, viewModel.viewState.username.hasFocus)
-                    }
-                )
+                onImeAction = {
+                    focusManager.clearFocus()
+                    onSubmit()
+                },
+                onTextChanged = {
+                    onEvent(ForgotPasswordEvent.UpdateUsernameValue(it))
+                }
+            )
 
-                RoundedButton(
-                    text = "Reset password",
-                    onClick = {
-                        viewModel.submit(goToResetPassword = goToResetPassword)
-                    },
-                    modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
-                    contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-                    buttonState = viewModel.viewState.buttonState,
-                )
+            RoundedButton(
+                text = stringResource(id = R.string.forgot_password_button),
+                onClick = onSubmit,
+                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
+                contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
+                buttonState = state.buttonState,
+            )
 
-                TextWithClickableSuffix(
-                    text = "",
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    suffixText = "Already have a reset code?",
-                    onClick = goToResetPassword
-                )
-            }
+            TextWithClickableSuffix(
+                text = "",
+                modifier = Modifier.padding(bottom = 24.dp),
+                suffixText = stringResource(id = R.string.already_have_code_question),
+                onClick = goToResetPassword
+            )
         }
     )
 }

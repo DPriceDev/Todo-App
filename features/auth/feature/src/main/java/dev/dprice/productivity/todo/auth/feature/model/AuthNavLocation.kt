@@ -16,7 +16,7 @@ sealed class AuthNavLocation(
     object VerifySignUp : AuthNavLocation(
         "auth-sign-up-verify/{username}?$WAVE_OFFSET_QUERY"
     ) {
-        fun location(username: String) = "auth-sign-up-verify/$username"
+        fun withParameters(username: String) = "auth-sign-up-verify/$username"
 
         const val USERNAME = "username"
     }

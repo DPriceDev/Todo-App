@@ -14,14 +14,16 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TitleBlock(
+    title: String,
     colour: Color,
-    title: String = "Create Account"
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = Modifier
             .height(128.dp)
             .fillMaxWidth()
+            .then(modifier)
     ) {
         Text(
             text = title,

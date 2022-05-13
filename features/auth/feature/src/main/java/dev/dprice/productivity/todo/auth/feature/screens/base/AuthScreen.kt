@@ -26,11 +26,7 @@ fun AuthScreen(navController: NavHostController) {
     val state = remember { WavyScaffoldState() }
 
     BoxWithConstraints {
-        WavyBackdropScaffold(
-            state = state,
-            backContent = { },
-            frontContent = { }
-        )
+        WavyBackdropScaffold(state = state)
 
         AnimatedNavHost(
             authNavController,

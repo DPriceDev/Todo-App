@@ -1,7 +1,5 @@
 package dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,33 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ForgotPassword
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordEvent
+import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordState
 import dev.dprice.productivity.todo.auth.usecases.auth.SendForgotPasswordUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-sealed class ErrorState {
-    object None : ErrorState()
-    data class Error(val message: String) : ErrorState()
-}
-
-data class ForgotPasswordState(
-    val username: EntryField = EntryField(
-        icon = Icons.Outlined.Person,
-        contentDescription = "Username",
-        hintText = "Username",
-        errorText = "Please enter a valid username."
-    ),
-    val buttonState: ButtonState = ButtonState.DISABLED,
-    val errorState: ErrorState = ErrorState.None
-)
 
 interface ForgotPasswordViewModel {
     val viewState: ForgotPasswordState
 
-    fun updateUsername(username: String, focus: Boolean)
+    fun updateEntry(event: ForgotPasswordEvent)
 
     fun submit(goToResetPassword: () -> Unit)
 }
@@ -44,13 +29,23 @@ interface ForgotPasswordViewModel {
 class ForgotPasswordViewModelImpl @Inject constructor(
     private val updateUsernameEntryUseCase: UpdateUsernameEntryUseCase,
     private val sendForgotPasswordUseCase: SendForgotPasswordUseCase
-) : ViewModel(), ForgotPasswordViewModel {
+) : ViewModel(),
+    ForgotPasswordViewModel {
 
     private val viewModelState: MutableState<ForgotPasswordState> = mutableStateOf(ForgotPasswordState())
     override val viewState: ForgotPasswordState by viewModelState
 
-    override fun updateUsername(username: String, focus: Boolean) {
-        val updatedUsername = updateUsernameEntryUseCase(viewState.username, username, focus)
+    override fun updateEntry(event: ForgotPasswordEvent) {
+        val updatedUsername = when (event) {
+            is ForgotPasswordEvent.UpdateUsernameFocus -> updateUsernameEntryUseCase(
+                viewState.username,
+                event.focus
+            )
+            is ForgotPasswordEvent.UpdateUsernameValue -> updateUsernameEntryUseCase(
+                viewState.username,
+                event.value
+            )
+        }
         viewModelState.value = viewState.copy(
             username = updatedUsername,
             buttonState = if (updatedUsername.isValid) ButtonState.ENABLED else ButtonState.DISABLED
@@ -71,11 +66,16 @@ class ForgotPasswordViewModelImpl @Inject constructor(
                 ForgotPassword.Done -> goToResetPassword()
                 is ForgotPassword.Error -> {
                     viewModelState.value = viewState.copy(
-                        errorState = ErrorState.Error("error!"),
+                        errorState = ErrorState.Message(R.string.error_unknown_error),
                         buttonState = ButtonState.ENABLED
                     )
                 }
-                ForgotPassword.ConnectionError -> TODO()
+                ForgotPassword.ConnectionError -> {
+                    viewModelState.value = viewState.copy(
+                        errorState = ErrorState.Message(R.string.error_no_internet),
+                        buttonState = ButtonState.ENABLED
+                    )
+                }
             }
         }
     }

@@ -5,11 +5,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.signup.ui.SignUp
+import dev.dprice.productivity.todo.auth.feature.screens.signup.ui.SignUpViewModelImpl
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -48,15 +50,30 @@ fun NavGraphBuilder.signUpComposable(
             )
         }
 
+        val viewModel = hiltViewModel<SignUpViewModelImpl>()
         SignUp(
-            state = state,
-            goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.location(it)) },
+            viewModel.viewState,
+            wavyScaffoldState = state,
+            updateEntry = viewModel::updateEntry,
             goToSignIn = {
                 authNavHostController.navigate(AuthNavLocation.SignIn.route) {
                     popUpTo(AuthNavLocation.SignUp.route) { inclusive = true }
                 }
             },
-            goToMainApp = { appNavHostController.navigate("MainApp") }
+            submitForm = {
+                viewModel.submitForm(
+                    goToVerifyCode = { code ->
+                        authNavHostController.navigate(
+                            AuthNavLocation.VerifySignUp.withParameters(code)
+                        )
+                    },
+                    goToMainApp = {
+                        appNavHostController.navigate("MainApp") {
+                            popUpTo("MainApp") { inclusive = true }
+                        }
+                    }
+                )
+            }
         )
     }
 }

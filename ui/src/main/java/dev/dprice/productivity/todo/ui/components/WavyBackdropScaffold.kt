@@ -23,8 +23,8 @@ fun WavyBackdropScaffold(
     phaseOffset: Float = 0.0f,
     backgroundColour: Color = MaterialTheme.colors.surface,
     foregroundColour: Color = MaterialTheme.colors.background,
-    backContent: @Composable BoxScope.(height: Dp) -> Unit,
-    frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,
+    backContent: @Composable BoxScope.(height: Dp) -> Unit = { },
+    frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit = { },
 ) {
     WavyBackdropScaffold(
         backDropHeight = state.getBackDropHeight().value,
@@ -109,7 +109,7 @@ fun WavyBackdropScaffold(
 fun PreviewWavyScaffoldAt20Percent() {
     TodoAppTheme {
         WavyBackdropScaffold(
-            backDropHeight =128.dp + 16.dp,
+            backDropHeight = 128.dp + 16.dp,
             waveFrequency = 1f,
             backContent = { height ->
                 Box(

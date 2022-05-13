@@ -1,52 +1,23 @@
 package dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Password
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ResetPassword
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordEvent
+import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordForm
+import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordState
 import dev.dprice.productivity.todo.auth.usecases.auth.ResetPasswordUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
-import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-sealed class ErrorState {
-    object None : ErrorState()
-    data class Error(val message: String) : ErrorState()
-}
-
-data class ResetPasswordForm(
-    val code: EntryField = EntryField(
-        contentDescription = "Reset Code",
-        errorText = "Please enter your 6 digit reset code",
-        maxLength = 6,
-        visualTransformation = DashedEntryVisualTransformation(6)
-    ),
-    val password: EntryField = EntryField(
-        icon = Icons.Outlined.Password,
-        contentDescription = "New Password",
-        hintText = "New Password",
-        errorText = "Please enter a valid password.",
-        visualTransformation = PasswordVisualTransformation(),
-        imeAction = ImeAction.Done
-    ),
-)
-
-data class ResetPasswordState(
-    val form: ResetPasswordForm = ResetPasswordForm(),
-    val buttonState: ButtonState = ButtonState.DISABLED,
-    val errorState: ErrorState = ErrorState.None
-)
 
 interface ResetPasswordViewModel {
     val viewState: ResetPasswordState
@@ -70,32 +41,16 @@ class ResetPasswordViewModelImpl @Inject constructor(
     override fun update(event: ResetPasswordEvent) {
         val updatedForm = when (event) {
             is ResetPasswordEvent.UpdatePasswordValue -> viewState.form.copy(
-                password = updatePasswordEntryUseCase(
-                    viewState.form.password,
-                    event.value,
-                    viewState.form.password.hasFocus
-                )
+                password = updatePasswordEntryUseCase(viewState.form.password, event.value)
             )
             is ResetPasswordEvent.UpdatePasswordFocus -> viewState.form.copy(
-                password = updatePasswordEntryUseCase(
-                    viewState.form.password,
-                    viewState.form.password.value,
-                    event.focus
-                )
+                password = updatePasswordEntryUseCase(viewState.form.password, event.focus)
             )
             is ResetPasswordEvent.UpdateCodeValue -> viewState.form.copy(
-                code = updateCodeEntryUseCase(
-                    viewState.form.code,
-                    event.value,
-                    viewState.form.code.hasFocus
-                )
+                code = updateCodeEntryUseCase(viewState.form.code, event.value)
             )
             is ResetPasswordEvent.UpdateCodeFocus -> viewState.form.copy(
-                code = updateCodeEntryUseCase(
-                    viewState.form.code,
-                    viewState.form.code.value,
-                    event.focus
-                )
+                code = updateCodeEntryUseCase(viewState.form.code, event.focus)
             )
         }
 
@@ -127,11 +82,16 @@ class ResetPasswordViewModelImpl @Inject constructor(
                 ResetPassword.Done -> goBackToSignIn()
                 is ResetPassword.Error -> {
                     viewModelState.value = viewState.copy(
-                        errorState = ErrorState.Error("error!"),
+                        errorState = ErrorState.Message(R.string.error_unknown_error),
                         buttonState = ButtonState.ENABLED
                     )
                 }
-                ResetPassword.ConnectionError -> TODO()
+                ResetPassword.ConnectionError -> {
+                    viewModelState.value = viewState.copy(
+                        errorState = ErrorState.Message(R.string.error_no_internet),
+                        buttonState = ButtonState.ENABLED
+                    )
+                }
             }
         }
     }

@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ResendCode
 import dev.dprice.productivity.todo.auth.data.model.VerifyUser
-import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyErrorState
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent
 import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyState
 import dev.dprice.productivity.todo.auth.usecases.auth.ResendVerificationCodeUseCase
 import dev.dprice.productivity.todo.auth.usecases.auth.VerifySignUpCodeUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,7 +23,7 @@ import javax.inject.Inject
 interface VerifyCodeViewModel {
     val viewState: VerifyState
 
-    fun updateCode(code: String, focus: Boolean)
+    fun updateCode(event: VerifyCodeEvent)
 
     fun onSubmit(username: String, goToMainApp: () -> Unit)
 
@@ -39,8 +41,18 @@ class VerifyCodeViewModelImpl @Inject constructor(
     private val mutableViewState: MutableState<VerifyState> = mutableStateOf(VerifyState())
     override val viewState: VerifyState by mutableViewState
 
-    override fun updateCode(code: String, focus: Boolean) {
-        val updatedCode = updateCodeEntryUseCase(viewState.code, code, focus)
+    override fun updateCode(event: VerifyCodeEvent) {
+        val updatedCode = when (event) {
+            is VerifyCodeEvent.UpdateCodeFocus -> updateCodeEntryUseCase(
+                viewState.code,
+                event.focus
+            )
+            is VerifyCodeEvent.UpdateCodeValue -> updateCodeEntryUseCase(
+                viewState.code,
+                event.value
+            )
+        }
+
         mutableViewState.value = viewState.copy(
             code = updatedCode,
             buttonState = if (updatedCode.isValid) ButtonState.ENABLED else ButtonState.DISABLED
@@ -62,13 +74,28 @@ class VerifyCodeViewModelImpl @Inject constructor(
                 VerifyUser.Done -> goToMainApp()
                 is VerifyUser.Error -> {
                     mutableViewState.value = viewState.copy(
-                        errorState = VerifyErrorState.Error("error!"),
+                        errorState = ErrorState.Message(R.string.error_unknown_error),
                         buttonState = ButtonState.ENABLED
                     )
                 }
-                VerifyUser.ConnectionError -> TODO()
-                VerifyUser.ExpiredCode -> TODO()
-                VerifyUser.IncorrectCode -> TODO()
+                VerifyUser.ConnectionError -> {
+                    mutableViewState.value = viewState.copy(
+                        errorState = ErrorState.Message(R.string.error_no_internet),
+                        buttonState = ButtonState.ENABLED
+                    )
+                }
+                VerifyUser.ExpiredCode -> {
+                    mutableViewState.value = viewState.copy(
+                        errorState = ErrorState.Message(R.string.error_expired_code),
+                        buttonState = ButtonState.ENABLED
+                    )
+                }
+                VerifyUser.IncorrectCode -> {
+                    mutableViewState.value = viewState.copy(
+                        errorState = ErrorState.Message(R.string.error_invalid_code),
+                        buttonState = ButtonState.ENABLED
+                    )
+                }
             }
         }
     }

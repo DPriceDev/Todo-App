@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.SignIn
-import dev.dprice.productivity.todo.auth.feature.screens.signin.model.ErrorState
-import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInAction
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInEvent
 import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInForm
 import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInState
 import dev.dprice.productivity.todo.auth.usecases.auth.SignInUserUseCase
@@ -22,7 +22,7 @@ import javax.inject.Inject
 interface SignInViewModel {
     val viewState: SignInState
 
-    fun onFormChanged(action: SignInAction)
+    fun updateEntry(event: SignInEvent)
 
     fun submitForm(
         goToMainApp: () -> Unit,
@@ -43,22 +43,20 @@ class SignInViewModelImpl @Inject constructor(
     )
     override val viewState: SignInState by viewModelState
 
-    override fun onFormChanged(action: SignInAction) {
+    override fun updateEntry(event: SignInEvent) {
 
-        val updatedForm = when (action.type) {
-            SignInAction.Type.UPDATE_USERNAME -> viewState.form.copy(
-                username = updateUsernameEntryUseCase(
-                    viewState.form.username,
-                    action.value,
-                    action.focus
-                )
+        val updatedForm = when (event) {
+            is SignInEvent.UpdatePasswordFocus -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(viewState.form.password, event.focus)
             )
-            SignInAction.Type.UPDATE_PASSWORD -> viewState.form.copy(
-                password = updatePasswordEntryUseCase(
-                    viewState.form.password,
-                    action.value,
-                    action.focus
-                )
+            is SignInEvent.UpdatePasswordValue -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(viewState.form.password, event.value)
+            )
+            is SignInEvent.UpdateUsernameFocus -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(viewState.form.username, event.focus)
+            )
+            is SignInEvent.UpdateUsernameValue -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(viewState.form.username, event.value)
             )
         }
 
@@ -91,19 +89,19 @@ class SignInViewModelImpl @Inject constructor(
                 is SignIn.Error -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message(R.string.error_unknown_error)
+                        errorState = ErrorState.Message(R.string.error_unknown_error)
                     )
                 }
                 is SignIn.AccountDisabled -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message(R.string.error_sign_in_account_disabled)
+                        errorState = ErrorState.Message(R.string.error_sign_in_account_disabled)
                     )
                 }
-                SignIn.NetworkError -> {
+                SignIn.ConnectionError -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message(R.string.error_no_internet)
+                        errorState = ErrorState.Message(R.string.error_no_internet)
                     )
                 }
             }

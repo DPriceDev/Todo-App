@@ -1,13 +1,9 @@
 package dev.dprice.productivity.todo.auth.feature.screens.verify.model
 
-import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
-
-sealed class VerifyErrorState {
-    object None : VerifyErrorState()
-    data class Error(val message: String) : VerifyErrorState()
-}
+import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
 
 data class VerifyState(
     val code: EntryField = EntryField(
@@ -17,5 +13,5 @@ data class VerifyState(
         visualTransformation = DashedEntryVisualTransformation(6)
     ),
     val buttonState: ButtonState = ButtonState.DISABLED,
-    val errorState: VerifyErrorState = VerifyErrorState.None
+    val errorState: ErrorState = ErrorState.None
 )

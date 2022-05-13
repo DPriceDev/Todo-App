@@ -1,7 +1,6 @@
 package dev.dprice.productivity.todo.auth.feature.screens.verify.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -11,97 +10,88 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent
+import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent.UpdateCodeFocus
+import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent.UpdateCodeValue
+import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyState
+import dev.dprice.productivity.todo.auth.feature.ui.AuthWavyScaffold
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
 fun VerifyCode(
-    state: WavyScaffoldState,
+    state: VerifyState,
+    wavyScaffoldState: WavyScaffoldState,
     username: String,
-    goToMainApp: () -> Unit,
-    goBack: () -> Unit,
-    viewModel: VerifyCodeViewModel = hiltViewModel<VerifyCodeViewModelImpl>()
+    updateCode: (VerifyCodeEvent) -> Unit,
+    onSubmit: (String) -> Unit,
+    onResendClicked: (String) -> Unit,
+    goBack: () -> Unit
 ) {
     OnBackDialog(onConfirm = goBack)
 
-    WavyBackdropScaffold(
-        state = state,
+    AuthWavyScaffold(
+        state = wavyScaffoldState,
+        title = stringResource(id = R.string.verify_account),
+        description = stringResource(id = R.string.enter_code_question),
         phaseOffset = 0.3f,
-        backContent = {
-            TitleBlock(colour = MaterialTheme.colors.background, title = "Verify Sign Up")
-        },
         frontContent = {
             val focusManager = LocalFocusManager.current
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TitleBlock(colour = MaterialTheme.colors.primary, title = "Verify Sign Up")
-
-                Text(
-                    text = "Please enter the verification code that has been sent to your email address",
-                    modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onBackground
-                )
-
-                RoundedEntryCard(
-                    entry = viewModel.viewState.code,
-                    textStyle = MaterialTheme.typography.h2.copy(
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .width(256.dp)
-                        .onFocusChanged {
-                            viewModel.updateCode(viewModel.viewState.code.value, it.hasFocus)
-                        },
-                    onImeAction = {
-                        focusManager.clearFocus()
-                        viewModel.onSubmit(username, goToMainApp)
+            RoundedEntryCard(
+                entry = state.code,
+                textStyle = MaterialTheme.typography.h2.copy(
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .width(256.dp)
+                    .onFocusChanged {
+                        updateCode(UpdateCodeFocus(it.hasFocus))
                     },
-                    onTextChanged = {
-                        viewModel.updateCode(it, viewModel.viewState.code.hasFocus)
-                    }
-                )
+                onImeAction = {
+                    focusManager.clearFocus()
+                    onSubmit(username)
+                },
+                onTextChanged = {
+                    updateCode(UpdateCodeValue(it))
+                }
+            )
 
-                RoundedButton(
-                    text = "Verify",
-                    onClick = {
-                        viewModel.onSubmit(username, goToMainApp = goToMainApp)
-                    },
-                    modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
-                    contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-                    buttonState = viewModel.viewState.buttonState,
-                )
+            RoundedButton(
+                text = stringResource(id = R.string.verify_button),
+                onClick = {
+                    onSubmit(username)
+                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
+                contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
+                buttonState = state.buttonState,
+            )
 
-                Text(
-                    text = "Not received your verification code yet?",
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onBackground
-                )
+            Text(
+                text = stringResource(id = R.string.not_received_code_question),
+                modifier = Modifier.padding(horizontal = 32.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.onBackground
+            )
 
-                TextWithClickableSuffix(
-                    text = "",
-                    suffixText = "Resend verification code",
-                    onClick = {
-                        viewModel.resendVerificationCode(username)
-                    }
-                )
-
-            }
+            TextWithClickableSuffix(
+                text = "",
+                suffixText = stringResource(id = R.string.resend_code_question),
+                onClick = {
+                    onResendClicked(username)
+                }
+            )
         }
     )
 }
@@ -117,12 +107,12 @@ fun OnBackDialog(
     }
 
     if (isDialogShown.value) {
-       AppDialog(
-           title = "Are you sure you want to leave?",
-           message = "Your account can be verified at a later date when signing in.",
-           onConfirm = onConfirm,
-           isDialogShown = isDialogShown
-       )
+        AppDialog(
+            title = stringResource(id = R.string.back_dialog_title),
+            message = stringResource(id = R.string.back_dialog_description),
+            onConfirm = onConfirm,
+            isDialogShown = isDialogShown
+        )
     }
 }
 
@@ -132,13 +122,18 @@ fun OnBackDialog(
 
 @Preview
 @Composable
-private fun PreviewVerifyCode() {
-    val state = WavyScaffoldState(
-        initialBackDropHeight = 128.dp,
-        initialWaveHeight = 128.dp,
-        initialFrequency = 0.3f
-    )
+private fun PreviewVerifyCode(
+    @PreviewParameter(WavyScaffoldStateProvider::class) state: WavyScaffoldState
+) {
     TodoAppTheme() {
-        VerifyCode(state = state, "testUser", { }, { })
+        VerifyCode(
+            state = VerifyState(),
+            wavyScaffoldState = state,
+            "testUser",
+            { },
+            { },
+            { },
+            { }
+        )
     }
 }

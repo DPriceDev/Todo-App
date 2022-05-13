@@ -5,11 +5,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.verify.ui.VerifyCode
+import dev.dprice.productivity.todo.auth.feature.screens.verify.ui.VerifyCodeViewModelImpl
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -42,13 +44,21 @@ fun NavGraphBuilder.verifyCodeComposable(
             )
         }
 
+        val viewModel = hiltViewModel<VerifyCodeViewModelImpl>()
         VerifyCode(
-            state = state,
+            state = viewModel.viewState,
+            wavyScaffoldState = state,
             username = backStackEntry
                 .arguments
                 ?.getString(AuthNavLocation.VerifySignUp.USERNAME)
                 ?: throw Throwable("Missing username provided to verify code"),
-            goToMainApp = { appNavHostController.navigate("MainApp") },
+            onResendClicked = viewModel::resendVerificationCode,
+            updateCode = viewModel::updateCode,
+            onSubmit = {
+                viewModel.onSubmit(it) {
+                    appNavHostController.navigate("MainApp")
+                }
+            },
             goBack = {
                 authNavHostController.popBackStack(
                     route = AuthNavLocation.Landing.route,

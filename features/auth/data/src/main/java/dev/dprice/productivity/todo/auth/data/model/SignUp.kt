@@ -8,4 +8,6 @@ sealed class SignUp {
     data class UsernameExists(val username: String) : SignUp()
 
     data class Error(val throwable: Throwable) : SignUp()
+
+    object ConnectionError : SignUp()
 }

@@ -62,7 +62,7 @@ fun NavGraphBuilder.signInComposable(
             goToForgotPassword = {
                 authNavHostController.navigate(AuthNavLocation.ForgotPassword.route)
             },
-            onFormUpdated = viewModel::onFormChanged,
+            onFormUpdated = viewModel::updateEntry,
             onSubmitForm = {
                 viewModel.submitForm(
                     goToMainApp = {
@@ -72,7 +72,7 @@ fun NavGraphBuilder.signInComposable(
                     },
                     goToVerifyCode = { username ->
                         authNavHostController.navigate(
-                            AuthNavLocation.VerifySignUp.location(username)
+                            AuthNavLocation.VerifySignUp.withParameters(username)
                         )
                     }
                 )

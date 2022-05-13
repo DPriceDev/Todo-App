@@ -3,6 +3,7 @@ package dev.dprice.productivity.todo.ui.components
 import androidx.compose.animation.core.*
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.coroutineScope
@@ -60,4 +61,14 @@ data class WavyScaffoldState(
     }
 
     private fun <T> getAnimationSpec() = tween<T>(durationMillis = animationDuration)
+}
+
+class WavyScaffoldStateProvider : PreviewParameterProvider<WavyScaffoldState> {
+    override val values = sequenceOf(
+        WavyScaffoldState(
+            initialBackDropHeight = 128.dp,
+            initialWaveHeight = 128.dp,
+            initialFrequency = 0.3f
+        )
+    )
 }

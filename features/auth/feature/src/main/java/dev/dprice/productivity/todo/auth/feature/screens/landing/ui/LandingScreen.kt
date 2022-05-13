@@ -23,7 +23,7 @@ fun AuthLanding(
     goToSignUp: () -> Unit,
     goToSignIn: () -> Unit
 ) {
-    BoxWithConstraints() {
+    BoxWithConstraints {
         WavyBackdropScaffold(
             state = state,
             backContent = {

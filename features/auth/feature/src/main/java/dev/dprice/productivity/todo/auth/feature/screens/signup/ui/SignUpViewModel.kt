@@ -7,14 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.SignUp
-import dev.dprice.productivity.todo.auth.feature.screens.signup.model.ErrorState
-import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpAction
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpEvent
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpState
 import dev.dprice.productivity.todo.auth.usecases.auth.SignUpUserUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEmailEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +23,7 @@ import javax.inject.Inject
 interface SignUpViewModel {
     val viewState: SignUpState
 
-    fun onFormChanged(action: SignUpAction)
+    fun updateEntry(event: SignUpEvent)
 
     fun submitForm(
         goToVerifyCode: (String) -> Unit,
@@ -44,28 +45,25 @@ class SignUpViewModelImpl @Inject constructor(
     )
     override val viewState: SignUpState by viewModelState
 
-    override fun onFormChanged(action: SignUpAction) {
-        val updatedForm = when (action.type) {
-            SignUpAction.Type.UPDATE_EMAIL -> viewState.form.copy(
-                email = updateEmailEntryUseCase(
-                    viewState.form.email,
-                    action.value,
-                    action.focus
-                )
+    override fun updateEntry(event: SignUpEvent) {
+        val updatedForm = when (event) {
+            is SignUpEvent.UpdateEmailFocus -> viewState.form.copy(
+                email = updateEmailEntryUseCase(viewState.form.email, event.focus)
             )
-            SignUpAction.Type.UPDATE_USERNAME -> viewState.form.copy(
-                username = updateUsernameEntryUseCase(
-                    viewState.form.username,
-                    action.value,
-                    action.focus
-                )
+            is SignUpEvent.UpdateEmailValue -> viewState.form.copy(
+                email = updateEmailEntryUseCase(viewState.form.email, event.value)
             )
-            SignUpAction.Type.UPDATE_PASSWORD -> viewState.form.copy(
-                password = updatePasswordEntryUseCase(
-                    viewState.form.password,
-                    action.value,
-                    action.focus
-                )
+            is SignUpEvent.UpdatePasswordFocus -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(viewState.form.password, event.focus)
+            )
+            is SignUpEvent.UpdatePasswordValue -> viewState.form.copy(
+                password = updatePasswordEntryUseCase(viewState.form.password, event.value)
+            )
+            is SignUpEvent.UpdateUsernameFocus -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(viewState.form.username, event.focus)
+            )
+            is SignUpEvent.UpdateUsernameValue -> viewState.form.copy(
+                username = updateUsernameEntryUseCase(viewState.form.username, event.value)
             )
         }
 
@@ -98,13 +96,13 @@ class SignUpViewModelImpl @Inject constructor(
                 is SignUp.Error -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message("Error Test!")
+                        errorState = ErrorState.Message(R.string.error_unknown_error)
                     )
                 }
                 is SignUp.UsernameExists -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message("Existing user error!")
+                        errorState = ErrorState.Message(R.string.error_username_exists)
                     )
                 }
             }

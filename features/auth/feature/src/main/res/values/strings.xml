@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Sign In -->
+    <string name="sign_in">Sign in</string>
+    <string name="sign_in_description">Sign in with your username and password.</string>
+    <string name="forgot_password_question">Forgot password?</string>
+
+    <string name="no_account_question">Don\'t have an account yet?</string>
+
+    <!-- Sign Up -->
+    <string name="create_account">Create Account</string>
+    <string name="create_account_button">Create account</string>
+    <string name="create_account_description">Sign up for a free account today!</string>
+
+    <string name="existing_account_question">Already have an account?</string>
+
+    <!-- Forgot Password -->
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_button">Reset password</string>
+    <string name="reset_password_description">
+        Please enter the verification code we sent to your email, and enter a new password for your account.
+    </string>
+
+    <string name="forgot_password">Forgot Password</string>
+    <string name="forgot_password_button">Forgot password</string>
+    <string name="forgot_password_description">
+        Please enter the username associated to your account and we will send an email to reset your password.
+    </string>
+
+    <string name="already_have_code_question">Already have a reset code?</string>
+
+    <!-- Verify Account -->
+    <string name="verify_account">Verify Account</string>
+    <string name="verify_button">Verify</string>
+    <string name="enter_code_question">Please enter the verification code that has been sent to your email address</string>
+    <string name="not_received_code_question">Not received your verification code yet?</string>
+    <string name="resend_code_question">Resend verification code</string>
+
+    <!-- Back Dialog -->
+    <string name="back_dialog_title">Are you sure you want to leave?</string>
+    <string name="back_dialog_description">Your account can be verified at a later date when signing in.</string>
+
+    <!-- Error Messages -->
     <string name="error_no_internet">
         "Unable to continue due to a network error. Please check you have a valid connection to the internet, and try again."
     </string>
@@ -11,6 +52,18 @@
 
     <string name="error_unknown_error">
         "It's not you its us… something has gone wrong on our side, please wait a few minutes and then try again."
+    </string>
+
+    <string name="error_username_exists">
+        "The username you provided is already associated to an account. Please try another username."
+    </string>
+
+    <string name="error_expired_code">
+        "The code you have provided has expired, we have re-sent a verification code to your email address"
+    </string>
+
+    <string name="error_invalid_code">
+        "The code you have provided is not valid, please enter a valid verification code."
     </string>
 
 </resources>

@@ -4,63 +4,46 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpAction
-import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpAction.Type
+import dev.dprice.productivity.todo.auth.feature.model.ErrorState
+import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpEvent
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpState
-import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
+import dev.dprice.productivity.todo.auth.feature.ui.AuthWavyScaffold
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.*
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
 fun SignUp(
-    state: WavyScaffoldState,
-    goToVerifyCode: (String) -> Unit,
+    state: SignUpState,
+    wavyScaffoldState: WavyScaffoldState,
     goToSignIn: () -> Unit,
-    goToMainApp: () -> Unit,
-    viewModel: SignUpViewModel = hiltViewModel<SignUpViewModelImpl>()
+    updateEntry: (SignUpEvent) -> Unit,
+    submitForm: () -> Unit
 ) {
-    WavyBackdropScaffold(
-        state = state,
-        backContent = {
-            TitleBlock(colour = MaterialTheme.colors.background)
-        },
+    AuthWavyScaffold(
+        state = wavyScaffoldState,
+        title = stringResource(id = R.string.create_account),
+        description = stringResource(id = R.string.create_account_description),
+        errorMessage = (state.errorState as? ErrorState.Message)?.let { stringResource(id = it.messageId) },
         frontContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TitleBlock(colour = MaterialTheme.colors.primary)
-                Text(
-                    text = "Sign up for a free account today!",
-                    modifier = Modifier.padding(top = 16.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                )
-                Form(
-                    signUpForm = viewModel.viewState.form,
-                    buttonState = viewModel.viewState.buttonState,
-                    onEntryChanged = viewModel::onFormChanged,
-                    onSignInClicked = goToSignIn,
-                    onSubmitForm = {
-                        viewModel.submitForm(
-                            goToVerifyCode,
-                            goToMainApp
-                        )
-                    }
-                )
-            }
+            Form(
+                signUpForm = state.form,
+                buttonState = state.buttonState,
+                onEvent = updateEntry,
+                onSignInClicked = goToSignIn,
+                onSubmitForm = submitForm
+            )
         }
     )
 }
@@ -69,7 +52,7 @@ fun SignUp(
 private fun Form(
     signUpForm: SignUpForm,
     buttonState: ButtonState,
-    onEntryChanged: (SignUpAction) -> Unit,
+    onEvent: (SignUpEvent) -> Unit,
     onSubmitForm: () -> Unit,
     onSignInClicked: () -> Unit
 ) {
@@ -84,72 +67,36 @@ private fun Form(
         RoundedEntryCard(
             entry = signUpForm.email,
             modifier = Modifier.onFocusChanged {
-                onEntryChanged(
-                    SignUpAction(
-                        signUpForm.email.value,
-                        it.hasFocus,
-                        Type.UPDATE_EMAIL
-                    )
-                )
+                onEvent(SignUpEvent.UpdateEmailFocus(it.hasFocus))
             },
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
             onTextChanged = {
-                onEntryChanged(
-                    SignUpAction(
-                        it,
-                        signUpForm.email.hasFocus,
-                        Type.UPDATE_EMAIL
-                    )
-                )
+                onEvent(SignUpEvent.UpdateEmailValue(it))
             }
         )
         RoundedEntryCard(
             entry = signUpForm.username,
             modifier = Modifier.onFocusChanged {
-                onEntryChanged(
-                    SignUpAction(
-                        signUpForm.username.value,
-                        it.hasFocus,
-                        Type.UPDATE_USERNAME
-                    )
-                )
+                onEvent(SignUpEvent.UpdateUsernameFocus(it.hasFocus))
             },
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
             onTextChanged = {
-                onEntryChanged(
-                    SignUpAction(
-                        it,
-                        signUpForm.username.hasFocus,
-                        Type.UPDATE_USERNAME
-                    )
-                )
+                onEvent(SignUpEvent.UpdateUsernameValue(it))
             }
         )
         RoundedEntryCard(
             entry = signUpForm.password,
             modifier = Modifier.onFocusChanged {
-                onEntryChanged(
-                    SignUpAction(
-                        signUpForm.password.value,
-                        it.hasFocus,
-                        Type.UPDATE_PASSWORD
-                    )
-                )
+                onEvent(SignUpEvent.UpdatePasswordFocus(it.hasFocus))
             },
             onImeAction = { focusManager.clearFocus() },
             onTextChanged = {
-                onEntryChanged(
-                    SignUpAction(
-                        it,
-                        signUpForm.password.hasFocus,
-                        Type.UPDATE_PASSWORD
-                    )
-                )
+                onEvent(SignUpEvent.UpdatePasswordValue(it))
             }
         )
 
         RoundedButton(
-            text = "Create Account",
+            text = stringResource(id = R.string.create_account_button),
             onClick = onSubmitForm,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
@@ -157,8 +104,8 @@ private fun Form(
         )
 
         TextWithClickableSuffix(
-            text = "Already have an account? ",
-            suffixText = "Sign in",
+            text = stringResource(id = R.string.existing_account_question) + " ",
+            suffixText = stringResource(id = R.string.sign_in),
             onClick = onSignInClicked
         )
     }
@@ -168,35 +115,18 @@ private fun Form(
  * Preview
  */
 
-private val previewViewModel = object : SignUpViewModel {
-    override val viewState: SignUpState =
-        SignUpState()
-
-    override fun onFormChanged(action: SignUpAction) {
-        /* Stub */
-    }
-
-    override fun submitForm(goToVerifyCode: (String) -> Unit, goToMainApp: () -> Unit) {
-        /* Stub */
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-private fun PreviewSignUp() {
+private fun PreviewSignUp(
+    @PreviewParameter(WavyScaffoldStateProvider::class) state: WavyScaffoldState
+) {
     TodoAppTheme {
-        val state = WavyScaffoldState(
-            initialBackDropHeight = 128.dp,
-            initialWaveHeight = 128.dp,
-            initialFrequency = 0.3f
-        )
-
         SignUp(
+            SignUpState(),
             state,
             { },
             { },
-            { },
-            previewViewModel
+            { }
         )
     }
 }
