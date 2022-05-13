@@ -48,12 +48,19 @@ android {
     testBuildType = "espresso"
 
     buildTypes {
-        getByName("debug") { }
         create("espresso") {
             matchingFallbacks.add("debug")
         }
-        getByName("release") {
-            isMinifyEnabled = false
+    }
+
+    androidComponents {
+        beforeVariants { variantBuilder ->
+            val flavourMap = variantBuilder.productFlavors.toMap()
+            variantBuilder.enabled = when (variantBuilder.buildType) {
+                "debug" -> false
+                "release" -> false
+                else -> true
+            }
         }
     }
 }
@@ -85,5 +92,4 @@ dependencies {
     kaptAndroidTest(libs.hiltKaptTest)
 
     implementation("androidx.compose.ui:ui-test-manifest:1.2.0-alpha02")
-
 }

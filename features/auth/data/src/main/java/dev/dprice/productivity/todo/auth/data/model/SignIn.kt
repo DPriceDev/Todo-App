@@ -5,6 +5,8 @@ sealed class SignIn {
 
     data class Code(val username: String) : SignIn()
 
+    object NewPassword : SignIn()
+
     object AccountDisabled : SignIn()
 
     object ConnectionError : SignIn()

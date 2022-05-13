@@ -3,6 +3,7 @@ package dev.dprice.productivity.todo.auth.feature.sdk
 import android.content.Context
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.AuthException
+import com.amplifyframework.auth.AuthException.UserNotConfirmedException
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
@@ -31,8 +32,8 @@ class AWSAmplifySource(
         initializeAmplify()
     }
 
-    override fun getCurrentSession() : Flow<DataState<Session>> = flow {
-        if(auth.await()) {
+    override fun getCurrentSession(): Flow<DataState<Session>> = flow {
+        if (auth.await()) {
             emit(DataState.Loading)
             val session = Amplify.Auth.fetchAuthSession()
             emit(DataState.Data(Session(session.isSignedIn)))
@@ -66,22 +67,26 @@ class AWSAmplifySource(
 
     override suspend fun signInUser(username: String, password: String): SignIn {
         return try {
-
             val result = Amplify.Auth.signIn(username, password)
-            when(result.nextStep.signInStep) {
+            when (result.nextStep.signInStep) {
                 AuthSignInStep.CONFIRM_SIGN_UP -> SignIn.Code(username)
                 AuthSignInStep.DONE -> SignIn.Done
-                AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE -> TODO()
-                AuthSignInStep.CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE -> TODO()
-                AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD -> TODO()
-                AuthSignInStep.RESET_PASSWORD -> TODO()
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD,
+                AuthSignInStep.RESET_PASSWORD -> SignIn.NewPassword
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE,
+                AuthSignInStep.CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE -> SignIn.Error(
+                    Throwable("MFA not currently supported")
+                )
             }
         } catch (throwable: AuthException) {
-            SignIn.Error(throwable)
+            when (throwable) {
+                is UserNotConfirmedException -> SignIn.Code(username)
+                else -> SignIn.Error(throwable)
+            }
         }
     }
 
-    override suspend fun verifyNewUser(code: String, username: String) : VerifyUser {
+    override suspend fun verifyNewUser(code: String, username: String): VerifyUser {
         return try {
             val result = Amplify.Auth.confirmSignUp(username, code)
             Timber.i("AuthQuickstart", "Confirmed signin: $result")
@@ -105,7 +110,7 @@ class AWSAmplifySource(
         }
     }
 
-    override suspend fun resendVerificationCode(username: String) : ResendCode {
+    override suspend fun resendVerificationCode(username: String): ResendCode {
         return try {
             Amplify.Auth.resendSignUpCode(username)
             ResendCode.Done

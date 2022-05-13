@@ -104,6 +104,7 @@ class SignInViewModelImpl @Inject constructor(
                         errorState = ErrorState.Message(R.string.error_no_internet)
                     )
                 }
+                SignIn.NewPassword -> TODO() // go to
             }
         }
     }

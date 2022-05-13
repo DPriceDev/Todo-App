@@ -90,10 +90,10 @@ android {
             val flavourMap = variantBuilder.productFlavors.toMap()
             when {
                 variantBuilder.buildType == "debug" && flavourMap.containsValue("prod") ||
-                        variantBuilder.buildType == "espresso" && flavourMap.containsValue("prod") ||
-                        variantBuilder.buildType == "espresso" && flavourMap.containsValue("integration") ||
-                        variantBuilder.buildType == "release" && flavourMap.containsValue("local") ||
-                        variantBuilder.buildType == "release" && flavourMap.containsValue("integration")
+                variantBuilder.buildType == "espresso" && flavourMap.containsValue("prod") ||
+                variantBuilder.buildType == "espresso" && flavourMap.containsValue("integration") ||
+                variantBuilder.buildType == "release" && flavourMap.containsValue("local") ||
+                variantBuilder.buildType == "release" && flavourMap.containsValue("integration")
                 -> variantBuilder.enabled = false
                 else -> variantBuilder.enabled = true
             }
@@ -112,6 +112,7 @@ dependencies {
     implementation(projects.features.auth.feature)
     implementation(projects.features.auth.data)
     implementation(projects.core)
+    androidTestImplementation(projects.ui.test)
 
     /* Kotlin */
     implementation(libs.bundles.kotlin)

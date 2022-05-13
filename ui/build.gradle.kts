@@ -44,13 +44,8 @@ android {
         exclude("META-INF/*")
     }
 
-    testBuildType = "espresso"
-
     buildTypes {
         getByName("debug") { }
-        create("espresso") {
-            matchingFallbacks.add("debug")
-        }
         getByName("release") {
             isMinifyEnabled = false
         }
