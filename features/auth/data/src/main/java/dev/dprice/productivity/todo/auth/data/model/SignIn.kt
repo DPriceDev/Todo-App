@@ -7,5 +7,7 @@ sealed class SignIn {
 
     object AccountDisabled : SignIn()
 
+    object NetworkError : SignIn()
+
     data class Error(val throwable: Throwable) : SignIn()
 }

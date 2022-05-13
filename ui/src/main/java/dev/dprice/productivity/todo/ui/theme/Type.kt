@@ -34,6 +34,11 @@ val Typography = Typography(
         fontSize = 32.sp,
         fontWeight = FontWeight.Bold,
     ),
+    h3 = TextStyle(
+        fontFamily = signikaNegative,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+    ),
     button = TextStyle(
         fontFamily = signikaNegative,
         fontWeight = FontWeight.W500,

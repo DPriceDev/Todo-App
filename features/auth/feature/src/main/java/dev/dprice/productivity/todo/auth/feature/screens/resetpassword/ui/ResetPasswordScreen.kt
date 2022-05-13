@@ -2,22 +2,25 @@ package dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPasswordEvent.*
 import dev.dprice.productivity.todo.auth.feature.ui.TitleBlock
 import dev.dprice.productivity.todo.ui.components.*
+import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 sealed class ResetPasswordEvent {
     data class UpdatePasswordValue(val value: String) : ResetPasswordEvent()
@@ -28,13 +31,14 @@ sealed class ResetPasswordEvent {
 
 @Composable
 fun ResetPassword(
-    state: WavyScaffoldState,
-    returnToSignIn: () -> Unit,
-    viewModel: ResetPasswordViewModel = hiltViewModel<ResetPasswordViewModelImpl>()
+    state: ResetPasswordState,
+    wavyScaffoldState: WavyScaffoldState,
+    submitForm: () -> Unit,
+    updateEntry: (ResetPasswordEvent) -> Unit
 ) {
     WavyBackdropScaffold(
-        state = state,
-        phaseOffset = 0.6f,
+        state = wavyScaffoldState,
+        phaseOffset = 0.6f, // todo: Pass this into composable from previous or next nav location
         backContent = {
             TitleBlock(
                 colour = MaterialTheme.colors.background,
@@ -48,7 +52,7 @@ fun ResetPassword(
                 TitleBlock(colour = MaterialTheme.colors.primary, title = "Reset Password")
 
                 Text(
-                    text = "Please enter the reset code we sent to your email and a new password for your account",
+                    text = "Please enter the verification code we sent to your email, and enter a new password for your account.",
                     modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.body1,
@@ -56,21 +60,18 @@ fun ResetPassword(
                 )
 
                 ResetPasswordForm(
-                    viewModel.viewState.form.code,
-                    viewModel.viewState.form.password,
-                    viewModel::update
-                ) {
-                    viewModel.submit(returnToSignIn)
-                }
+                    state.form.code,
+                    state.form.password,
+                    updateEntry,
+                    submitForm
+                )
 
                 RoundedButton(
                     text = "Reset password",
-                    onClick = {
-                        viewModel.submit(goBackToSignIn = returnToSignIn)
-                    },
+                    onClick = submitForm,
                     modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
                     contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
-                    buttonState = viewModel.viewState.buttonState,
+                    buttonState = state.buttonState,
                 )
             }
         }
@@ -85,39 +86,61 @@ private fun ResetPasswordForm(
     updateEntry: (ResetPasswordEvent) -> Unit,
     submitForm: () -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
-    RoundedEntryCard(
-        entry = codeEntry,
-        textStyle = MaterialTheme.typography.h2.copy(
-            textAlign = TextAlign.Center
-        ),
+    Column(
         modifier = Modifier
-            .width(256.dp)
-            .padding(top = 24.dp, start = 32.dp, end = 32.dp)
-            .onFocusChanged {
-                updateEntry(UpdateCodeFocus(it.hasFocus))
+            .padding(start = 32.dp, end = 32.dp, top = 24.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val focusManager = LocalFocusManager.current
+        RoundedEntryCard(
+            entry = codeEntry,
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.Center
+            ),
+            modifier = Modifier
+                .onFocusChanged {
+                    updateEntry(UpdateCodeFocus(it.hasFocus))
+                },
+            onImeAction = {
+                focusManager.moveFocus(FocusDirection.Down)
             },
-        onImeAction = {
-            focusManager.moveFocus(FocusDirection.Down)
-        },
-        onTextChanged = {
-            updateEntry(UpdateCodeValue(it))
-        }
-    )
+            onTextChanged = {
+                updateEntry(UpdateCodeValue(it))
+            }
+        )
 
-    RoundedEntryCard(
-        entry = passwordEntry,
-        modifier = Modifier
-            .padding(top = 24.dp, start = 32.dp, end = 32.dp)
-            .onFocusChanged {
-                updateEntry(UpdatePasswordFocus(it.hasFocus))
+        RoundedEntryCard(
+            entry = passwordEntry,
+            modifier = Modifier
+                .onFocusChanged {
+                    updateEntry(UpdatePasswordFocus(it.hasFocus))
+                },
+            onImeAction = {
+                focusManager.clearFocus()
+                submitForm()
             },
-        onImeAction = {
-            focusManager.clearFocus()
-            submitForm()
-        },
-        onTextChanged = {
-            updateEntry(UpdatePasswordValue(it))
-        }
-    )
+            onTextChanged = {
+                updateEntry(UpdatePasswordValue(it))
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewResetPasswordScreen() {
+    TodoAppTheme {
+        val wavyScaffoldState = remember { WavyScaffoldState() }
+        ResetPassword(
+            state = ResetPasswordState(
+                form = ResetPasswordForm(
+                    code = ResetPasswordForm().code.copy(value = "111")
+                )
+            ),
+            wavyScaffoldState = wavyScaffoldState,
+            { },
+            { }
+        )
+    }
 }

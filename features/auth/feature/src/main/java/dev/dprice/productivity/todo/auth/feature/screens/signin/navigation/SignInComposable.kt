@@ -5,11 +5,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.signin.ui.SignIn
+import dev.dprice.productivity.todo.auth.feature.screens.signin.ui.SignInViewModelImpl
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -48,14 +50,10 @@ fun NavGraphBuilder.signInComposable(
             )
         }
 
+        val viewModel = hiltViewModel<SignInViewModelImpl>()
         SignIn(
-            state = state,
-            goToMainApp = {
-                appNavHostController.navigate("MainApp") {
-                    popUpTo("MainApp") { inclusive = true }
-                }
-            },
-            goToVerifyCode = { authNavHostController.navigate(AuthNavLocation.VerifySignUp.location(it)) },
+            state = viewModel.viewState,
+            wavyScaffoldState = state,
             goToSignUp = {
                 authNavHostController.navigate(AuthNavLocation.SignUp.route) {
                     popUpTo(AuthNavLocation.SignIn.route) { inclusive = true }
@@ -63,6 +61,21 @@ fun NavGraphBuilder.signInComposable(
             },
             goToForgotPassword = {
                 authNavHostController.navigate(AuthNavLocation.ForgotPassword.route)
+            },
+            onFormUpdated = viewModel::onFormChanged,
+            onSubmitForm = {
+                viewModel.submitForm(
+                    goToMainApp = {
+                        appNavHostController.navigate("MainApp") {
+                            popUpTo("MainApp") { inclusive = true }
+                        }
+                    },
+                    goToVerifyCode = { username ->
+                        authNavHostController.navigate(
+                            AuthNavLocation.VerifySignUp.location(username)
+                        )
+                    }
+                )
             }
         )
     }

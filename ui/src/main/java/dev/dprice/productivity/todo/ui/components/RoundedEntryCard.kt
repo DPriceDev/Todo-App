@@ -35,7 +35,7 @@ data class EntryField(
 fun RoundedEntryCard(
     entry: EntryField,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle =  LocalTextStyle.current,
+    textStyle: TextStyle = LocalTextStyle.current,
     onImeAction: () -> Unit = { },
     onTextChanged: (String) -> Unit,
 ) {
@@ -54,7 +54,7 @@ fun RoundedEntryCard(
             keyboardActions = KeyboardActions { onImeAction() },
             keyboardOptions = KeyboardOptions(imeAction = entry.imeAction),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = if(!entry.isValid && entry.shouldValidate) ErrorBackgroundColour else TextBackground,
+                backgroundColor = if (!entry.isValid && entry.shouldValidate) ErrorBackgroundColour else TextBackground,
                 textColor = TextColour,
                 leadingIconColor = TextColour,
                 errorBorderColor = ErrorTextColour
@@ -76,7 +76,7 @@ fun RoundedEntryCard(
             }
         )
 
-        if(!entry.isValid && entry.shouldValidate && entry.errorText != null) {
+        if (!entry.isValid && entry.shouldValidate && entry.errorText != null) {
             Text(
                 text = entry.errorText,
                 color = ErrorTextColour,

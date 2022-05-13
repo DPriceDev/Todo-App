@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.data.model.ResetPassword
 import dev.dprice.productivity.todo.auth.usecases.auth.ResetPasswordUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
@@ -59,7 +59,7 @@ interface ResetPasswordViewModel {
 @HiltViewModel
 class ResetPasswordViewModelImpl @Inject constructor(
     private val updatePasswordEntryUseCase: UpdatePasswordEntryUseCase,
-    private val updateCodeEntryUseCase: UpdateEntryUseCase,
+    private val updateCodeEntryUseCase: UpdateCodeEntryUseCase,
     private val resetPasswordUseCase: ResetPasswordUseCase
 ) : ViewModel(),
     ResetPasswordViewModel {
@@ -77,7 +77,7 @@ class ResetPasswordViewModelImpl @Inject constructor(
                 )
             )
             is ResetPasswordEvent.UpdatePasswordFocus -> viewState.form.copy(
-                password = updateCodeEntryUseCase(
+                password = updatePasswordEntryUseCase(
                     viewState.form.password,
                     viewState.form.password.value,
                     event.focus
@@ -101,12 +101,15 @@ class ResetPasswordViewModelImpl @Inject constructor(
 
         viewModelState.value = viewState.copy(
             form = updatedForm,
-            buttonState = if (updatedForm.isValid) ButtonState.ENABLED else ButtonState.DISABLED
+            buttonState = when (viewState.buttonState) {
+                ButtonState.LOADING -> ButtonState.LOADING
+                else -> if (updatedForm.isValid) ButtonState.ENABLED else ButtonState.DISABLED
+            }
         )
     }
 
     override fun submit(goBackToSignIn: () -> Unit) {
-        if (!viewState.form.isValid) return // todo: maybe show error?
+        if (!viewState.form.isValid || viewState.buttonState == ButtonState.LOADING) return
 
         viewModelState.value = viewState.copy(
             buttonState = ButtonState.LOADING

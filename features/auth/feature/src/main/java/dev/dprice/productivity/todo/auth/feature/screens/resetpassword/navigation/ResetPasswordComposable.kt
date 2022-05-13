@@ -5,11 +5,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPassword
+import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.ui.ResetPasswordViewModelImpl
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -41,11 +43,16 @@ fun NavGraphBuilder.resetPasswordComposable(
             )
         }
 
+        val viewModel = hiltViewModel<ResetPasswordViewModelImpl>()
         ResetPassword(
-            state = state,
-            returnToSignIn = {
-                authNavHostController.navigate(AuthNavLocation.SignIn.route) {
-                    popUpTo(AuthNavLocation.SignIn.route)
+            state = viewModel.viewState,
+            wavyScaffoldState = state,
+            updateEntry = viewModel::update,
+            submitForm = {
+                viewModel.submit {
+                    authNavHostController.navigate(AuthNavLocation.SignIn.route) {
+                        popUpTo(AuthNavLocation.SignIn.route)
+                    }
                 }
             }
         )

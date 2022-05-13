@@ -14,6 +14,7 @@ import dev.dprice.productivity.todo.auth.feature.screens.signin.model.SignInStat
 import dev.dprice.productivity.todo.auth.usecases.auth.SignInUserUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
+import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -90,13 +91,19 @@ class SignInViewModelImpl @Inject constructor(
                 is SignIn.Error -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message("Error Test!")
+                        error = ErrorState.Message(R.string.error_unknown_error)
                     )
                 }
                 is SignIn.AccountDisabled -> {
                     viewModelState.value = viewState.copy(
                         buttonState = ButtonState.ENABLED,
-                        error = ErrorState.Message("Account Disabled")
+                        error = ErrorState.Message(R.string.error_sign_in_account_disabled)
+                    )
+                }
+                SignIn.NetworkError -> {
+                    viewModelState.value = viewState.copy(
+                        buttonState = ButtonState.ENABLED,
+                        error = ErrorState.Message(R.string.error_no_internet)
                     )
                 }
             }

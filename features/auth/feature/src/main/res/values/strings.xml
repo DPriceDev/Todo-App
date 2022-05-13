@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_no_internet">
+        "Unable to continue due to a network error. Please check you have a valid connection to the internet, and try again."
+    </string>
+
+    <string name="error_sign_in_account_disabled">
+        "Unable to sign in as your account has been disabled. Please contact the support team."
+    </string>
+
+    <string name="error_unknown_error">
+        "It's not you its us… something has gone wrong on our side, please wait a few minutes and then try again."
+    </string>
+
+</resources>

@@ -39,7 +39,13 @@ class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
 
     override suspend fun signInUser(username: String, password: String): SignIn {
         delay(responseDelay)
-        return signIn
+        return when (username) {
+            "no_internet" -> SignIn.NetworkError
+            "disabled" -> SignIn.AccountDisabled
+            "error" -> SignIn.Error(Throwable("error"))
+            "code" -> SignIn.Code("code")
+            else -> signIn
+        }
     }
 
     override suspend fun sendForgotPassword(email: String): ForgotPassword {
