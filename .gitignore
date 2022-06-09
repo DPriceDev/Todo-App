@@ -15,3 +15,10 @@
 local.properties
 .idea/*
 /.idea/*
+
+amplify
+amplify/*
+/amplify
+
+/app/src/main/res/raw/amplifyconfiguration.json
+/app/src/main/res/raw/awsconfiguration.json
