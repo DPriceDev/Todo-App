@@ -26,4 +26,6 @@ interface AuthenticationSource {
     suspend fun sendForgotPassword(username: String): ForgotPassword
 
     suspend fun resetPassword(code: String, newPassword: String): ResetPassword
+
+    suspend fun signOutUser()
 }

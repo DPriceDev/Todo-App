@@ -10,6 +10,7 @@ sealed class NavLocation(
 ) : NavDestination {
     object Notes : NavLocation("Notes")
     object Auth : NavLocation("Auth")
+    object Settings : NavLocation("Settings")
 }
 
 interface NavDestination {

@@ -26,7 +26,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun TaskListUi(
+fun TaskListScreen(
     viewModel: TaskListViewModel = hiltViewModel<TaskListViewModelImpl>()
 ) {
     TaskList(
@@ -109,7 +109,7 @@ private val testViewModel = object : TaskListViewModel {
 @Composable
 private fun PreviewLayout() {
     TodoAppTheme {
-        TaskListUi(
+        TaskListScreen(
             testViewModel
         )
     }

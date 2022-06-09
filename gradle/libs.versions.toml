@@ -3,25 +3,26 @@
 # Config
 
 # Gradle
-gradle = "7.4.0-alpha01"
+gradle = "7.4.0-alpha03"
 
 # Kotlin
-kotlin = "1.6.10"
-coroutine = "1.6.0-RC3"
+kotlin = "1.6.21"
+coroutine = "1.6.1-native-mt"
 datetime = "0.3.1"
 serialization = "1.2.2"
 
 # Android
-androidPlugin = "7.3.0-alpha01"
+androidPlugin = "7.3.0-alpha03"
 coreKtx = "1.7.0"
 appCompat = "1.4.1"
 runtimeKtx = "2.4.0-alpha02"
 fragmentKtx = "1.5.0-alpha01"
 material = "1.4.0"
 materialThree = "1.0.0-alpha04"
+splashScreen = "1.0.0-beta02"
 
 # Compose
-compose = "1.2.0-alpha02"
+compose = "1.2.0-beta03"
 composeActivity = "1.4.0"
 composeNavigation = "2.5.0-alpha01"
 composeViewModel = "2.5.0-alpha01"
@@ -73,6 +74,7 @@ appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat"
 runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "runtimeKtx" }
 fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
 fragmentTesting = { module = "androidx.fragment:fragment-testing", version.ref = "fragmentKtx" }
 

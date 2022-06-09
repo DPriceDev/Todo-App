@@ -5,7 +5,7 @@ import dev.dprice.productivity.todo.auth.data.model.ResendCode
 import javax.inject.Inject
 
 interface ResendVerificationCodeUseCase {
-    suspend operator fun invoke(username: String) : ResendCode
+    suspend operator fun invoke(username: String): ResendCode
 }
 
 class ResendVerificationCodeUseCaseImpl @Inject constructor(

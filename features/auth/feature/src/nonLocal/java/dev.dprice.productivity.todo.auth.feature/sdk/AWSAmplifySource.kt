@@ -137,4 +137,12 @@ class AWSAmplifySource(
             ResetPassword.Error(throwable)
         }
     }
+
+    override suspend fun signOutUser() {
+        try {
+            Amplify.Auth.signOut()
+        } catch (throwable: Throwable) {
+            // todo
+        }
+    }
 }

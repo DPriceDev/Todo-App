@@ -27,4 +27,7 @@ interface AuthUseCaseModule {
 
     @Binds
     fun ResetPasswordUseCaseImpl.bindResetPasswordUseCase(): ResetPasswordUseCase
+
+    @Binds
+    fun SignOutUserUseCaseImpl.bindSignOutUserUseCase(): SignOutUserUseCase
 }

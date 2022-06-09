@@ -28,3 +28,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+include(":features:settings:feature")
+include(":features:settings:data")
+include(":features:settings:dataimpl")

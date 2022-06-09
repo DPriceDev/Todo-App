@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     defaultConfig {
         applicationId = "dev.dprice.productivity.todo"
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -109,6 +109,7 @@ dependencies {
     implementation(projects.ui)
     implementation(projects.platform)
     implementation(projects.features.tasks)
+    implementation(projects.features.settings.feature)
     implementation(projects.features.auth.feature)
     implementation(projects.features.auth.data)
     implementation(projects.core)
@@ -119,6 +120,7 @@ dependencies {
 
     /* Android */
     implementation(libs.bundles.android)
+    implementation(libs.splashScreen)
 
     /* Compose */
     implementation(libs.bundles.compose)

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         google()
@@ -8,7 +10,7 @@ buildscript {
         classpath(libs.gradle.kotlin)
         classpath(libs.gradle.hilt)
         classpath(libs.gradle.junit5)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
         // classpath("com.squareup.sqldelight:gradle-plugin:1.5.0")
         // classpath(kotlin("serialization", version = Version.kotlin))
     }
@@ -16,4 +18,12 @@ buildscript {
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += listOf(
+            "-Xuse-k2"
+        )
+    }
 }
