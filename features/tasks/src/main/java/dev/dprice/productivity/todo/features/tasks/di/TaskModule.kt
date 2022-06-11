@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.dprice.productivity.todo.features.tasks.data.TaskRepositoryImpl
 import dev.dprice.productivity.todo.features.tasks.data.TaskService
 import dev.dprice.productivity.todo.features.tasks.data.TaskServiceImpl
-import dev.dprice.productivity.todo.features.tasks.model.TaskRepository
+import dev.dprice.productivity.todo.features.tasks.data.TaskRepository
 import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCaseImpl
 

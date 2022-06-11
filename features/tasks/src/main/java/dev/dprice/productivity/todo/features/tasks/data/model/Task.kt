@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.features.tasks.model
+package dev.dprice.productivity.todo.features.tasks.data.model
 
 import kotlinx.datetime.LocalDateTime
 

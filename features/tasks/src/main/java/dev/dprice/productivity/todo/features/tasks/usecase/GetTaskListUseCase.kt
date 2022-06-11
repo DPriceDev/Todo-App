@@ -1,6 +1,6 @@
 package dev.dprice.productivity.todo.features.tasks.usecase
 
-import dev.dprice.productivity.todo.features.tasks.model.TaskRepository
+import dev.dprice.productivity.todo.features.tasks.data.TaskRepository
 
 interface GetTaskListUseCase {
     suspend operator fun invoke()

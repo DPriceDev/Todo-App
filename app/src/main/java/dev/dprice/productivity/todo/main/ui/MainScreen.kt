@@ -17,6 +17,7 @@ import dev.dprice.productivity.todo.auth.feature.screens.base.AuthScreen
 import dev.dprice.productivity.todo.features.settings.ui.SettingsScreen
 import dev.dprice.productivity.todo.features.settings.ui.SettingsViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListScreen
+import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListViewModelImpl
 import dev.dprice.productivity.todo.main.model.MainState
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
@@ -25,7 +26,8 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 @Composable
 fun MainScreen(
     state: MainState,
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     LaunchedEffect(key1 = state.userSession) {
         state.userSession?.let { session ->
@@ -52,7 +54,12 @@ fun MainScreen(
 
                 navigation(route = "MainApp", startDestination = NavLocation.Notes.route) {
                     composable(NavLocation.Notes.route) {
-                        TaskListScreen()
+                        val viewModel = hiltViewModel<TaskListViewModelImpl>()
+                        TaskListScreen(
+                            modifier = modifier,
+                            state = viewModel.state,
+                            onAction = viewModel::updateState
+                        )
                     }
 
                     composable(NavLocation.Settings.route) {

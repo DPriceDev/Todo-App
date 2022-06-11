@@ -72,8 +72,6 @@ private fun DrawScope.dot(
     radius: Float,
     colour: Color
 ) {
-
-
     scale(
         scale = scale,
         pivot = Offset(radius * 4, radius)

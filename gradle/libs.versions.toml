@@ -8,7 +8,7 @@ gradle = "7.4.0-alpha03"
 # Kotlin
 kotlin = "1.6.21"
 coroutine = "1.6.1-native-mt"
-datetime = "0.3.1"
+datetime = "0.3.3"
 serialization = "1.2.2"
 
 # Android

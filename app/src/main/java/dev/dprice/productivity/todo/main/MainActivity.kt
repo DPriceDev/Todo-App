@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -17,6 +19,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -27,6 +31,7 @@ import dev.dprice.productivity.todo.main.ui.MainScreen
 import dev.dprice.productivity.todo.main.ui.MainViewModel
 import dev.dprice.productivity.todo.main.ui.MainViewModelImpl
 import dev.dprice.productivity.todo.platform.model.NavLocation
+import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @AndroidEntryPoint
@@ -50,7 +55,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen(
                         state = viewModel.viewState,
-                        navController = navController
+                        navController = navController,
+                        modifier = Modifier.padding(it)
                     )
                 }
             }
@@ -65,21 +71,26 @@ fun BottomNavigationBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     if (navBackStackEntry?.destination?.route != "Auth") {
-        BottomNavigation {
-            val currentRoute = navBackStackEntry?.destination?.route
+        Column {
+            BottomNavigation(
+                backgroundColor = MediumBlue,
+                contentColor = Color.White
+            ) {
+                val currentRoute = navBackStackEntry?.destination?.route
 
-            Constants.BottomNavItems.forEach { navItem ->
-                BottomNavigationItem(
-                    selected = currentRoute == navItem.route,
-                    onClick = { navController.navigate(navItem.route) },
-                    icon = {
-                        Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-                    },
-                    label = {
-                        Text(text = navItem.label)
-                    },
-                    alwaysShowLabel = false
-                )
+                Constants.BottomNavItems.forEach { navItem ->
+                    BottomNavigationItem(
+                        selected = currentRoute == navItem.route,
+                        onClick = { navController.navigate(navItem.route) },
+                        icon = {
+                            Icon(imageVector = navItem.icon, contentDescription = navItem.label)
+                        },
+                        label = {
+                            Text(text = navItem.label)
+                        },
+                        alwaysShowLabel = false
+                    )
+                }
             }
         }
     }
