@@ -103,7 +103,34 @@ fun TaskListScreen(
                 waveHeight = 12.dp,
                 waveOffsetPercent = waveOffset,
                 backContent = {
-                    TitleBar()
+                    var searchableTitleBarState by remember {
+                        mutableStateOf(SearchableTitleBarState())
+                    }
+                    SearchableTitleBar(
+                        state = searchableTitleBarState,
+                        onTextChange = {
+                            searchableTitleBarState = searchableTitleBarState.copy(
+                                entry = searchableTitleBarState.entry.copy(
+                                    value = it
+                                )
+                            )
+                        },
+                        onFocusChange = {
+                            searchableTitleBarState = searchableTitleBarState.copy(
+                                entry = searchableTitleBarState.entry.copy(
+                                    hasFocus = it
+                                ),
+                                isSearchShown = if (!it && searchableTitleBarState.entry.hasFocus) {
+                                    false
+                                } else {
+                                    searchableTitleBarState.isSearchShown
+                                }
+                            )
+                        },
+                        onSearchClick = {
+                            searchableTitleBarState = searchableTitleBarState.copy(isSearchShown = true)
+                        }
+                    )
                 }
             ) { padding ->
                 TaskList(

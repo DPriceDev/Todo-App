@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -36,6 +37,8 @@ fun RoundedEntryCard(
     entry: EntryField,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = LocalTextStyle.current,
+    borderColour: Color = MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high),
+    leadingIconPadding: PaddingValues = PaddingValues(start = 4.dp),
     onImeAction: () -> Unit = { },
     onTextChanged: (String) -> Unit,
 ) {
@@ -54,6 +57,7 @@ fun RoundedEntryCard(
             keyboardActions = KeyboardActions { onImeAction() },
             keyboardOptions = KeyboardOptions(imeAction = entry.imeAction),
             colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = borderColour,
                 backgroundColor = if (!entry.isValid && entry.shouldValidate) ErrorBackgroundColour else TextBackground,
                 textColor = TextColour,
                 leadingIconColor = TextColour,
@@ -70,7 +74,7 @@ fun RoundedEntryCard(
                     Icon(
                         imageVector = entry.icon,
                         contentDescription = entry.contentDescription,
-                        modifier = Modifier.padding(start = 4.dp)
+                        modifier = Modifier.padding(leadingIconPadding)
                     )
                 }
             }

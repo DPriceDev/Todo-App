@@ -3,12 +3,20 @@ package dev.dprice.productivity.todo.auth.feature.sdk
 import dev.dprice.productivity.todo.auth.data.AuthenticationSource
 import dev.dprice.productivity.todo.auth.data.model.*
 import dev.dprice.productivity.todo.core.DataState
+import dev.dprice.productivity.todo.platform.di.IO
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
+class MockAuthenticationSource @Inject constructor(
+    @IO ioDispatcher: CoroutineDispatcher
+) : AuthenticationSource {
     var responseDelay: Long = 1000L
     var signUp: SignUp = SignUp.Done
     var verifyUser: VerifyUser = VerifyUser.Done
@@ -17,10 +25,19 @@ class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
     var forgotPassword: ForgotPassword = ForgotPassword.Done
     var resetPassword: ResetPassword = ResetPassword.Done
 
-    override fun getCurrentSession(): Flow<DataState<Session>> = flow {
-        emit(DataState.Loading)
-        emit(DataState.Data(Session(false)))
+    var sessionFlow: MutableStateFlow<DataState<Session>> = MutableStateFlow(DataState.Loading)
+
+    init {
+        CoroutineScope(ioDispatcher).launch {
+            sessionFlow.emit(
+                DataState.Data(
+                    Session(true)
+                )
+            )
+        }
     }
+
+    override fun getCurrentSession(): Flow<DataState<Session>> = sessionFlow
 
     override suspend fun createUser(username: String, email: String, password: String): SignUp {
         delay(responseDelay)
@@ -80,5 +97,14 @@ class MockAuthenticationSource @Inject constructor() : AuthenticationSource {
             "222333" -> ResetPassword.ConnectionError
             else -> resetPassword
         }
+    }
+
+    override suspend fun signOutUser() {
+        delay(500)
+        sessionFlow.emit(
+            DataState.Data(
+                Session(isSignedIn = false)
+            )
+        )
     }
 }
