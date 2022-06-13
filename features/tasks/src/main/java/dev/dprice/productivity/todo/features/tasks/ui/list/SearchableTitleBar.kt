@@ -34,7 +34,7 @@ data class SearchableTitleBarState(
     val isSearchShown: Boolean = false
 )
 
-enum class TitleBarAnimationState {
+enum class SearchBarState {
     TITLE,
     SEARCH_EXPAND_CIRCLE,
     SEARCH
@@ -47,20 +47,20 @@ fun SearchableTitleBar(
     onFocusChange: (Boolean) -> Unit,
     onSearchClick: () -> Unit
 ) {
-    var animationState: TitleBarAnimationState by remember {
-        mutableStateOf(TitleBarAnimationState.TITLE)
+    var animationState: SearchBarState by remember {
+        mutableStateOf(SearchBarState.TITLE)
     }
 
     LaunchedEffect(key1 = state.isSearchShown) {
         animationState = if(state.isSearchShown) {
             when(animationState) {
-                TitleBarAnimationState.TITLE -> TitleBarAnimationState.SEARCH_EXPAND_CIRCLE
-                else -> TitleBarAnimationState.SEARCH
+                SearchBarState.TITLE -> SearchBarState.SEARCH_EXPAND_CIRCLE
+                else -> SearchBarState.SEARCH
             }
         } else {
             when(animationState) {
-                TitleBarAnimationState.SEARCH -> TitleBarAnimationState.SEARCH_EXPAND_CIRCLE
-                else -> TitleBarAnimationState.TITLE
+                SearchBarState.SEARCH -> SearchBarState.SEARCH_EXPAND_CIRCLE
+                else -> SearchBarState.TITLE
             }
         }
     }
@@ -70,30 +70,37 @@ fun SearchableTitleBar(
             .fillMaxWidth()
             .height(72.dp)
     ) {
-        if (animationState == TitleBarAnimationState.SEARCH) {
-            SearchBar(
-                state.entry,
+        if (animationState != SearchBarState.TITLE) {
+            ExpandingSearchBar(
+                entry = state.entry,
+                state = animationState,
                 modifier = Modifier.align(Alignment.CenterEnd),
-                animationState = animationState,
                 onFocusChange = onFocusChange,
                 onTextChange = onTextChange,
                 onAnimationUpdate = {
                     animationState = when(state.isSearchShown) {
-                        true -> TitleBarAnimationState.SEARCH
-                        false -> TitleBarAnimationState.TITLE
+                        true -> SearchBarState.SEARCH
+                        false -> SearchBarState.TITLE
                     }
                 }
             )
-        } else {
+        }
+
+        if (animationState != SearchBarState.SEARCH) {
             TitleBar(
-                animationState = animationState,
-                onAnimationUpdate = {
-                    animationState = when(state.isSearchShown) {
-                        true -> TitleBarAnimationState.SEARCH
-                        false -> TitleBarAnimationState.TITLE
+                rightContent = {
+                    IconButton(
+                        onClick = onSearchClick
+                    ) {
+                        Icon(
+                            Icons.Outlined.Search,
+                            null,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(12.dp)
+                        )
                     }
-                },
-                onSearchClick = onSearchClick
+                }
             )
         }
     }
@@ -104,10 +111,9 @@ fun SearchableTitleBar(
 
 @Composable
 private fun TitleBar(
-    animationState: TitleBarAnimationState,
     modifier: Modifier = Modifier,
-    onAnimationUpdate: () -> Unit,
-    onSearchClick: () -> Unit
+    leftContent: @Composable BoxScope.() -> Unit = { },
+    rightContent: @Composable BoxScope.() -> Unit = { }
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -115,65 +121,66 @@ private fun TitleBar(
             .fillMaxSize()
             .then(modifier)
     ) {
+        Box(
+            modifier = Modifier.size(64.dp),
+        ) {
+            leftContent()
+        }
+
         Text(
             text = "Tasks",
-            modifier = Modifier
-                .padding(start = 64.dp)
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h3
         )
 
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(56.dp)
+            modifier = Modifier.size(64.dp)
         ) {
-            val size: Dp by animateDpAsState(
-                targetValue = when(animationState) {
-                    TitleBarAnimationState.TITLE -> 0.dp
-                    else -> 56.dp
-                },
-                animationSpec = tween(
-                    durationMillis = 80,
-                    easing = LinearEasing
-                ),
-                finishedListener = { onAnimationUpdate() }
-            )
-
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(percent = 50)
-                    )
-                    .size(size)
-            )
-
-            IconButton(
-                onClick = onSearchClick
-            ) {
-                Icon(
-                    Icons.Outlined.Search,
-                    null,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(12.dp)
-                )
-            }
+            rightContent()
         }
-
-        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 
 @Composable
-private fun SearchBar(
+private fun ExpandingSearchBar(
+    state: SearchBarState,
     entry: EntryField,
-    animationState: TitleBarAnimationState,
     modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     onAnimationUpdate: () -> Unit
+) {
+    when(state) {
+        SearchBarState.SEARCH -> {
+            SearchBarTextField(
+                state,
+                entry,
+                modifier,
+                onAnimationUpdate,
+                onTextChange,
+                onFocusChange
+
+            )
+        }
+        else -> {
+            SearchBarIcon(
+                state,
+                modifier,
+                onAnimationUpdate
+            )
+        }
+    }
+}
+
+@Composable
+private fun SearchBarTextField(
+    state: SearchBarState,
+    entry: EntryField,
+    modifier: Modifier = Modifier,
+    onAnimationFinished: () -> Unit = { },
+    onTextChange: (String) -> Unit = { },
+    onFocusChange: (Boolean) -> Unit = { }
 ) {
     BoxWithConstraints(
         modifier = modifier
@@ -186,13 +193,13 @@ private fun SearchBar(
                 durationMillis = 150,
                 easing = FastOutSlowInEasing
             ),
-            finishedListener = { onAnimationUpdate() }
+            finishedListener = { onAnimationFinished() }
         )
 
         val focusRequester: FocusRequester = remember { FocusRequester() }
-        LaunchedEffect(key1 = animationState) {
-            targetWidth = when (animationState) {
-                TitleBarAnimationState.SEARCH -> {
+        LaunchedEffect(key1 = state) {
+            targetWidth = when (state) {
+                SearchBarState.SEARCH -> {
                     focusRequester.requestFocus()
                     maxWidth
                 }
@@ -217,6 +224,50 @@ private fun SearchBar(
             onImeAction = { focusManager.clearFocus() }
         )
     }
+
+}
+
+@Composable
+private fun SearchBarIcon(
+    animationState: SearchBarState,
+    modifier: Modifier = Modifier,
+    onAnimationFinished: () -> Unit = { },
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(56.dp).then(modifier)
+    ) {
+        val size: Dp by animateDpAsState(
+            targetValue = when(animationState) {
+                SearchBarState.TITLE -> 0.dp
+                else -> 56.dp
+            },
+            animationSpec = tween(
+                durationMillis = 80,
+                easing = LinearEasing
+            ),
+            finishedListener = { onAnimationFinished() }
+        )
+
+        Box(
+            modifier = Modifier
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(percent = 50)
+                )
+                .size(size)
+        )
+
+        Icon(
+            Icons.Outlined.Search,
+            null,
+            modifier = Modifier
+                .size(48.dp)
+                .padding(12.dp)
+        )
+    }
+
+    Spacer(modifier = Modifier.width(8.dp))
 }
 
 @Preview
