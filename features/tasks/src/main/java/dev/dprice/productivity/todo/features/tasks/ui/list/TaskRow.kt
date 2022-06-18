@@ -80,7 +80,9 @@ fun TaskRow(
                         Text(text = task.task.dateTime.asTaskDateString())
                     }
 
-                    TaskStatusIcon()
+                    TaskStatusIcon(
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
                 }
                 if (task.isSelected) {
                     ExpandedTaskContent(task)
@@ -96,14 +98,20 @@ fun TaskRow(
 }
 
 @Composable
-private fun TaskStatusIcon() {
-    Icon(
-        Icons.Outlined.Circle,
-        null,
-        Modifier
-            .size(48.dp)
-            .padding(12.dp)
-    )
+private fun TaskStatusIcon(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
+            .padding(end = 12.dp)
+            .then(modifier)
+    ) {
+        Icon(
+            Icons.Outlined.Circle,
+            null,
+            Modifier.size(24.dp)
+        )
+    }
 }
 
 @Composable
