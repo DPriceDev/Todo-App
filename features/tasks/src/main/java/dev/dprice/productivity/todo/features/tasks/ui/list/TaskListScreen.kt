@@ -1,9 +1,7 @@
 package dev.dprice.productivity.todo.features.tasks.ui.list
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -17,28 +15,24 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.dprice.productivity.todo.features.tasks.data.model.Task
 import dev.dprice.productivity.todo.features.tasks.ui.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.ui.list.model.TaskListState
-import dev.dprice.productivity.todo.features.tasks.ui.list.model.TaskState
-import dev.dprice.productivity.todo.ui.components.RoundedButton
+import dev.dprice.productivity.todo.features.tasks.ui.list.preview.TaskListStatePreviewProvider
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.shapes.waveToppedShape
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TaskListScreen(
     state: TaskListState,
     modifier: Modifier = Modifier,
+    maxBackDropHeight: Dp = 80.dp,
     onAction: (TaskListAction) -> Unit
 ) {
     val bottomSheetState = rememberBottomSheetState(
@@ -72,11 +66,11 @@ fun TaskListScreen(
             )
         )
 
-        val maxBackDropHeight = 80.dp
         var backDropHeight: Dp by remember {
             mutableStateOf(maxBackDropHeight)
         }
         with(LocalDensity.current) {
+            // Provides scrolling to title bar from lazy list
             val nestedScrollConnection = remember {
                 object : NestedScrollConnection {
                     override fun onPreScroll(
@@ -103,33 +97,11 @@ fun TaskListScreen(
                 waveHeight = 12.dp,
                 waveOffsetPercent = waveOffset,
                 backContent = {
-                    var searchableTitleBarState by remember {
-                        mutableStateOf(SearchableTitleBarState())
-                    }
                     SearchableTitleBar(
-                        state = searchableTitleBarState,
-                        onTextChange = {
-                            searchableTitleBarState = searchableTitleBarState.copy(
-                                entry = searchableTitleBarState.entry.copy(
-                                    value = it
-                                )
-                            )
-                        },
-                        onFocusChange = {
-                            searchableTitleBarState = searchableTitleBarState.copy(
-                                entry = searchableTitleBarState.entry.copy(
-                                    hasFocus = it
-                                ),
-                                isSearchShown = if (!it && searchableTitleBarState.entry.hasFocus) {
-                                    false
-                                } else {
-                                    searchableTitleBarState.isSearchShown
-                                }
-                            )
-                        },
-                        onSearchClick = {
-                            searchableTitleBarState = searchableTitleBarState.copy(isSearchShown = true)
-                        }
+                        state = state.titleBarState,
+                        onTextChange = { onAction(TaskListAction.UpdateSearchText(it)) },
+                        onFocusChange = { onAction(TaskListAction.UpdateSearchFocus(it)) },
+                        onSearchClick = { onAction(TaskListAction.SearchButtonClicked) }
                     )
                 }
             ) { padding ->
@@ -169,91 +141,16 @@ private fun NewTaskFabButton(
     }
 }
 
-@Composable
-fun TaskList(
-    tasks: List<TaskState>,
-    modifier: Modifier = Modifier,
-    topPadding: Dp = 0.dp,
-    onAction: (TaskListAction) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier
-            .then(modifier),
-        verticalArrangement = Arrangement.spacedBy(0.dp),
-        contentPadding = PaddingValues(
-            top = 16.dp + topPadding,
-            bottom = 4.dp,
-            start = 4.dp,
-            end = 4.dp
-        )
-    ) {
-        items(tasks) { task ->
-            TaskRow(
-                task = task,
-                onClicked = {
-                    onAction(
-                        TaskListAction.SelectTask(task)
-                    )
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun NewTask() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text("Test")
-        Text("test 2")
-        RoundedButton(
-            text = "Add Task",
-            onClick = { /*TODO*/ }
-        )
-    }
-}
-
 /**
  * Previews
  */
 
-private val testTask = TaskState(
-    Task(
-        "Task",
-        "Description",
-        false,
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-    )
-)
-
-private val testState = TaskListState(
-    listOf(testTask)
-)
-
 @Preview
 @Composable
-private fun PreviewLayout() {
+private fun PreviewTaskListScreen(
+    @PreviewParameter(TaskListStatePreviewProvider::class) state: TaskListState
+) {
     TodoAppTheme {
-        TaskListScreen(testState) { }
+        TaskListScreen(state) {}
     }
 }
-
-@Preview
-@Composable
-private fun PreviewTaskList() {
-    TodoAppTheme {
-        TaskList(testState.tasks) { }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewTaskRow() {
-    TodoAppTheme {
-        TaskRow(testTask) { }
-    }
-}
-
-fun LocalDateTime.asTaskDateString(): String = "$dayOfMonth $month $year"

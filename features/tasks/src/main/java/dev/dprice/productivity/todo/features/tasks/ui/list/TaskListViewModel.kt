@@ -73,7 +73,7 @@ class TaskListViewModelImpl @Inject constructor(
             is TaskListAction.SelectTask -> state.copy(
                 tasks = state.tasks.map { task ->
                     task.copy(
-                        isSelected = action.task == task
+                        isSelected = if(task.isSelected) false else action.task == task
                     )
                 }
             )
@@ -81,6 +81,24 @@ class TaskListViewModelImpl @Inject constructor(
             is TaskListAction.UpdateTasks -> state.copy(
                 tasks = action.tasks,
                 isLoading = false
+            )
+            TaskListAction.SearchButtonClicked -> state.copy(
+                titleBarState = state.titleBarState.copy(isSearchShown = true)
+            )
+            is TaskListAction.UpdateSearchFocus -> state.copy(
+                titleBarState = state.titleBarState.copy(
+                    searchEntry = state.titleBarState.searchEntry.copy(hasFocus = action.focus),
+                    isSearchShown = if (state.titleBarState.searchEntry.hasFocus && !action.focus && state.titleBarState.searchEntry.value.isEmpty()) {
+                        false
+                    } else {
+                        state.titleBarState.isSearchShown
+                    }
+                )
+            )
+            is TaskListAction.UpdateSearchText -> state.copy(
+                titleBarState = state.titleBarState.copy(
+                    searchEntry = state.titleBarState.searchEntry.copy(value = action.value)
+                )
             )
         }
     }

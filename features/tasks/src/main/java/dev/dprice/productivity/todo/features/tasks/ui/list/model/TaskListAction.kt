@@ -7,4 +7,9 @@ sealed class TaskListAction {
     data class UnCompleteTask(val task: TaskState) : TaskListAction()
     data class DeleteTask(val task: TaskState) : TaskListAction()
     data class AddTask(val task: TaskState) : TaskListAction()
+
+    object SearchButtonClicked : TaskListAction()
+
+    data class UpdateSearchText(val value: String) : TaskListAction()
+    data class UpdateSearchFocus(val focus: Boolean) : TaskListAction()
 }
