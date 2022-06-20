@@ -1,9 +1,13 @@
 package dev.dprice.productivity.todo.features.tasks.ui.list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +20,7 @@ import dev.dprice.productivity.todo.features.tasks.ui.list.model.TaskState
 import dev.dprice.productivity.todo.features.tasks.ui.list.preview.TaskListStatePreviewProvider
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun TaskList(
     tasks: List<TaskState>,
@@ -33,15 +38,31 @@ fun TaskList(
             end = 4.dp
         )
     ) {
-        items(tasks) { task ->
+        itemsIndexed(tasks) { index, task ->
             TaskRow(
                 task = task,
+           //     modifier = Modifier.animateItemPlacement(),
+                index = index,
+                onCompleteTaskClick = {
+                    onAction(
+                        TaskListAction.CompleteTask(task)
+                    )
+                },
+                onSwipeTask = {
+                    onAction(
+                        TaskListAction.SwipeTask(task)
+                    )
+                },
                 onClicked = {
                     onAction(
                         TaskListAction.SelectTask(task)
                     )
                 }
             )
+        }
+        
+        item {
+            Spacer(modifier.height(96.dp))
         }
     }
 }

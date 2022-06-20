@@ -3,7 +3,7 @@
 # Config
 
 # Gradle
-gradle = "7.4.0-alpha03"
+gradle = "7.4.0-alpha05"
 
 # Kotlin
 kotlin = "1.6.21"
@@ -12,7 +12,7 @@ datetime = "0.3.3"
 serialization = "1.2.2"
 
 # Android
-androidPlugin = "7.3.0-alpha03"
+androidPlugin = "7.4.0-alpha05"
 coreKtx = "1.7.0"
 appCompat = "1.4.1"
 runtimeKtx = "2.4.0-alpha02"
@@ -27,6 +27,9 @@ composeActivity = "1.4.0"
 composeNavigation = "2.5.0-alpha01"
 composeViewModel = "2.5.0-alpha01"
 animatedComposeNavigation = "0.24.4-alpha"
+
+# Accompanist
+accompanistMaterial = "0.24.11-rc"
 
 # AWS
 awsAmplify = "0.15.3"
@@ -99,6 +102,9 @@ composeAnimatedNavigation = { module = "com.google.accompanist:accompanist-navig
 
 composeUiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 
+# Accompanist
+accompanistMaterial = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanistMaterial" }
+
 # AWS
 aws-amplify = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAmplify" }
 aws-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsCognito" }
@@ -137,7 +143,7 @@ mockitoKotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "m
 [bundles]
 kotlin = ["stdlib", "reflect", "datetime", "serialization", "coroutine"]
 android = ["coreKtx", "appCompat", "runtimeKtx", "fragmentKtx", "material"]
-compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation", "composeAnimatedNavigation"]
+compose = ["composeUi", "composeActivity", "uiTooling", "composeFoundation", "composeMaterial", "composeMaterialIcons", "composeMaterialIconsExtended", "composeAnimation", "composeMaterialThree", "composeViewModel", "composeNavigation", "composeAnimatedNavigation", "accompanistMaterial"]
 hilt = ["hiltAndroid", "hiltComposeNavigation"]
 aws = ["aws-amplify", "aws-cognito"]
 uiTest = ["fragmentTesting", "composeUiTest", "junit", "espresso", "test", "mockitoCore", "mockitoKotlin", "hiltTest", "testRunner", "testRules"]

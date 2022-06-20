@@ -13,12 +13,14 @@ class TaskStatePreviewProvider : PreviewParameterProvider<TaskState> {
         generateTask(),
         generateTask(isSelected = true),
         generateTask(isComplete = true),
-        generateTask(isSelected = true, isComplete = true)
+        generateTask(isSelected = true, isComplete = true),
+        generateTask(isSwiped = true, isComplete = true)
     )
 
     private fun generateTask(
         isSelected: Boolean = false,
-        isComplete: Boolean = false
+        isComplete: Boolean = false,
+        isSwiped: Boolean = false
     ) = TaskState(
         Task(
             "Task unselected",
@@ -26,6 +28,7 @@ class TaskStatePreviewProvider : PreviewParameterProvider<TaskState> {
             isComplete = isComplete,
             Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         ),
-        isSelected = isSelected
+        isSelected = isSelected,
+        isSwiped = isSwiped
     )
 }

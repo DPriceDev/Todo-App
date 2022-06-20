@@ -44,7 +44,7 @@ class TaskListViewModelImpl @Inject constructor(
                     Task(
                         LoremIpsum(5).values.joinToString() + " $it",
                         LoremIpsum(20).values.joinToString(),
-                        false,
+                        it % 2 == 0,
                         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                     )
                 )
@@ -66,7 +66,19 @@ class TaskListViewModelImpl @Inject constructor(
     override fun updateState(action: TaskListAction) {
         viewState.value = when (action) {
             is TaskListAction.AddTask -> TODO()
-            is TaskListAction.CompleteTask -> TODO()
+            is TaskListAction.CompleteTask -> state.copy(
+                tasks = state.tasks.map {
+                    if (it == action.task) {
+                        it.copy(
+                            task = it.task.copy(
+                                isComplete = !it.task.isComplete
+                            )
+                        )
+                    } else {
+                        it
+                    }
+                }.filter { !it.task.isComplete }
+            )
             is TaskListAction.DeleteTask -> state.copy(
                 tasks = state.tasks.apply { toMutableList().remove(action.task) }
             )
@@ -77,7 +89,6 @@ class TaskListViewModelImpl @Inject constructor(
                     )
                 }
             )
-            is TaskListAction.UnCompleteTask -> TODO()
             is TaskListAction.UpdateTasks -> state.copy(
                 tasks = action.tasks,
                 isLoading = false
@@ -99,6 +110,15 @@ class TaskListViewModelImpl @Inject constructor(
                 titleBarState = state.titleBarState.copy(
                     searchEntry = state.titleBarState.searchEntry.copy(value = action.value)
                 )
+            )
+            is TaskListAction.SwipeTask -> state.copy(
+                tasks = state.tasks.map {
+                    if (it == action.task) {
+                        it.copy(isSwiped = true)
+                    } else {
+                        it
+                    }
+                }
             )
         }
     }
