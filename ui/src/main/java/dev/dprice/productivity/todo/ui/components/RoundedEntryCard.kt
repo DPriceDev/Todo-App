@@ -20,6 +20,7 @@ import dev.dprice.productivity.todo.ui.theme.*
 
 data class EntryField(
     val value: String = "",
+    val enabled: Boolean = true,
     val hasFocus: Boolean = false,
     val isValid: Boolean = true,
     val shouldValidate: Boolean = false,
@@ -29,6 +30,7 @@ data class EntryField(
     val contentDescription: String? = null,
     val visualTransformation: VisualTransformation = VisualTransformation.None,
     val maxLength: Int = Int.MAX_VALUE,
+    val maxLines: Int = 1,
     val imeAction: ImeAction = ImeAction.Next
 )
 
@@ -47,12 +49,13 @@ fun RoundedEntryCard(
     ) {
         OutlinedTextField(
             value = entry.value,
+            enabled = entry.enabled,
             onValueChange = onTextChanged,
             modifier = Modifier.fillMaxWidth(),
             isError = !entry.isValid && entry.shouldValidate,
-            singleLine = true,
+            maxLines = entry.maxLines,
             textStyle = textStyle,
-            shape = RoundedCornerShape(percent = 50),
+            shape = RoundedCornerShape(32.dp),
             visualTransformation = entry.visualTransformation,
             keyboardActions = KeyboardActions { onImeAction() },
             keyboardOptions = KeyboardOptions(imeAction = entry.imeAction),

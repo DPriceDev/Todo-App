@@ -1,6 +1,7 @@
 package dev.dprice.productivity.todo.auth.usecases.updater
 
 import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 import javax.inject.Inject
 
 interface UpdateUsernameEntryUseCase {
@@ -39,7 +40,7 @@ class UpdateUsernameEntryUseCaseImpl @Inject constructor(
         usernameEntry,
         newUsername,
         newFocus,
-        usernameRegex::matches
+        validator = usernameRegex::matches
     )
 
     companion object {

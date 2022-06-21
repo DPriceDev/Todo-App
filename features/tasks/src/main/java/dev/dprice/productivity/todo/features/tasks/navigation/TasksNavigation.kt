@@ -8,10 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import dev.dprice.productivity.todo.features.tasks.ui.add.NewTaskViewModelImpl
-import dev.dprice.productivity.todo.features.tasks.ui.list.NewContent
-import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListScreen
-import dev.dprice.productivity.todo.features.tasks.ui.list.TaskListViewModelImpl
+import dev.dprice.productivity.todo.features.tasks.screens.add.NewTaskViewModelImpl
+import dev.dprice.productivity.todo.features.tasks.screens.list.NewContent
+import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
+import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
 import dev.dprice.productivity.todo.platform.model.NavLocation
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
@@ -37,7 +37,11 @@ fun NavGraphBuilder.tasksNavigation(
             val viewModel = hiltViewModel<NewTaskViewModelImpl>()
             NewContent(
                 state = viewModel.viewState,
-                onAction = viewModel::updateState
+                onAction = { action ->
+                    viewModel.updateState(action) {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
     }

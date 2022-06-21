@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-//    id("com.squareup.sqldelight")
     id("dagger.hilt.android.plugin")
     id("de.mannodermaus.android-junit5")
     kotlin("android")
@@ -130,6 +129,9 @@ dependencies {
     kapt(libs.hiltCompiler)
 
     implementation(libs.bundles.aws)
+
+    /* Database */
+    implementation("com.squareup.sqldelight:android-driver:1.5.3")
 
     /* Logging */
     implementation(libs.timber)

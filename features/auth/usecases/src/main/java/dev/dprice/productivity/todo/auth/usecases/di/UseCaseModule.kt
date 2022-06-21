@@ -11,9 +11,6 @@ import dev.dprice.productivity.todo.auth.usecases.updater.*
 interface UseCaseModule {
 
     @Binds
-    fun UpdateEntryUseCaseImpl.bindUpdateEntryUseCase(): UpdateEntryUseCase
-
-    @Binds
     fun UpdateUsernameEntryUseCaseImpl.bindUpdateUsernameEntryUseCase(): UpdateUsernameEntryUseCase
 
     @Binds

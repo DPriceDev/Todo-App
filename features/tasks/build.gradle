@@ -1,3 +1,11 @@
+plugins {
+    id("com.squareup.sqldelight")
+}
+
 apply {
     from("$rootDir/android-feature-build.gradle")
+}
+
+dependencies {
+    implementation "com.squareup.sqldelight:coroutines-extensions-jvm:1.5.3"
 }

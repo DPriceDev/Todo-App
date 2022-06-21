@@ -1,6 +1,7 @@
 package dev.dprice.productivity.todo.auth.usecases.updater
 
 import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 import javax.inject.Inject
 
 interface UpdateEmailEntryUseCase {
@@ -39,7 +40,7 @@ class UpdateEmailEntryUseCaseImpl @Inject constructor(
         emailEntry,
         newEmail,
         newFocus,
-        emailRegex::matches
+        validator = emailRegex::matches
     )
 
     companion object {
