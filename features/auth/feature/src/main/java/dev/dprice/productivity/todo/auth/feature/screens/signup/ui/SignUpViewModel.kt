@@ -11,10 +11,10 @@ import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpEvent
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpForm
 import dev.dprice.productivity.todo.auth.feature.screens.signup.model.SignUpState
-import dev.dprice.productivity.todo.auth.usecases.auth.SignUpUserUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateEmailEntryUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.SignUpUserUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateEmailEntryUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdatePasswordEntryUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateUsernameEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch

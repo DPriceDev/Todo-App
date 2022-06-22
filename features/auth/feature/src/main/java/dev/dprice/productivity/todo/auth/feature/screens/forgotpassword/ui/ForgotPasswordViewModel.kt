@@ -10,8 +10,8 @@ import dev.dprice.productivity.todo.auth.data.model.ForgotPassword
 import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordEvent
 import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordState
-import dev.dprice.productivity.todo.auth.usecases.auth.SendForgotPasswordUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateUsernameEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.SendForgotPasswordUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateUsernameEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch

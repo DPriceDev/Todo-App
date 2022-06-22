@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.features.settings.model
 
-import dev.dprice.productivity.todo.features.settings.data.navigation.SettingsComponent
+import dev.dprice.productivity.todo.platform.model.Component
 
 data class SettingsState(
-    val components: List<SettingsComponent>
+    val components: List<Component>
 )

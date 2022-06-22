@@ -5,5 +5,4 @@ apply {
 dependencies {
     "implementation"(projects.features.auth.usecases)
     "implementation"(projects.features.auth.data)
-    "implementation"(projects.features.settings.data)
 }

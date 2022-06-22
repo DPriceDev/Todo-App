@@ -23,7 +23,8 @@ tasks.register("clean", Delete::class) {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += listOf(
-            "-Xuse-k2"
+            "-Xuse-k2",
+            "-opt-in=kotlin.RequiresOptIn"
         )
     }
 }

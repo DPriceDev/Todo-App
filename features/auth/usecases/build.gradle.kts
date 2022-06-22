@@ -1,5 +1,5 @@
 apply {
-    from("$rootDir/android-feature-build.gradle")
+    from("$rootDir/library-build.gradle")
 }
 
 dependencies {

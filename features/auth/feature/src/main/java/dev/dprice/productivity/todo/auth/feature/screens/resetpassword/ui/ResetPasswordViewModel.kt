@@ -11,9 +11,9 @@ import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordEvent
 import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordForm
 import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.model.ResetPasswordState
-import dev.dprice.productivity.todo.auth.usecases.auth.ResetPasswordUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdatePasswordEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.ResetPasswordUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateCodeEntryUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch

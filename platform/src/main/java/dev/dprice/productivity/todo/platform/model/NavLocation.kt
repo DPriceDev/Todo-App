@@ -9,10 +9,10 @@ sealed class NavLocation(
     override val navArguments: List<NamedNavArgument> = emptyList()
 ) : NavDestination {
     object Main : NavLocation("Main")
-    object Tasks : NavLocation("Tasks")
-    object TasksList : NavLocation("Tasks/List")
-    object TasksDetail : NavLocation("Tasks/Detail")
-    object TasksNewContent : NavLocation("Tasks/New")
+    object Tasks : NavLocation("tasks")
+    object TasksList : NavLocation("tasks/list")
+    object TasksDetail : NavLocation("tasks/fetail")
+    object TasksNewContent : NavLocation("tasks/new")
     object Auth : NavLocation("Auth")
     object Settings : NavLocation("Settings")
 }

@@ -7,6 +7,8 @@ java {
 }
 
 dependencies {
+    implementation(projects.core)
+
     implementation(libs.bundles.kotlin)
 
     testImplementation(libs.bundles.unitTest)

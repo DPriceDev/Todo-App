@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
@@ -52,7 +51,6 @@ fun SlideSelector(
                                 text = title,
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                                 style = MaterialTheme.typography.body1,
-                                color = DarkBlue
                             )
                         }
                     } else {

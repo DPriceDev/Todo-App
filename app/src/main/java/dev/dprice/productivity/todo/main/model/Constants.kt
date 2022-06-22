@@ -17,7 +17,7 @@ object Constants {
         BottomNavItem(
             label = "Tasks",
             icon = Icons.Filled.Task,
-            route = NavLocation.Tasks.route
+            route = NavLocation.TasksList.route
         ),
         BottomNavItem(
             label = "Settings",

@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import dev.dprice.productivity.todo.main.model.Constants
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
@@ -25,12 +27,20 @@ fun BottomNavigationBar(
                 backgroundColor = MediumBlue,
                 contentColor = Color.White
             ) {
-                val currentRoute = navBackStackEntry?.destination?.route
+                val currentRoute = navBackStackEntry?.destination
 
                 Constants.BottomNavItems.forEach { navItem ->
                     BottomNavigationItem(
-                        selected = currentRoute == navItem.route,
-                        onClick = { navController.navigate(navItem.route) },
+                        selected = currentRoute?.hierarchy?.any { it.route == navItem.route } == true,
+                        onClick = {
+                            navController.navigate(navItem.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                                  },
                         icon = {
                             Icon(imageVector = navItem.icon, contentDescription = navItem.label)
                         },

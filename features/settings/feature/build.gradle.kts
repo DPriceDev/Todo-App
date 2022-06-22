@@ -10,7 +10,3 @@ apply {
 android {
     namespace = "dev.dprice.productivity.todo.features.settings.feature"
 }
-
-dependencies {
-    "implementation"(projects.features.settings.data)
-}

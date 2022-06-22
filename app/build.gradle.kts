@@ -107,12 +107,14 @@ android {
 dependencies {
     implementation(projects.ui)
     implementation(projects.platform)
-    implementation(projects.features.tasks)
+    implementation(projects.features.tasks.feature)
+    implementation(projects.features.tasks.dataImpl)
     implementation(projects.features.settings.feature)
     implementation(projects.features.auth.feature)
     implementation(projects.features.auth.data)
     implementation(projects.core)
     androidTestImplementation(projects.ui.test)
+
 
     /* Kotlin */
     implementation(libs.bundles.kotlin)
@@ -129,9 +131,6 @@ dependencies {
     kapt(libs.hiltCompiler)
 
     implementation(libs.bundles.aws)
-
-    /* Database */
-    implementation("com.squareup.sqldelight:android-driver:1.5.3")
 
     /* Logging */
     implementation(libs.timber)

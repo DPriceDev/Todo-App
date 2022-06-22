@@ -11,9 +11,9 @@ import dev.dprice.productivity.todo.auth.data.model.VerifyUser
 import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent
 import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyState
-import dev.dprice.productivity.todo.auth.usecases.auth.ResendVerificationCodeUseCase
-import dev.dprice.productivity.todo.auth.usecases.auth.VerifySignUpCodeUseCase
-import dev.dprice.productivity.todo.auth.usecases.updater.UpdateCodeEntryUseCase
+import dev.dprice.productivity.todo.auth.usecases.ResendVerificationCodeUseCase
+import dev.dprice.productivity.todo.auth.usecases.VerifySignUpCodeUseCase
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch

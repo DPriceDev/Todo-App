@@ -5,9 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.features.settings.data.navigation.SettingsComponent
 import dev.dprice.productivity.todo.features.settings.model.SettingsState
+import dev.dprice.productivity.todo.platform.model.Component
 import javax.inject.Inject
+import javax.inject.Named
 
 interface SettingsViewModel {
     val viewState: SettingsState
@@ -15,7 +16,7 @@ interface SettingsViewModel {
 
 @HiltViewModel
 class SettingsViewModelImpl @Inject constructor(
-    components: Set<@JvmSuppressWildcards SettingsComponent>
+    @Named("Settings") components: Set<@JvmSuppressWildcards Component>
 ) : ViewModel(),
     SettingsViewModel {
 
