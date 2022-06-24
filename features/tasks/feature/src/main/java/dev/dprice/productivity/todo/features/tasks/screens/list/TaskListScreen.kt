@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskListStatePreviewProvider
-import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
@@ -29,7 +28,7 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 fun TaskListScreen(
     state: TaskListState,
     modifier: Modifier = Modifier,
-    maxBackDropHeight: Dp = 80.dp,
+    maxBackDropHeight: Dp = 132.dp,
     openAddTaskSheet: () -> Unit,
     onAction: (TaskListAction) -> Unit,
 ) {
@@ -76,12 +75,7 @@ fun TaskListScreen(
             waveHeight = 12.dp,
             waveOffsetPercent = waveOffset,
             backContent = {
-                SearchableTitleBar(
-                    state = state.titleBarState,
-                    onTextChange = { onAction(TaskListAction.UpdateSearchText(it)) },
-                    onFocusChange = { onAction(TaskListAction.UpdateSearchFocus(it)) },
-                    onSearchClick = { onAction(TaskListAction.SearchButtonClicked) }
-                )
+                TitleBar(state.titleBarState, onAction)
             }
         ) { padding ->
             TaskList(

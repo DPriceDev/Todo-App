@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +19,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListSt
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskListStatePreviewProvider
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskList(
     tasks: List<Task>,

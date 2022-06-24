@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
@@ -26,6 +27,8 @@ fun SlideSelector(
     vararg items: String,
     selected: Int,
     modifier: Modifier = Modifier,
+    selectedColor: Color = Yellow,
+    selectedContentColor: Color = Color.Black,
     onSelected: (Int) -> Unit
 ) {
     Surface(
@@ -44,26 +47,33 @@ fun SlideSelector(
                 items.forEachIndexed { index, title ->
                     if (index == selected) {
                         Card(
-                            backgroundColor = Yellow,
+                            modifier = Modifier.weight(1f),
+                            backgroundColor = selectedColor,
                             shape = RoundedCornerShape(percent = 50),
                         ) {
                             Text(
                                 text = title,
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                                 style = MaterialTheme.typography.body1,
+                                textAlign = TextAlign.Center,
+                                color = selectedContentColor
                             )
                         }
                     } else {
                         Box(
                             modifier = Modifier
+                                .weight(1f)
                                 .clip(shape = RoundedCornerShape(percent = 50))
                                 .clickable { onSelected(index) }
                         ) {
                             Text(
                                 text = title,
-                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                modifier = Modifier
+                                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                                    .align(Alignment.Center),
                                 style = MaterialTheme.typography.body1,
-                                color = Color.White
+                                color = Color.White,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }

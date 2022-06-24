@@ -1,7 +1,10 @@
 package dev.dprice.productivity.todo.ui.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
@@ -11,18 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
-data class TitleBarState(
-    val searchEntry: EntryField = EntryField(
-        value = "",
-        hintText = "Search Tasks",
-        icon = Icons.Outlined.Search
-    ),
-    val isSearchShown: Boolean = false
-)
-
 @Composable
 fun SearchableTitleBar(
-    state: TitleBarState = TitleBarState(),
+    entry: EntryField,
+    isSearchShown: Boolean,
     onTextChange: (String) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     onSearchClick: () -> Unit
@@ -42,8 +37,8 @@ fun SearchableTitleBar(
             modifier = Modifier.align(Alignment.CenterEnd)
         ) {
             ExpandingEntryField(
-                isExpanded = state.isSearchShown,
-                entry = state.searchEntry,
+                isExpanded = isSearchShown,
+                entry = entry,
                 onFocusChange = onFocusChange,
                 onTextChange = onTextChange,
                 onExpandClicked = onSearchClick
@@ -57,6 +52,16 @@ fun SearchableTitleBar(
 @Composable
 fun PreviewTitleBar() {
     TodoAppTheme {
-        SearchableTitleBar(TitleBarState(), { }, { }) { }
+        SearchableTitleBar(
+            entry = EntryField(
+                value = "",
+                hintText = "Search Tasks",
+                icon = Icons.Outlined.Search
+            ),
+            isSearchShown = false,
+            { },
+            { },
+            { }
+        )
     }
 }

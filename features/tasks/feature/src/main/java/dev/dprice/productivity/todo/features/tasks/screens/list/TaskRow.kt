@@ -9,7 +9,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -37,13 +40,13 @@ fun TaskRow(
     isSelected: Boolean,
     index: Int,
     modifier: Modifier = Modifier,
-    isSwiped: MutableState<Boolean> = remember { mutableStateOf(false) },
-    swipeState: SwipeableState<Boolean> = rememberSwipeableState(initialValue = isSwiped.value),
     focusRequester: FocusRequester = remember { FocusRequester() },
     onCompleteTaskClick: () -> Unit = { },
     onClicked: () -> Unit = { },
     expandableContent: @Composable () -> Unit
 ) {
+    val isSwiped = remember { mutableStateOf(false) }
+    val swipeState = rememberSwipeableState(initialValue = isSwiped.value)
     LaunchedEffect(key1 = swipeState.currentValue) {
         isSwiped.value = swipeState.currentValue
     }
@@ -188,7 +191,6 @@ private fun BehindTaskCard(
 }
 
 /* Preview */
-@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 private fun PreviewTaskRow(
@@ -199,7 +201,6 @@ private fun PreviewTaskRow(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 private fun PreviewSelectedTaskRow(

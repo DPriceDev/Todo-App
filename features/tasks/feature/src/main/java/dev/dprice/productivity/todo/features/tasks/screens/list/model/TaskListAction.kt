@@ -1,6 +1,14 @@
 package dev.dprice.productivity.todo.features.tasks.screens.list.model
 
+import androidx.annotation.StringRes
+import dev.dprice.productivity.todo.features.tasks.R
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
+
+enum class TaskFilter(@StringRes val displayNameId: Int) {
+    ALL(R.string.filter_all),
+    INCOMPLETE(R.string.filter_incomplete),
+    COMPLETE(R.string.filter_complete)
+}
 
 sealed class TaskListAction {
     data class UpdateTasks(val tasks: List<Task>) : TaskListAction()
@@ -12,4 +20,6 @@ sealed class TaskListAction {
 
     data class UpdateSearchText(val value: String) : TaskListAction()
     data class UpdateSearchFocus(val focus: Boolean) : TaskListAction()
+
+    data class UpdateFilter(val filter: TaskFilter) : TaskListAction()
 }

@@ -40,9 +40,7 @@ fun ExpandedTaskContent(
             RoundedButton(
                 onClick = onCompleteTaskClick,
                 modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(
-                    vertical = 12.dp
-                )
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Icon(
                     Icons.Default.Done,
@@ -53,9 +51,7 @@ fun ExpandedTaskContent(
             RoundedButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(
-                    vertical = 12.dp
-                )
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Icon(
                     Icons.Default.Edit,
@@ -66,9 +62,7 @@ fun ExpandedTaskContent(
             RoundedButton(
                 onClick = { onDeleteClicked() },
                 modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(
-                    vertical = 12.dp
-                )
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
                 Icon(
                     Icons.Default.Delete,
