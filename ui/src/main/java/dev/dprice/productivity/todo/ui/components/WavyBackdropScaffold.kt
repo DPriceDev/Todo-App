@@ -23,6 +23,7 @@ fun WavyBackdropScaffold(
     phaseOffset: Float = 0.0f,
     backgroundColour: Color = MaterialTheme.colors.surface,
     foregroundColour: Color = MaterialTheme.colors.background,
+    layoutBeyondConstraints: Boolean = true,
     backContent: @Composable BoxScope.(height: Dp) -> Unit = { },
     frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit = { },
 ) {
@@ -33,6 +34,7 @@ fun WavyBackdropScaffold(
         waveOffsetPercent = state.getPhase().value + phaseOffset,
         backgroundColour = backgroundColour,
         foregroundColour = foregroundColour,
+        layoutBeyondConstraints = layoutBeyondConstraints,
         modifier = modifier,
         backContent = backContent,
         frontContent = frontContent
@@ -48,6 +50,7 @@ fun WavyBackdropScaffold(
     waveOffsetPercent: Float = 0.0f,
     backgroundColour: Color = MaterialTheme.colors.surface,
     foregroundColour: Color = MaterialTheme.colors.background,
+    layoutBeyondConstraints: Boolean = true,
     backContent: @Composable BoxScope.(height: Dp) -> Unit,
     frontContent: @Composable BoxScope.(topPadding: Dp) -> Unit,
 ) {
@@ -79,23 +82,29 @@ fun WavyBackdropScaffold(
                 frequency = waveFrequency,
                 waveOffset = waveOffsetPercent
             ) {
+                val layoutModifier = if (layoutBeyondConstraints) {
+                    // This layout is measuring an infinite child, then placing the children at 0, 0
+                    Modifier.layout { measurable, constraints ->
+                        val childConstraints = constraints.copy(
+                            maxHeight = Constraints.Infinity,
+                            maxWidth = constraints.maxWidth
+                        )
+                        val placeable = measurable.measure(childConstraints)
+                        val width = placeable.width.coerceAtMost(constraints.maxWidth)
+                        val height = placeable.height.coerceAtMost(constraints.maxHeight)
+
+                        layout(width, height) {
+                            placeable.placeRelativeWithLayer(0, 0)
+                        }
+                    }
+                } else {
+                    Modifier
+                }
+
                 Box(
                     modifier = Modifier
                         .size(this@BoxWithConstraints.maxWidth, this@BoxWithConstraints.maxHeight)
-                        // This layout is measuring an infinite child, then placing the children at 0, 0
-                        .layout { measurable, constraints ->
-                            val childConstraints = constraints.copy(
-                                maxHeight = Constraints.Infinity,
-                                maxWidth = constraints.maxWidth
-                            )
-                            val placeable = measurable.measure(childConstraints)
-                            val width = placeable.width.coerceAtMost(constraints.maxWidth)
-                            val height = placeable.height.coerceAtMost(constraints.maxHeight)
-
-                            layout(width, height) {
-                                placeable.placeRelativeWithLayer(0, 0)
-                            }
-                        }
+                        .then(layoutModifier)
                 ) {
                     backContent(backOffset)
                 }

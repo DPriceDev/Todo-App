@@ -1,42 +1,44 @@
 package dev.dprice.productivity.todo.ui.components
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 
 // todo: convert pulsing to modifier?
 @Composable
 fun PulsingButton(
     backgroundColour: Color,
     modifier: Modifier = Modifier,
+    durationMillis: Int = 3000,
+    pulseRange: ClosedRange<Float> = 0.98f..1.0f,
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val infiniteTransition = rememberInfiniteTransition()
     val pulseAnimation by infiniteTransition.animateFloat(
-        initialValue = 0.98f,
-        targetValue = 1.0f,
+        initialValue = pulseRange.start,
+        targetValue = pulseRange.endInclusive,
         animationSpec = infiniteRepeatable(
-            tween(durationMillis = 3000, easing = FastOutSlowInEasing),
+            tween(durationMillis = durationMillis, easing = FastOutSlowInEasing),
             RepeatMode.Reverse
         )
     )
 
-    Card(
-        shape = RoundedCornerShape(percent = 50),
-        backgroundColor = backgroundColour,
-        elevation = 8.dp,
+    RoundedButton(
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = backgroundColour
+        ),
+        onClick = { onClick() },
+        contentPadding = PaddingValues(),
         modifier = Modifier
             .scale(pulseAnimation)
-            .clickable { onClick() }
-            .then(modifier),
-        content = content
-    )
+            .then(modifier)
+    ) {
+        content()
+    }
 }

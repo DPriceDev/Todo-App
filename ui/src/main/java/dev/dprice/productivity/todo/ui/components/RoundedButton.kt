@@ -27,7 +27,7 @@ fun RoundedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(percent = 50),
+    shape: Shape = RoundedCornerShape(28.dp),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: ButtonElevation? = ButtonDefaults.elevation(),
     border: BorderStroke? = null,

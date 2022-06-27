@@ -29,6 +29,7 @@ import dev.dprice.productivity.todo.ui.theme.DarkBlue
 @Composable
 fun TitleBar(
     state: TitleBarState,
+    openGroupSelector: () -> Unit,
     onAction: (TaskListAction) -> Unit
 ) {
     Column {
@@ -48,7 +49,7 @@ fun TitleBar(
             PulsingButton(
                 modifier = Modifier.weight(1f),
                 backgroundColour = Color.Green,
-                onClick = { /* todo: Open group selector */ }
+                onClick = openGroupSelector
             ) {
                 Shimmer {
                     ButtonLayout(
@@ -109,7 +110,7 @@ private fun DateSelector() {
 }
 
 @Composable
-private fun ButtonLayout(
+fun ButtonLayout(
     icon: ImageVector,
     contentColour: Color,
     text: String

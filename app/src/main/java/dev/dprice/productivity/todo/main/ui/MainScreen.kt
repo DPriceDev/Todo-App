@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -23,6 +24,8 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dev.dprice.productivity.todo.main.AppNavigation
 import dev.dprice.productivity.todo.main.model.MainState
+import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.shapes.waveToppedShape
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
@@ -66,13 +69,19 @@ fun MainScreen(
         Scaffold(
             bottomBar = { BottomNavigationBar(navController = navController) }
         ) { padding ->
-            when (state.isLoading) {
-                true -> Box(modifier = Modifier.fillMaxSize())
-                else -> AppNavigation(
-                    modifier = modifier.padding(padding),
-                    isSignedIn = state.userSession?.isSignedIn,
-                    navController = navController
-                )
+            Box {
+                val wavyState = remember { WavyScaffoldState() }
+                WavyBackdropScaffold(state = wavyState)
+
+                when (state.isLoading) {
+                    true -> Box(modifier = Modifier.fillMaxSize())
+                    else -> AppNavigation(
+                        modifier = modifier.padding(padding),
+                        isSignedIn = state.userSession?.isSignedIn,
+                        navController = navController,
+                        wavyState = wavyState
+                    )
+                }
             }
         }
     }

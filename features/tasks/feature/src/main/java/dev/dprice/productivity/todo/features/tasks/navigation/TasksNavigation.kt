@@ -1,6 +1,8 @@
 package dev.dprice.productivity.todo.features.tasks.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,10 +14,14 @@ import dev.dprice.productivity.todo.features.tasks.screens.add.NewTaskViewModelI
 import dev.dprice.productivity.todo.features.tasks.screens.list.NewContent
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
+import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorScreen
+import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorViewModel
 import dev.dprice.productivity.todo.platform.model.NavLocation
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun NavGraphBuilder.tasksNavigation(
+    wavyState: WavyScaffoldState,
     navController: NavHostController,
     modifier: Modifier,
 ) {
@@ -28,8 +34,20 @@ fun NavGraphBuilder.tasksNavigation(
             TaskListScreen(
                 modifier = modifier,
                 state = viewModel.state,
+                wavyState = wavyState,
                 onAction = viewModel::updateState,
-                openAddTaskSheet = { navController.navigate(NavLocation.TasksNewContent.route) }
+                openAddTaskSheet = { navController.navigate(NavLocation.TasksNewContent.route) },
+                openGroupSelector = { navController.navigate(NavLocation.TasksGroup.route) }
+            )
+        }
+
+        composable(NavLocation.TasksGroup.route) {
+            val viewModel = hiltViewModel<GroupSelectorViewModel>()
+            GroupSelectorScreen(
+                state = viewModel.state,
+                wavyState = wavyState,
+                modifier = modifier,
+                onAction = viewModel::updateState,
             )
         }
 

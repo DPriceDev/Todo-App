@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 
+
+// todo: Switch to clipped modifier?
 @Composable
 fun Shimmer(
     modifier: Modifier = Modifier,

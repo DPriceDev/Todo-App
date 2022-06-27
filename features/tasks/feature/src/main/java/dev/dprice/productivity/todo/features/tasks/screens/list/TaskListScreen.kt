@@ -1,12 +1,14 @@
 package dev.dprice.productivity.todo.features.tasks.screens.list
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -22,30 +24,31 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAc
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskListStatePreviewProvider
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun TaskListScreen(
     state: TaskListState,
+    wavyState: WavyScaffoldState,
     modifier: Modifier = Modifier,
     maxBackDropHeight: Dp = 264.dp,
     openAddTaskSheet: () -> Unit,
+    openGroupSelector: () -> Unit,
     onAction: (TaskListAction) -> Unit,
 ) {
-    val waveOffset by rememberInfiniteTransition().animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 10000,
-                easing = LinearEasing
-            )
+    LaunchedEffect(key1 = Unit) {
+        wavyState.animate(
+            backDropHeight = maxBackDropHeight,
+            frequency = 0.3f,
+            waveHeight = 12.dp,
+            duration = 10_000
         )
-    )
-
-    var backDropHeight: Dp by remember {
-        mutableStateOf(maxBackDropHeight)
     }
+
+    val scope = rememberCoroutineScope()
+
     with(LocalDensity.current) {
         // Provides scrolling to title bar from lazy list
         val nestedScrollConnection = remember {
@@ -55,8 +58,13 @@ fun TaskListScreen(
                     source: NestedScrollSource
                 ): Offset {
                     val delta = available.y.toDp()
-                    val newHeight = backDropHeight + delta
-                    backDropHeight = newHeight.coerceIn(0.dp..maxBackDropHeight)
+                    val newHeight = wavyState.getBackDropHeight().value + delta
+
+                    scope.launch {
+                        wavyState.snapToHeight(
+                            backDropHeight = newHeight.coerceIn(0.dp..maxBackDropHeight)
+                        )
+                    }
 
                     val consumed = when {
                         newHeight < 0.dp -> delta - delta - newHeight
@@ -70,12 +78,14 @@ fun TaskListScreen(
         }
 
         WavyBackdropScaffold(
+            state = wavyState,
             modifier = modifier,
-            backDropHeight = backDropHeight,
-            waveHeight = 12.dp,
-            waveOffsetPercent = waveOffset,
             backContent = {
-                TitleBar(state.titleBarState, onAction)
+                TitleBar(
+                    state = state.titleBarState,
+                    onAction = onAction,
+                    openGroupSelector = openGroupSelector
+                )
             }
         ) { padding ->
             TaskList(
@@ -123,6 +133,17 @@ private fun PreviewTaskListScreen(
     @PreviewParameter(TaskListStatePreviewProvider::class) state: TaskListState
 ) {
     TodoAppTheme {
-        TaskListScreen(state, openAddTaskSheet = { }) {}
+        val wavyState = WavyScaffoldState(
+            initialBackDropHeight = 264.dp,
+            initialWaveHeight = 12.dp,
+            initialFrequency = 0.3f
+        )
+
+        TaskListScreen(
+            state = state,
+            wavyState = wavyState,
+            openAddTaskSheet = { },
+            openGroupSelector = { }
+        ) {}
     }
 }

@@ -13,10 +13,12 @@ import dev.dprice.productivity.todo.features.settings.ui.SettingsScreen
 import dev.dprice.productivity.todo.features.settings.ui.SettingsViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.navigation.tasksNavigation
 import dev.dprice.productivity.todo.platform.model.NavLocation
+import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavigation(
+    wavyState: WavyScaffoldState,
     isSignedIn: Boolean?,
     navController: NavHostController,
     modifier: Modifier = Modifier
@@ -33,7 +35,8 @@ fun AppNavigation(
         ) {
             tasksNavigation(
                 navController = navController,
-                modifier = modifier
+                modifier = modifier,
+                wavyState = wavyState
             )
 
             composable(NavLocation.Settings.route) {

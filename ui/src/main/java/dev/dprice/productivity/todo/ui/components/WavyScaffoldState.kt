@@ -35,6 +35,10 @@ data class WavyScaffoldState(
 
     fun getWaveHeight() = animatableHeight.asState()
 
+    suspend fun snapToHeight(backDropHeight: Dp) {
+        animatableBackDropHeight.snapTo(backDropHeight)
+    }
+
     suspend fun animate(
         backDropHeight: Dp = animatableBackDropHeight.targetValue,
         frequency: Float = animatableFrequency.targetValue,
