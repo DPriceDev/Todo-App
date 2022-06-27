@@ -13,8 +13,7 @@ class GetTaskListUseCaseImpl(private val taskRepository: TaskRepository): GetTas
     override operator fun invoke() = taskRepository
         .getTasks()
         .map { tasks ->
-            tasks
-                .sortedBy { it.dateTime }
-                .sortedBy { it.isComplete }
+            tasks.sortedBy { it.finishDate }
+                .sortedBy { it.isCompleted }
         }
 }

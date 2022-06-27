@@ -26,9 +26,9 @@ fun ExpandedTaskContent(
             .padding(bottom = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        if (task.description.isNotEmpty()) {
+        if (task.details.isNotEmpty()) {
             Text(text = "Description")
-            Text(text = task.description)
+            Text(text = task.details)
         }
 
         Row(

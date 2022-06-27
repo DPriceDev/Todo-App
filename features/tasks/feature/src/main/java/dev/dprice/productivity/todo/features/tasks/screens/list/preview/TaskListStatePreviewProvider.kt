@@ -14,8 +14,8 @@ class TaskListStatePreviewProvider : PreviewParameterProvider<TaskListState> {
         UUID.randomUUID().toString(),
         "Task",
         "Description",
-        false,
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        finishDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+        isCompleted = false,
     )
 
     override val values: Sequence<TaskListState> = sequenceOf(

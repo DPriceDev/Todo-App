@@ -28,7 +28,7 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 fun TaskListScreen(
     state: TaskListState,
     modifier: Modifier = Modifier,
-    maxBackDropHeight: Dp = 132.dp,
+    maxBackDropHeight: Dp = 264.dp,
     openAddTaskSheet: () -> Unit,
     onAction: (TaskListAction) -> Unit,
 ) {

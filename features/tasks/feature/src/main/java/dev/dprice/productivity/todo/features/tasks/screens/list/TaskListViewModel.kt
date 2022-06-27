@@ -45,8 +45,8 @@ class TaskListViewModelImpl @Inject constructor(
             }.combine(filterFlow) { tasks, filter ->
                 tasks.filter { task ->
                     when(filter) {
-                        TaskFilter.COMPLETE -> task.isComplete
-                        TaskFilter.INCOMPLETE -> !task.isComplete
+                        TaskFilter.COMPLETE -> task.isCompleted
+                        TaskFilter.INCOMPLETE -> !task.isCompleted
                         else -> true
                     }
                 }
@@ -79,7 +79,7 @@ class TaskListViewModelImpl @Inject constructor(
         viewModelScope.launch {
             state.tasks.find { it.id == id }?.let {
                 updateTaskListUseCase(
-                    it.copy(isComplete = !it.isComplete)
+                    it.copy(isCompleted = !it.isCompleted)
                 )
             }
         }

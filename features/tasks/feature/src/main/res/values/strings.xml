@@ -4,4 +4,9 @@
     <string name="filter_all">All</string>
     <string name="filter_incomplete">Incomplete</string>
     <string name="filter_complete">Complete</string>
+
+    <string name="filter_daily">Daily</string>
+    <string name="filter_three_day">3-Day</string>
+    <string name="filter_weekly">Weekly</string>
+    <string name="filter_monthly">Monthly</string>
 </resources>

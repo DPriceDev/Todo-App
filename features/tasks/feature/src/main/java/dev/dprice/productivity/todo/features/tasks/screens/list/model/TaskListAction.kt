@@ -10,6 +10,14 @@ enum class TaskFilter(@StringRes val displayNameId: Int) {
     COMPLETE(R.string.filter_complete)
 }
 
+enum class DateFilter(@StringRes val displayNameId: Int) {
+    ALL(R.string.filter_all),
+    DAILY(R.string.filter_daily),
+    THREE_DAY(R.string.filter_three_day),
+    WEEKLY(R.string.filter_weekly),
+    MONTHLY(R.string.filter_monthly)
+}
+
 sealed class TaskListAction {
     data class UpdateTasks(val tasks: List<Task>) : TaskListAction()
     data class SelectTask(val id: String) : TaskListAction()

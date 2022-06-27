@@ -69,7 +69,7 @@ fun TaskRow(
             .then(modifier)
     ) {
         if (swipeState.offset.value < 0f) {
-            BehindTaskCard(isComplete = task.isComplete)
+            BehindTaskCard(isComplete = task.isCompleted)
         }
 
         val maxSwipe = with(LocalDensity.current) { 256.dp.toPx() }
@@ -131,11 +131,11 @@ private fun TaskRowContent(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = task.title)
-                    Text(text = task.dateTime.asTaskDateString())
+                    Text(text = task.finishDate.asTaskDateString())
                 }
 
                 StatusIcon(
-                    task.isComplete,
+                    task.isCompleted,
                     index = index,
                     modifier = Modifier.padding(top = 16.dp)
                 )

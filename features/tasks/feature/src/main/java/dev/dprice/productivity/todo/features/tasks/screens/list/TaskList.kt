@@ -46,22 +46,14 @@ fun TaskList(
                 task = task,
                 index = index,
                 modifier = Modifier.animateItemPlacement(),
-                onCompleteTaskClick = {
-                    onAction(TaskListAction.CompleteTask(task.id))
-                },
-                onClicked = {
-                    onAction(TaskListAction.SelectTask(task.id))
-                },
+                onCompleteTaskClick = { onAction(TaskListAction.CompleteTask(task.id)) },
+                onClicked = { onAction(TaskListAction.SelectTask(task.id)) },
                 isSelected = task.id == selectedTaskId
             ) {
                 ExpandedTaskContent(
                     task,
-                    onCompleteTaskClick = {
-                        onAction(TaskListAction.CompleteTask(task.id))
-                    },
-                    onDeleteClicked = {
-                        onAction(TaskListAction.DeleteTask(task.id))
-                    }
+                    onCompleteTaskClick = { onAction(TaskListAction.CompleteTask(task.id)) },
+                    onDeleteClicked = { onAction(TaskListAction.DeleteTask(task.id)) }
                 )
             }
         }

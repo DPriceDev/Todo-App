@@ -20,8 +20,8 @@ class TaskPreviewProvider : PreviewParameterProvider<Task> {
         UUID.randomUUID().toString(),
         "Task unselected",
         "Description",
-        isComplete = isComplete,
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        isCompleted = isComplete,
+        finishDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     )
 }
 

@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.features.tasks.screens.list
+package dev.dprice.productivity.todo.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,14 +12,29 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 
 @Composable
-private fun DropdownCard(
+fun <T> DropdownCard(
+    title: String,
+    value: String,
+    items: List<T>,
+    modifier: Modifier = Modifier,
+    isExpanded: MutableState<Boolean> = remember { mutableStateOf(false) },
+    onItemClick: (Int, T) -> Unit,
+    dropdownContent: @Composable ColumnScope.(T) -> Unit
+) {
+
+}
+
+@Composable
+fun DropdownCard(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
     isExpanded: MutableState<Boolean> = remember { mutableStateOf(false) },
+    leadingIcon: (@Composable () -> Unit)? = null,
     dropdownContent: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -37,13 +52,15 @@ private fun DropdownCard(
                     contentDescription = null
                 )
             },
+            leadingIcon = leadingIcon,
             onValueChange = { },
             modifier = Modifier.clickable { isExpanded.value = true },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 disabledTextColor = MediumBlue,
                 disabledBorderColor = MediumBlue,
                 disabledLabelColor = MediumBlue,
-                disabledTrailingIconColor = MediumBlue
+                disabledTrailingIconColor = MediumBlue,
+                backgroundColor = Color.Green
             )
         )
 

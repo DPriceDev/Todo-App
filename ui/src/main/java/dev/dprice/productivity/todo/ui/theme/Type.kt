@@ -39,6 +39,11 @@ val Typography = Typography(
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
     ),
+    h4 = TextStyle(
+        fontFamily = signikaNegative,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+    ),
     button = TextStyle(
         fontFamily = signikaNegative,
         fontWeight = FontWeight.W500,

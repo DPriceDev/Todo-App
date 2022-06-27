@@ -17,9 +17,9 @@ class TaskRepositoryImpl constructor(
         taskQueries.insert(
             task.id,
             task.title,
-            task.description,
-            task.isComplete,
-            task.dateTime
+            task.details,
+            task.isCompleted,
+            task.finishDate
         )
         // todo: add to server
     }
@@ -28,9 +28,9 @@ class TaskRepositoryImpl constructor(
         taskQueries.insert(
             task.id,
             task.title,
-            task.description,
-            task.isComplete,
-            task.dateTime
+            task.details,
+            task.isCompleted,
+            task.finishDate
         )
         // todo: update on server
     }
@@ -51,12 +51,13 @@ class TaskRepositoryImpl constructor(
     }
 }
 
+// todo: Update with new fields
 fun TaskItem.toTask() : Task {
     return Task(
-        id,
-        title,
-        details,
-        isComplete,
-        date
+        id = id,
+        title = title,
+        details = details,
+        isCompleted = isComplete,
+        finishDate = date
     )
 }
