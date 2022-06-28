@@ -1,8 +1,6 @@
 package dev.dprice.productivity.todo.features.tasks.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -47,7 +45,11 @@ fun NavGraphBuilder.tasksNavigation(
                 state = viewModel.state,
                 wavyState = wavyState,
                 modifier = modifier,
-                onAction = viewModel::updateState,
+                onSelect = { group ->
+                    viewModel.selectGroup(group)
+                    navController.popBackStack()
+                },
+                onAddGroup = { navController.navigate(NavLocation.TasksNewContent.route) }
             )
         }
 

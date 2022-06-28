@@ -9,4 +9,9 @@
     <string name="filter_three_day">3-Day</string>
     <string name="filter_weekly">Weekly</string>
     <string name="filter_monthly">Monthly</string>
+
+    <plurals name="task_count">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
 </resources>

@@ -10,7 +10,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.usecase.DeleteTaskUseCase
-import dev.dprice.productivity.todo.features.tasks.usecase.GetTaskListUseCase
+import dev.dprice.productivity.todo.features.tasks.usecase.GetCurrentTasksUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -27,7 +27,7 @@ interface TaskListViewModel {
 
 @HiltViewModel
 class TaskListViewModelImpl @Inject constructor(
-    getTaskListUseCase: GetTaskListUseCase,
+    getCurrentTasksUseCase: GetCurrentTasksUseCase,
     private val deleteTaskListUseCase: DeleteTaskUseCase,
     private val updateTaskListUseCase: UpdateTaskUseCase
 ) : ViewModel(),
@@ -39,7 +39,7 @@ class TaskListViewModelImpl @Inject constructor(
     override val state: TaskListState by viewModelState
 
     init {
-        getTaskListUseCase()
+        getCurrentTasksUseCase()
             .combine(searchFlow) { tasks, searchText ->
                 tasks.filter { it.title.contains(searchText) }
             }.combine(filterFlow) { tasks, filter ->

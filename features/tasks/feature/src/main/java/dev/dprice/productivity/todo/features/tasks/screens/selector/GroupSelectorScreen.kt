@@ -14,13 +14,16 @@ import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.features.tasks.R
+import dev.dprice.productivity.todo.features.tasks.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.screens.list.ButtonLayout
-import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorAction
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorState
 import dev.dprice.productivity.todo.ui.components.PulsingButton
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
@@ -33,7 +36,8 @@ fun GroupSelectorScreen(
     state: GroupSelectorState,
     wavyState: WavyScaffoldState,
     modifier: Modifier = Modifier,
-    onAction: (GroupSelectorAction) -> Unit
+    onSelect: (Group?) -> Unit,
+    onAddGroup: () -> Unit
 ) {
     BoxWithConstraints(
         modifier = modifier
@@ -50,14 +54,14 @@ fun GroupSelectorScreen(
             layoutBeyondConstraints = false,
             backContent = {
                 GroupSelectorContent(
-                    state = state
+                    state = state,
+                    onSelect = onSelect
                 )
-            },
-            frontContent = { }
+            }
         )
 
         FloatingActionButton(
-            onClick = { /* onAction() */ },
+            onClick = onAddGroup,
             modifier = Modifier
                 .padding(24.dp)
                 .align(Alignment.BottomEnd),
@@ -75,7 +79,8 @@ fun GroupSelectorScreen(
 @Composable
 private fun GroupSelectorContent(
     state: GroupSelectorState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSelect: (Group?) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -96,41 +101,87 @@ private fun GroupSelectorContent(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            itemsIndexed(state.groups) { index, (group, count) ->
 
-            itemsIndexed(state.groups) { index, group ->
-
-                // todo: animate height of first time
-                // todo: Share animation state from navigation?
-                PulsingButton(
-                    modifier = Modifier.weight(1f),
-                    backgroundColour = group.colour?.let {
-                        Color(it.red, it.green, it.blue)
-                    } ?: MediumBlue,
-                    onClick = { /* todo: select group */ }
-                ) {
-                    Column {
-                        ButtonLayout(
-                            contentColour = Color.Black,
-                            icon = Icons.Default.DoneAll,
-                            text = group.name
-                        )
-                        Text(
-                            text = "4 tasks",
-                            color = Color.Black.copy(alpha = 0.5f),
-                            fontStyle = FontStyle.Italic,
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .padding(bottom = 24.dp)
-                        )
-                    }
+                if (group == null) {
+                    GroupButton(
+                        title = "All",
+                        description = "All grouped and ungrouped tasks.",
+                        taskCount = count,
+                        onSelect = { onSelect(null) },
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
+                    GroupButton(
+                        title = group.name,
+                        description = group.description,
+                        taskCount = count,
+                        onSelect = { onSelect(group) },
+                        modifier = Modifier.weight(1f),
+                        colour = group.colour?.let {
+                            Color(it.red, it.green, it.blue)
+                        } ?: MediumBlue
+                    )
                 }
             }
+        }
+    }
+}
+
+// todo: animate height of first time
+// todo: Share animation state from navigation?
+@Composable
+@OptIn(ExperimentalComposeUiApi::class)
+private fun GroupButton(
+    title: String,
+    taskCount: Int,
+    modifier: Modifier = Modifier,
+    description: String? = null,
+    colour: Color = MediumBlue,
+    contentColour: Color = Color.White,
+    onSelect: () -> Unit
+) {
+    PulsingButton(
+        modifier = modifier,
+        backgroundColour = colour,
+        onClick = onSelect
+    ) {
+        Column {
+            ButtonLayout(
+                contentColour = contentColour,
+                icon = Icons.Default.DoneAll,
+                text = title
+            )
+
+            description?.let {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body1,
+                    color = contentColour,
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 8.dp)
+                )
+            }
+
+            Text(
+                text = pluralStringResource(
+                    id = R.plurals.task_count,
+                    count = taskCount,
+                    taskCount
+                ),
+                color = contentColour.copy(alpha = 0.8f),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 24.dp)
+            )
         }
     }
 }
@@ -145,7 +196,8 @@ private fun PreviewGroupSelectorScreen() {
                 wavyState = WavyScaffoldState(
                     initialBackDropHeight = maxHeight
                 ),
-                onAction = { }
+                onSelect = { },
+                onAddGroup = { }
             )
         }
     }
