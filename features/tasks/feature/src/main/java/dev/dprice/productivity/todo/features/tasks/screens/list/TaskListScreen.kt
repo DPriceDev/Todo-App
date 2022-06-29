@@ -33,7 +33,7 @@ fun TaskListScreen(
     state: TaskListState,
     wavyState: WavyScaffoldState,
     modifier: Modifier = Modifier,
-    maxBackDropHeight: Dp = 264.dp,
+    maxBackDropHeight: Dp = 248.dp,
     openAddTaskSheet: () -> Unit,
     openGroupSelector: () -> Unit,
     onAction: (TaskListAction) -> Unit,
@@ -60,15 +60,16 @@ fun TaskListScreen(
                     val delta = available.y.toDp()
                     val newHeight = wavyState.getBackDropHeight().value + delta
 
+                    val offset = 16.dp
                     scope.launch {
                         wavyState.snapToHeight(
-                            backDropHeight = newHeight.coerceIn(0.dp..maxBackDropHeight)
+                            backDropHeight = newHeight.coerceIn(0.dp..(maxBackDropHeight))
                         )
                     }
 
                     val consumed = when {
-                        newHeight < 0.dp -> delta - delta - newHeight
-                        newHeight > maxBackDropHeight -> delta - delta - (newHeight - maxBackDropHeight)
+                        newHeight <= offset -> 0.dp
+                        newHeight > (maxBackDropHeight + offset) -> 0.dp
                         else -> delta
                     }
 

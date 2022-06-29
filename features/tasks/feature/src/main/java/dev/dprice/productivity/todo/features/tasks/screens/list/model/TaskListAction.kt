@@ -2,6 +2,7 @@ package dev.dprice.productivity.todo.features.tasks.screens.list.model
 
 import androidx.annotation.StringRes
 import dev.dprice.productivity.todo.features.tasks.R
+import dev.dprice.productivity.todo.features.tasks.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
 
 enum class TaskFilter(@StringRes val displayNameId: Int) {
@@ -30,4 +31,5 @@ sealed class TaskListAction {
     data class UpdateSearchFocus(val focus: Boolean) : TaskListAction()
 
     data class UpdateFilter(val filter: TaskFilter) : TaskListAction()
+    data class UpdateGroup(val group: Group?) : TaskListAction()
 }

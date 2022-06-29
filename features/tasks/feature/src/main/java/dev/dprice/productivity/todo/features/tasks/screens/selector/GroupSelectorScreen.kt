@@ -28,6 +28,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupS
 import dev.dprice.productivity.todo.ui.components.PulsingButton
 import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
@@ -125,7 +126,7 @@ private fun GroupSelectorContent(
                         modifier = Modifier.weight(1f),
                         colour = group.colour?.let {
                             Color(it.red, it.green, it.blue)
-                        } ?: MediumBlue
+                        } ?: DarkBlue
                     )
                 }
             }

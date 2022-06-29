@@ -32,7 +32,7 @@ android {
             shrinkResources true
             initWith shared
             minifyEnabled true
-            debuggable false
+            debuggable true
         }
     }
 

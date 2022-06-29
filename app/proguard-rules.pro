@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep public class dev.dprice.productivity.todo.R
+-keep class **.R$*
+-keepclassmembers class *.R$ { public static <fields>; }
+-keepclasseswithmembernames class dev.dprice.productivity.todo.R
+
+-keep public class * extends androidx.fragment.app.FragmentActivity
+-keep public class * extends androidx.appcompat.app.AppCompatActivity
+
+-keepnames class ** { *; }
+
+-dontwarn org.jetbrains.annotations.**
+-keep class kotlin.Metadata { *; }
+
+-keep public class dev.dprice.productivity.todo.platform.model.NavLocation
+-keep public class dev.dprice.productivity.todo.platform.model.NavLocation.*
+-keep public class dev.dprice.productivity.todo.platform.model.NavLocation.**

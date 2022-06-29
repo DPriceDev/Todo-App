@@ -12,7 +12,6 @@ data class TitleBarState(
         icon = Icons.Outlined.Search
     ),
     val isSearchShown: Boolean = false,
-    val groups: List<Group> = emptyList(),
     val currentGroup: Group? = null,
     val currentDateRange: DateFilter = DateFilter.ALL,
     val filter: TaskFilter = TaskFilter.ALL,

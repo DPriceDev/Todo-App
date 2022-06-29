@@ -25,6 +25,7 @@ import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.Shimmer
 import dev.dprice.productivity.todo.ui.components.SlideSelector
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
+import dev.dprice.productivity.todo.ui.theme.MediumBlue
 
 @Composable
 fun TitleBar(
@@ -48,14 +49,16 @@ fun TitleBar(
 
             PulsingButton(
                 modifier = Modifier.weight(1f),
-                backgroundColour = Color.Green,
+                backgroundColour = state.currentGroup?.colour?.let {
+                    Color(it.red, it.green, it.blue)
+                } ?: DarkBlue,
                 onClick = openGroupSelector
             ) {
                 Shimmer {
                     ButtonLayout(
-                        contentColour = Color.Black,
+                        contentColour = Color.White,
                         icon = Icons.Default.DoneAll,
-                        text = "All"
+                        text = state.currentGroup?.name ?: "All"
                     )
                 }
             }

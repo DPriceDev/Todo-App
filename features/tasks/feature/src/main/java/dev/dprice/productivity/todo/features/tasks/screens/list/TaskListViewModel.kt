@@ -5,11 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.dprice.productivity.todo.features.tasks.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.usecase.DeleteTaskUseCase
+import dev.dprice.productivity.todo.features.tasks.usecase.GetCurrentGroupUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.GetCurrentTasksUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +30,7 @@ interface TaskListViewModel {
 @HiltViewModel
 class TaskListViewModelImpl @Inject constructor(
     getCurrentTasksUseCase: GetCurrentTasksUseCase,
+    getCurrentGroupUseCase: GetCurrentGroupUseCase,
     private val deleteTaskListUseCase: DeleteTaskUseCase,
     private val updateTaskListUseCase: UpdateTaskUseCase
 ) : ViewModel(),
@@ -53,6 +56,10 @@ class TaskListViewModelImpl @Inject constructor(
             }
             .onEach { tasks -> updateState(TaskListAction.UpdateTasks(tasks)) }
             .launchIn(viewModelScope)
+
+        getCurrentGroupUseCase()
+            .onEach { group -> updateState(TaskListAction.UpdateGroup(group))  }
+            .launchIn(viewModelScope)
     }
 
     override fun updateState(action: TaskListAction) {
@@ -65,6 +72,7 @@ class TaskListViewModelImpl @Inject constructor(
             is TaskListAction.UpdateSearchFocus -> updateSearchEntry(action.focus)
             is TaskListAction.UpdateSearchText -> updateSearchEntry(action.value)
             is TaskListAction.UpdateFilter -> updateTaskFilter(action.filter)
+            is TaskListAction.UpdateGroup -> updateTaskGroup(action.group)
         }
     }
 
@@ -72,6 +80,12 @@ class TaskListViewModelImpl @Inject constructor(
         filterFlow.value = filter
         viewModelState.value = state.copy(
             titleBarState = state.titleBarState.copy(filter = filter)
+        )
+    }
+
+    private fun updateTaskGroup(group: Group?) {
+        viewModelState.value = state.copy(
+            titleBarState = state.titleBarState.copy(currentGroup = group)
         )
     }
 
