@@ -16,5 +16,12 @@ class GetAllTaskGroupsUseCase(
         .combine(taskRepository.getTasks()) { groups, tasks ->
             tasks.groupBy { task -> groups.find { it.id == task.groupId } }
                 .map { (group, tasks) -> TaskGroup(group, tasks) }
+                .let { taskGroups ->
+                    if (taskGroups.find { it.group == null } == null) {
+                        taskGroups.plus(TaskGroup(null, emptyList()))
+                    } else {
+                        taskGroups
+                    }
+                }
         }
 }

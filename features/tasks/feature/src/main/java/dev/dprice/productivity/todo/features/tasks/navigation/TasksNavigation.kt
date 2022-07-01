@@ -8,8 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import dev.dprice.productivity.todo.features.tasks.screens.add.NewTaskViewModelImpl
-import dev.dprice.productivity.todo.features.tasks.screens.list.NewContent
+import dev.dprice.productivity.todo.features.tasks.screens.add.NewContentViewModel
+import dev.dprice.productivity.todo.features.tasks.screens.add.NewContent
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorScreen
@@ -54,7 +54,7 @@ fun NavGraphBuilder.tasksNavigation(
         }
 
         bottomSheet(route = NavLocation.TasksNewContent.route) {
-            val viewModel = hiltViewModel<NewTaskViewModelImpl>()
+            val viewModel = hiltViewModel<NewContentViewModel>()
             NewContent(
                 state = viewModel.viewState,
                 onAction = { action ->

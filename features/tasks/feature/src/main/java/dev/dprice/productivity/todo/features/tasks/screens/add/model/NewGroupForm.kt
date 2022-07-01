@@ -6,26 +6,18 @@ import androidx.compose.material.icons.filled.Title
 import androidx.compose.ui.text.input.ImeAction
 import dev.dprice.productivity.todo.ui.components.EntryField
 
-data class NewTaskForm(
+data class NewGroupForm(
     val titleEntry: EntryField = EntryField(
         hintText = "Title",
         icon = Icons.Default.Title,
         maxLength = 64,
-        errorText = "Enter a title for your task."
+        errorText = "Enter a title for your group."
     ),
     val detailsEntry: EntryField = EntryField(
         hintText = "Details",
         icon = Icons.Default.Edit,
         maxLines = 5,
-        maxLength = 512,
+        maxLength = 256,
         imeAction = ImeAction.Done
     ),
-) {
-    val isValid
-        get() = titleEntry.isValid && detailsEntry.isValid
-
-    fun withEnablement(enablement: Boolean) = copy(
-        titleEntry = titleEntry.copy(enabled = enablement),
-        detailsEntry = detailsEntry.copy(enabled = enablement),
-    )
-}
+)

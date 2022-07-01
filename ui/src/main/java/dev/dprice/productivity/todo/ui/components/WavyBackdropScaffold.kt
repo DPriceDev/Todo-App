@@ -67,7 +67,7 @@ fun WavyBackdropScaffold(
                 frontContent(backOffset)
             }
         }
-        
+
         WaveBottomCard(
             modifier = Modifier
                 .height(backDropHeight)

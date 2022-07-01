@@ -1,7 +1,9 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add
 
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -14,15 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewTaskAction
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewTaskState
-import dev.dprice.productivity.todo.ui.components.RoundedButton
+import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction.NewTaskAction
+import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewTaskForm
 import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
 @Composable
 fun NewTask(
-    state: NewTaskState = NewTaskState(),
+    form: NewTaskForm,
     onAction: (NewTaskAction) -> Unit
 ) {
     Column(
@@ -49,7 +50,7 @@ fun NewTask(
         val focusManager = LocalFocusManager.current
 
         RoundedEntryCard(
-            entry = state.form.titleEntry,
+            entry = form.titleEntry,
             modifier = Modifier.onFocusChanged {
                 onAction(NewTaskAction.UpdateTitleFocus(it.hasFocus))
             },
@@ -58,7 +59,7 @@ fun NewTask(
         )
 
         RoundedEntryCard(
-            entry = state.form.detailsEntry,
+            entry = form.detailsEntry,
             modifier = Modifier.onFocusChanged {
                 onAction(NewTaskAction.UpdateDescriptionFocus(it.hasFocus))
             },
@@ -77,20 +78,5 @@ fun NewTask(
         // todo: Repeatability
 
         // todo: reminders
-
-        Divider(
-            color = Yellow,
-            thickness = 1.dp,
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
-
-        RoundedButton(
-            text = "Create",
-            buttonState = state.buttonState,
-            modifier = Modifier.focusable(),
-            onClick = { onAction(NewTaskAction.CreateTask) }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }

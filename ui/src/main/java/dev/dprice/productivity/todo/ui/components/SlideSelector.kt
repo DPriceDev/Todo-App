@@ -24,7 +24,7 @@ import dev.dprice.productivity.todo.ui.theme.Yellow
 // todo: Animate slider between items
 @Composable
 fun SlideSelector(
-    vararg items: String,
+    items: List<String>,
     selected: Int,
     modifier: Modifier = Modifier,
     selectedColor: Color = Yellow,
@@ -88,8 +88,10 @@ fun SlideSelector(
 fun PreviewSlideSelector() {
     TodoAppTheme {
         SlideSelector(
-            "New Task",
-            "New Group",
+            listOf(
+                "New Task",
+                "New Group",
+            ),
             selected = 0,
             onSelected = { },
             modifier = Modifier.padding(16.dp)

@@ -25,7 +25,6 @@ import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.Shimmer
 import dev.dprice.productivity.todo.ui.components.SlideSelector
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
-import dev.dprice.productivity.todo.ui.theme.MediumBlue
 
 @Composable
 fun TitleBar(
@@ -80,9 +79,7 @@ fun TitleBar(
 
         // Task filters
         SlideSelector(
-            *TaskFilter.values()
-                .map { stringResource(id = it.displayNameId) }
-                .toTypedArray(),
+            TaskFilter.values().map { stringResource(id = it.displayNameId) },
             selected = state.filter.ordinal,
             onSelected = { onAction(TaskListAction.UpdateFilter(TaskFilter.values()[it])) },
             selectedColor = DarkBlue,
