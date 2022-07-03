@@ -1,25 +1,13 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add.model
 
-sealed interface NewContentAction {
+import dev.dprice.productivity.todo.ui.components.FormAction
 
-    object SubmitClicked: NewContentAction
+sealed interface NewContentAction {
 
     data class SelectContentType(val index: Int) : NewContentAction
 
-    sealed class NewTaskAction : NewContentAction {
-        data class UpdateTitleValue(val value: String) : NewTaskAction()
-        data class UpdateTitleFocus(val focus: Boolean) : NewTaskAction()
-
-        data class UpdateDescriptionValue(val value: String) : NewTaskAction()
-        data class UpdateDescriptionFocus(val focus: Boolean) : NewTaskAction()
-    }
-
-    sealed class NewGroupAction : NewContentAction {
-        data class UpdateTitleValue(val value: String) : NewGroupAction()
-        data class UpdateTitleFocus(val focus: Boolean) : NewGroupAction()
-
-        data class UpdateDescriptionValue(val value: String) : NewGroupAction()
-        data class UpdateDescriptionFocus(val focus: Boolean) : NewGroupAction()
-    }
+    data class UpdateTaskForm(val action: FormAction<NewTaskForm.Type>) : NewContentAction
+    data class UpdateGroupForm(val action: FormAction<NewGroupForm.Type>) : NewContentAction
+    data class UpdateHabitForm(val action: FormAction<NewHabitForm.Type>) : NewContentAction
 }
 

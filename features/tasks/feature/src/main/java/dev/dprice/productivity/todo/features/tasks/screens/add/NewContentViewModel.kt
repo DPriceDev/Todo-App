@@ -5,14 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction
+import dev.dprice.productivity.todo.features.tasks.screens.add.model.*
 import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction.*
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentState
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentType
 import dev.dprice.productivity.todo.features.tasks.usecase.AddTaskUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskDetailsEntryUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskTitleEntryUseCase
 import dev.dprice.productivity.todo.ui.components.ButtonState
+import dev.dprice.productivity.todo.ui.components.FormAction
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -31,37 +30,103 @@ class NewContentViewModel @Inject constructor(
 
     fun updateState(action: NewContentAction, dismissSheet: () -> Unit) {
         when (action) {
-            is NewTaskAction -> updateTaskForm(action)
-            is NewGroupAction -> updateGroupForm(action)
             is SelectContentType -> selectContentType(action)
-            SubmitClicked -> submitForm(dismissSheet)
+            is UpdateGroupForm -> updateGroupForm(action.action, dismissSheet)
+            is UpdateHabitForm -> updateHabitForm(action.action, dismissSheet)
+            is UpdateTaskForm -> updateTaskForm(action.action, dismissSheet)
         }
     }
 
-    private fun submitForm(dismissSheet: () -> Unit) = viewModelScope.launch {
-        viewModelState.value = viewState.copy(buttonState = ButtonState.LOADING)
+    private fun selectContentType(action: SelectContentType) {
+        viewModelState.value = viewState.copy(
+            selectedContentType = viewState
+                .contentTypes
+                .getOrNull(action.index)
+                ?: viewState.contentTypes.first()
+        )
+    }
 
-       val isSuccessful = when (viewState.selectedContentType) {
-            NewContentType.TASK -> submitTask()
-            NewContentType.HABIT -> submitHabit()
-            NewContentType.GROUP -> submitGroup()
+    private fun updateTaskForm(action: FormAction<NewTaskForm.Type>, dismissSheet: () -> Unit) {
+        val form = when (action) {
+            is FormAction.UpdateFocus -> when(action.id) {
+                NewTaskForm.Type.TITLE -> viewState.taskForm.copy(
+                    titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.focus)
+                )
+                NewTaskForm.Type.DETAILS -> viewState.taskForm.copy(
+                    detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.focus)
+                )
+                else -> return
+            }
+            is FormAction.UpdateText ->  when(action.id) {
+                NewTaskForm.Type.TITLE -> viewState.taskForm.copy(
+                    titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.text)
+                )
+                NewTaskForm.Type.DETAILS -> viewState.taskForm.copy(
+                    detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.text)
+                )
+                else -> return
+            }
+            is FormAction.ButtonClicked -> {
+                submitTask(dismissSheet)
+                return
+            }
         }
 
-        if (isSuccessful) dismissSheet()
-        viewModelState.value = viewState.copy(buttonState = ButtonState.ENABLED)
+        viewModelState.value = viewState.copy(
+            taskForm = form.copy(
+                buttonState = if (form.isValid) ButtonState.ENABLED else ButtonState.DISABLED
+            )
+        )
     }
 
-    private fun submitGroup() : Boolean {
+    private fun updateHabitForm(action: FormAction<NewHabitForm.Type>, dismissSheet: () -> Unit) {
+
+    }
+
+    private fun updateGroupForm(action: FormAction<NewGroupForm.Type>, dismissSheet: () -> Unit) {
+        val form = when (action) {
+            is FormAction.UpdateFocus -> when(action.id) {
+                NewGroupForm.Type.TITLE -> viewState.groupForm.copy(
+                    titleEntry = updateTaskTitleEntryUseCase(viewState.groupForm.titleEntry, action.focus)
+                )
+                NewGroupForm.Type.DETAILS -> viewState.groupForm.copy(
+                    detailsEntry = updateTaskDetailsEntryUseCase(viewState.groupForm.detailsEntry, action.focus)
+                )
+                else -> return
+            }
+            is FormAction.UpdateText ->  when(action.id) {
+                NewGroupForm.Type.TITLE -> viewState.groupForm.copy(
+                    titleEntry = updateTaskTitleEntryUseCase(viewState.groupForm.titleEntry, action.text)
+                )
+                NewGroupForm.Type.DETAILS -> viewState.groupForm.copy(
+                    detailsEntry = updateTaskDetailsEntryUseCase(viewState.groupForm.detailsEntry, action.text)
+                )
+                else -> return
+            }
+            is FormAction.ButtonClicked -> {
+                submitGroup(dismissSheet)
+                return
+            }
+        }
+
+        viewModelState.value = viewState.copy(
+            groupForm = form.copy(
+                buttonState = if (form.isValid) ButtonState.ENABLED else ButtonState.DISABLED
+            )
+        )
+    }
+
+    private fun submitGroup(dismissSheet: () -> Unit) = viewModelScope.launch {
         // todo
-        return false
+        dismissSheet()
     }
 
-    private fun submitHabit() : Boolean {
+    private fun submitHabit(dismissSheet: () -> Unit) = viewModelScope.launch {
         // todo
-        return false
+        dismissSheet()
     }
 
-    private suspend fun submitTask() : Boolean {
+    private fun submitTask(dismissSheet: () -> Unit) = viewModelScope.launch {
         viewModelState.value = viewState.copy(
             taskForm = viewState.taskForm.withEnablement(false)
         )
@@ -76,62 +141,8 @@ class NewContentViewModel @Inject constructor(
         )
 
         viewModelState.value = viewState.copy(
-            taskForm = viewState.taskForm.withEnablement(true)
+            taskForm = viewState.taskForm.withEnablement(true),
         )
-
-        return true
-    }
-
-    private fun selectContentType(action: SelectContentType) {
-        viewModelState.value = viewState.copy(
-            selectedContentType = viewState
-                .contentTypes
-                .getOrNull(action.index)
-                ?: viewState.contentTypes.first()
-        )
-    }
-
-    private fun updateGroupForm(action: NewGroupAction) {
-        val form = when (action) {
-            is NewGroupAction.UpdateDescriptionFocus -> viewState.taskForm.copy(
-                detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.focus)
-            )
-            is NewGroupAction.UpdateDescriptionValue -> viewState.taskForm.copy(
-                detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.value)
-            )
-            is NewGroupAction.UpdateTitleFocus -> viewState.taskForm.copy(
-                titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.focus)
-            )
-            is NewGroupAction.UpdateTitleValue -> viewState.taskForm.copy(
-                titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.value)
-            )
-        }
-
-        updateState(viewState.copy(groupForm = form), isValid = form.isValid)
-    }
-
-    private fun updateTaskForm(action: NewTaskAction) {
-        val form = when (action) {
-            is NewTaskAction.UpdateDescriptionFocus -> viewState.taskForm.copy(
-                detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.focus)
-            )
-            is NewTaskAction.UpdateDescriptionValue -> viewState.taskForm.copy(
-                detailsEntry = updateTaskDetailsEntryUseCase(viewState.taskForm.detailsEntry, action.value)
-            )
-            is NewTaskAction.UpdateTitleFocus -> viewState.taskForm.copy(
-                titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.focus)
-            )
-            is NewTaskAction.UpdateTitleValue -> viewState.taskForm.copy(
-                titleEntry = updateTaskTitleEntryUseCase(viewState.taskForm.titleEntry, action.value)
-            )
-        }
-
-        updateState(viewState.copy(taskForm = form), isValid = form.isValid)
-    }
-
-    private fun updateState(state: NewContentState, isValid: Boolean) {
-        viewModelState.value = state.copy(
-            buttonState = if (isValid) ButtonState.ENABLED else ButtonState.DISABLED
-        )
+        dismissSheet()
     }
 }
