@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction
 import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentState
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentType
 import dev.dprice.productivity.todo.ui.components.Form
 import dev.dprice.productivity.todo.ui.components.SlideSelector
 
@@ -29,26 +28,16 @@ fun NewContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SlideSelector(
-                state.contentTypes.map { it.displayName },
-                selected = state.selectedContentType.ordinal
+                state.forms.map { it.displayName },
+                selected = state.forms.indexOf(state.currentForm)
             ) {
                 onAction(NewContentAction.SelectContentType(it))
             }
 
-            when(state.selectedContentType) {
-                NewContentType.TASK -> Form(
-                    entries = state.taskForm.entries,
-                    onAction = { onAction(NewContentAction.UpdateTaskForm(it)) }
-                )
-                NewContentType.HABIT -> Form(
-                    entries = state.habitForm.entries,
-                    onAction = { onAction(NewContentAction.UpdateHabitForm(it)) }
-                )
-                NewContentType.GROUP -> Form(
-                    entries = state.groupForm.entries,
-                    onAction = { onAction(NewContentAction.UpdateGroupForm(it)) }
-                )
-            }
+            Form(
+                entries = state.currentForm.entries,
+                onAction = { onAction(NewContentAction.UpdateForm(it)) }
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
         }
