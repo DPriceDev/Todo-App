@@ -2,6 +2,7 @@ package dev.dprice.productivity.todo.features.tasks.screens.add.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Title
+import dev.dprice.productivity.todo.features.tasks.screens.add.model.ContentForm.Type
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
 import dev.dprice.productivity.todo.ui.components.FormEntry
@@ -22,9 +23,9 @@ data class NewHabitForm(
     override val entries = listOf(
         FormEntry.Description(text = "Enter Habit TBC..."),
         FormEntry.Divider,
-        FormEntry.Text(id = NewContentEntry.TITLE, entry = title),
+        FormEntry.Text(id = Type.TITLE, entry = title),
         FormEntry.Divider,
-        FormEntry.Button(id = NewContentEntry.SUBMIT, state = buttonState)
+        FormEntry.Button(id = Type.SUBMIT, state = buttonState)
     )
 
     override fun withEnablement(enabled: Boolean) = copy(

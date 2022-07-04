@@ -1,26 +1,29 @@
 package dev.dprice.productivity.todo.features.tasks.di
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskDetailsEntryUseCase
-import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskDetailsEntryUseCaseImpl
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskTitleEntryUseCase
-import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskTitleEntryUseCaseImpl
+import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface TaskModule {
+object TaskModule {
 
-    @Binds
+    @Provides
     @Singleton
-    fun UpdateTaskTitleEntryUseCaseImpl.bindUpdateTaskTitleEntryUseCase(): UpdateTaskTitleEntryUseCase
+    fun provideUpdateTaskTitleEntryUseCase(updateEntryUseCase: UpdateEntryUseCase): UpdateTaskTitleEntryUseCase {
+        return UpdateTaskTitleEntryUseCase(updateEntryUseCase)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    fun UpdateTaskDetailsEntryUseCaseImpl.bindUpdateTaskDetailsEntryUseCase(): UpdateTaskDetailsEntryUseCase
+    fun provideUpdateTaskDetailsEntryUseCase(updateEntryUseCase: UpdateEntryUseCase): UpdateTaskDetailsEntryUseCase {
+        return UpdateTaskDetailsEntryUseCase(updateEntryUseCase)
+    }
 
     // todo: task api
 }

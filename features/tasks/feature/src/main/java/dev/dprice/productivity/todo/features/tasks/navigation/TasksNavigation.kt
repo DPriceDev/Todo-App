@@ -56,7 +56,7 @@ fun NavGraphBuilder.tasksNavigation(
         bottomSheet(route = NavLocation.TasksNewContent.route) {
             val viewModel = hiltViewModel<NewContentViewModel>()
             NewContent(
-                state = viewModel.viewState,
+                state = viewModel.state,
                 onAction = { action ->
                     viewModel.updateState(action) {
                         navController.popBackStack()

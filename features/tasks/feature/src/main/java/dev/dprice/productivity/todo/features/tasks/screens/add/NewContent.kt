@@ -29,7 +29,7 @@ fun NewContent(
         ) {
             SlideSelector(
                 state.forms.map { it.displayName },
-                selected = state.forms.indexOf(state.currentForm)
+                selected = state.selectedForm
             ) {
                 onAction(NewContentAction.SelectContentType(it))
             }

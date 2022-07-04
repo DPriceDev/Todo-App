@@ -10,7 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
@@ -43,6 +46,7 @@ fun <T> Form(
     modifier: Modifier = Modifier,
     onAction: (FormAction<T>) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -62,17 +66,19 @@ fun <T> Form(
                     thickness = 1.dp,
                     modifier = Modifier.padding(bottom = 20.dp)
                 )
-                // todo:
                 is FormEntry.Text -> RoundedEntryCard(
                     entry = entry.entry,
-                    onTextChanged = { }
+                    modifier = Modifier.onFocusChanged {
+                        onAction(FormAction.UpdateFocus(entry.id, it.hasFocus))
+                    },
+                    onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+                    onTextChanged = { onAction(FormAction.UpdateText(entry.id, it)) }
                 )
-                // todo
                 is FormEntry.Button -> RoundedButton(
                     text = "Create",
                     buttonState = entry.state,
                     modifier = Modifier.focusable(),
-                    onClick = { /* todo */ }
+                    onClick = { onAction(FormAction.ButtonClicked(entry.id)) }
                 )
             }
         }

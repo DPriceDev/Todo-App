@@ -6,6 +6,6 @@ sealed interface NewContentAction {
 
     data class SelectContentType(val index: Int) : NewContentAction
 
-    data class UpdateForm(val action: FormAction<NewContentEntry>) : NewContentAction
+    data class UpdateForm(val action: FormAction<ContentForm.Type>) : NewContentAction
 }
 

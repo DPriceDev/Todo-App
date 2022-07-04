@@ -2,44 +2,18 @@ package dev.dprice.productivity.todo.features.tasks.usecase
 
 import dev.dprice.productivity.todo.ui.components.EntryField
 import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
-import javax.inject.Inject
 
-interface UpdateTaskDetailsEntryUseCase {
-    operator fun invoke(detailsEntry: EntryField, newDetails: String): EntryField
-
-    operator fun invoke(detailsEntry: EntryField, newFocus: Boolean): EntryField
-
-    operator fun invoke(
-        detailsEntry: EntryField,
-        newDetails: String,
-        newFocus: Boolean
-    ): EntryField
-}
-
-class UpdateTaskDetailsEntryUseCaseImpl @Inject constructor(
+class UpdateTaskDetailsEntryUseCase constructor(
     private val updateEntryUseCase: UpdateEntryUseCase
-) : UpdateTaskDetailsEntryUseCase {
-
-    override fun invoke(detailsEntry: EntryField, newDetails: String): EntryField = this(
-        detailsEntry,
-        newDetails,
-        detailsEntry.hasFocus
-    )
-
-    override fun invoke(detailsEntry: EntryField, newFocus: Boolean): EntryField = this(
-        detailsEntry,
-        detailsEntry.value,
-        newFocus
-    )
-
-    override fun invoke(
-        detailsEntry: EntryField,
-        newDetails: String,
-        newFocus: Boolean
+) {
+    operator fun invoke(
+        entry: EntryField,
+        newDetails: String? = null,
+        newFocus: Boolean? = null,
     ) = updateEntryUseCase(
-        detailsEntry,
-        newDetails,
-        newFocus,
+        entry,
+        newValue = newDetails ?: entry.value,
+        newFocus = newFocus ?: entry.hasFocus,
         trimEnd = false,
         validator = detailsRegex::matches
     )
