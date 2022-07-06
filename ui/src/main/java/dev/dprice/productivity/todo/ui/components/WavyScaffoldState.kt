@@ -1,6 +1,8 @@
 package dev.dprice.productivity.todo.ui.components
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -52,15 +54,15 @@ data class WavyScaffoldState(
         launch { animatableDuration.animateTo(duration, getAnimationSpec()) }
 
         launch {
-            animatablePhase.animateTo(
-                animatablePhase.value + 1f,
-                infiniteRepeatable(
-                    tween(
-                        animatableDuration.value,
-                        easing = LinearEasing
-                    )
-                )
-            )
+//            animatablePhase.animateTo(
+//                animatablePhase.value + 1f,
+//                infiniteRepeatable(
+//                    tween(
+//                        animatableDuration.value,
+//                        easing = LinearEasing
+//                    )
+//                )
+//            )
         }
     }
 

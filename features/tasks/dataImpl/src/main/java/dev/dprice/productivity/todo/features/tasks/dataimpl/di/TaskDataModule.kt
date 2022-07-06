@@ -21,6 +21,7 @@ import dev.dprice.productivity.todo.features.tasks.dataimpl.TasksDatabase
 import dev.dprice.productivity.todo.features.tasks.dataimpl.converters.LocalDateTimeAdapter
 import dev.dprice.productivity.todo.features.tasks.dataimpl.groups.GroupRepositoryImpl
 import dev.dprice.productivity.todo.platform.di.Default
+import dev.dprice.productivity.todo.platform.di.IO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Named
@@ -70,8 +71,9 @@ object TaskDataModule {
     @Provides
     @Singleton
     fun provideGroupRepository(
-        @Named("TasksDataStore") datastore: DataStore<Preferences>
+        @Named("TasksDataStore") datastore: DataStore<Preferences>,
+        @IO ioDispatcher: CoroutineDispatcher
     ) : GroupRepository {
-        return GroupRepositoryImpl(datastore)
+        return GroupRepositoryImpl(datastore, ioDispatcher)
     }
 }

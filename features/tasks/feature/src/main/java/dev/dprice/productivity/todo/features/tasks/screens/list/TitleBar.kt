@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
@@ -25,6 +26,7 @@ import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.Shimmer
 import dev.dprice.productivity.todo.ui.components.SlideSelector
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
+import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable
 fun TitleBar(
@@ -43,7 +45,7 @@ fun TitleBar(
 
         Row(
             modifier = Modifier.padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
             PulsingButton(
@@ -75,7 +77,7 @@ fun TitleBar(
             }
         }
 
-        Spacer(modifier = Modifier.heightIn(16.dp))
+        Spacer(modifier = Modifier.heightIn(8.dp))
 
         // Task filters
         SlideSelector(
@@ -87,7 +89,7 @@ fun TitleBar(
             modifier = Modifier.padding(horizontal = 8.dp)
         )
 
-        DateSelector()
+        //DateSelector()
     }
 }
 
@@ -135,6 +137,18 @@ fun ButtonLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewTitleBar() {
+    TodoAppTheme {
+        TitleBar(
+            state = TitleBarState(),
+            openGroupSelector = { /*TODO*/ },
+            onAction = { }
         )
     }
 }

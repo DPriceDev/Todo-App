@@ -19,13 +19,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskPreviewProvider
 import dev.dprice.productivity.todo.platform.util.asTaskDateString
-import dev.dprice.productivity.todo.ui.components.ExpandedArrowIcon
 import dev.dprice.productivity.todo.ui.components.StatusIcon
 import dev.dprice.productivity.todo.ui.components.SwipeableCard
 import dev.dprice.productivity.todo.ui.components.VerticalDivider
@@ -122,22 +122,26 @@ private fun TaskRowContent(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(text = task.title)
-                    Text(text = task.finishDate.asTaskDateString())
+                    Text(
+                        text = task.finishDate.asTaskDateString(),
+                        fontStyle = FontStyle.Italic,
+                    )
                 }
 
                 StatusIcon(
                     task.isCompleted,
                     index = index,
-                    modifier = Modifier.padding(top = 16.dp)
+                    //modifier = Modifier.padding(top = 16.dp)
                 )
             }
 
@@ -145,10 +149,10 @@ private fun TaskRowContent(
                 expandableContent()
             }
 
-            ExpandedArrowIcon(
-                isSelected = isSelected,
-                modifier = modifier.align(Alignment.CenterHorizontally)
-            )
+//            ExpandedArrowIcon(
+//                isSelected = isSelected,
+//                modifier = modifier.align(Alignment.CenterHorizontally)
+//            )
         }
     }
 }
@@ -169,7 +173,7 @@ private fun BehindTaskCard(
         backgroundColor = if (!isComplete) completeColour else inProgressColour
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -184,7 +188,7 @@ private fun BehindTaskCard(
                 modifier = Modifier
                     .aspectRatio(1f)
                     .fillMaxHeight()
-                    .padding(4.dp)
+                    .padding(8.dp)
             )
         }
     }

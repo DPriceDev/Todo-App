@@ -30,6 +30,6 @@ data class NewHabitForm(
 
     override fun withEnablement(enabled: Boolean) = copy(
         title = title.copy(enabled = enabled),
-        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.DISABLED
+        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
     )
 }

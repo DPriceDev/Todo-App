@@ -33,7 +33,7 @@ fun TaskListScreen(
     state: TaskListState,
     wavyState: WavyScaffoldState,
     modifier: Modifier = Modifier,
-    maxBackDropHeight: Dp = 248.dp,
+    maxBackDropHeight: Dp = 192.dp,
     openAddTaskSheet: () -> Unit,
     openGroupSelector: () -> Unit,
     onAction: (TaskListAction) -> Unit,

@@ -48,7 +48,7 @@ data class NewTaskForm(
 
     override fun withEnablement(enabled: Boolean) = copy(
         title = title.copy(enabled = enabled),
-        details = details.copy(enabled = enabled),
-        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.DISABLED
+        details = title.copy(enabled = enabled),
+        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
     )
 }

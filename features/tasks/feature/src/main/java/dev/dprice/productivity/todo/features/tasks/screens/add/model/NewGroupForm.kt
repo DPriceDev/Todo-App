@@ -1,9 +1,7 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add.model
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Title
-import androidx.compose.ui.text.input.ImeAction
 import dev.dprice.productivity.todo.features.tasks.screens.add.model.ContentForm.Type
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
@@ -16,31 +14,24 @@ data class NewGroupForm(
         maxLength = 64,
         errorText = "Enter a title for your group."
     ),
-    val details: EntryField = EntryField(
-        hintText = "Details",
-        icon = Icons.Default.Edit,
-        maxLines = 5,
-        maxLength = 256,
-        imeAction = ImeAction.Done
-    ),
     val buttonState: ButtonState = ButtonState.DISABLED
 ) : ContentForm {
     override val displayName: String = "New Group"
 
-    override val isValid = title.isValid && details.isValid
+    override val isValid = title.isValid
 
     override val entries = listOf(
         FormEntry.Description(text = "Create a group TBC..."),
         FormEntry.Divider,
         FormEntry.Text(id = Type.TITLE, entry = title),
-        FormEntry.Text(id = Type.DETAILS, entry = details),
+        // todo: Colour,
+        // todo: Icon,
         FormEntry.Divider,
         FormEntry.Button(id = Type.SUBMIT, state = buttonState)
     )
 
     override fun withEnablement(enabled: Boolean) = copy(
         title = title.copy(enabled = enabled),
-        details = details.copy(enabled = enabled),
-        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.DISABLED
+        buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
     )
 }

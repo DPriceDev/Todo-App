@@ -14,6 +14,8 @@ import dev.dprice.productivity.todo.features.tasks.usecase.SetCurrentGroupUseCas
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +35,12 @@ class GroupSelectorViewModel @Inject constructor(
 
     fun selectGroup(group: Group?) {
         viewModelScope.launch {
-            setCurrentGroupUseCase(group?.id)
+            try {
+                setCurrentGroupUseCase(group?.id)
+            } catch (exception: IOException) {
+                Timber.e(exception, "Exception thrown setting current group")
+            }
+            viewModelState.value = state.copy(isDismissed = true)
         }
     }
 

@@ -1,9 +1,5 @@
 package dev.dprice.productivity.todo.main.ui
 
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,7 +7,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,27 +35,19 @@ fun MainScreen(
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberNavController(bottomSheetNavigator)
 
-    val bottomSheetWaveOffset: Float by rememberInfiniteTransition().animateFloat(
-        initialValue = 0.0f,
-        targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 17000)
-        )
-    )
-
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         scrimColor = Color.Black.copy(alpha = 0.32f),
         sheetShape = waveToppedShape(
             height = with(LocalDensity.current) { 24.dp.toPx() },
             frequency = 0.3f,
-            offset = bottomSheetWaveOffset
+            offset = 0.0f
         ),
         sheetBackgroundColor = DarkBlue,
         sheetContentColor = Color.White
     ) {
         Scaffold(
-            bottomBar = { BottomNavigationBar(navController = navController) }
+           // bottomBar = { BottomNavigationBar(navController = navController) }
         ) { padding ->
             Box {
                 val wavyState = remember { WavyScaffoldState() }

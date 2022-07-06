@@ -1,6 +1,5 @@
 package dev.dprice.productivity.todo.features.tasks.screens.list
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListSt
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskListStatePreviewProvider
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskList(
     tasks: List<Task>,
@@ -34,8 +32,8 @@ fun TaskList(
         contentPadding = PaddingValues(
             top = 16.dp + topPadding,
             bottom = 4.dp,
-            start = 4.dp,
-            end = 4.dp
+            start = 0.dp,
+            end = 0.dp
         )
     ) {
         itemsIndexed(
@@ -45,7 +43,7 @@ fun TaskList(
             TaskRow(
                 task = task,
                 index = index,
-                modifier = Modifier.animateItemPlacement(),
+                //modifier = Modifier.animateItemPlacement(),
                 onCompleteTaskClick = { onAction(TaskListAction.CompleteTask(task.id)) },
                 onClicked = { onAction(TaskListAction.SelectTask(task.id)) },
                 isSelected = task.id == selectedTaskId

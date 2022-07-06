@@ -33,41 +33,37 @@ fun ExpandedTaskContent(
 
         Row(
             modifier = Modifier
+                .padding(top = 8.dp)
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            RoundedButton(
-                onClick = onCompleteTaskClick,
-                modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(vertical = 12.dp)
-            ) {
-                Icon(
-                    Icons.Default.Done,
-                    null
-                )
-            }
-
-            RoundedButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(vertical = 12.dp)
-            ) {
-                Icon(
-                    Icons.Default.Edit,
-                    null
-                )
-            }
-
-            RoundedButton(
-                onClick = { onDeleteClicked() },
-                modifier = Modifier.padding(horizontal = 12.dp),
-                contentPadding = PaddingValues(vertical = 12.dp)
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    null
-                )
+            mapOf(
+                Icons.Default.Done to "Complete",
+                Icons.Default.Edit to "Edit",
+                Icons.Default.Delete to "Delete",
+            ).forEach { (icon, title) ->
+                RoundedButton(
+                    onClick = {
+                        when(title) {
+                            "Complete" -> onCompleteTaskClick()
+                            "Delete" -> onDeleteClicked()
+                            else -> { }
+                        }
+                    },
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = title,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
             }
         }
     }

@@ -9,6 +9,5 @@ data class Colour(
 data class Group(
     val id: String,
     val name: String,
-    val description: String? = null,
     val colour: Colour? = null
 )

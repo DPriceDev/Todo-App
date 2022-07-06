@@ -112,7 +112,6 @@ private fun GroupSelectorContent(
                 if (group == null) {
                     GroupButton(
                         title = "All",
-                        description = "All grouped and ungrouped tasks.",
                         taskCount = count,
                         onSelect = { onSelect(null) },
                         modifier = Modifier.weight(1f)
@@ -120,7 +119,6 @@ private fun GroupSelectorContent(
                 } else {
                     GroupButton(
                         title = group.name,
-                        description = group.description,
                         taskCount = count,
                         onSelect = { onSelect(group) },
                         modifier = Modifier.weight(1f),
@@ -142,7 +140,6 @@ private fun GroupButton(
     title: String,
     taskCount: Int,
     modifier: Modifier = Modifier,
-    description: String? = null,
     colour: Color = MediumBlue,
     contentColour: Color = Color.White,
     onSelect: () -> Unit
@@ -158,17 +155,6 @@ private fun GroupButton(
                 icon = Icons.Default.DoneAll,
                 text = title
             )
-
-            description?.let {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.body1,
-                    color = contentColour,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 8.dp)
-                )
-            }
 
             Text(
                 text = pluralStringResource(

@@ -10,11 +10,11 @@ class GetAllTaskGroupsUseCase(
     private val groupRepository: GroupRepository,
     private val taskRepository: TaskRepository
 ) {
-
     operator fun invoke(): Flow<List<TaskGroup>> = groupRepository
         .getGroups()
         .combine(taskRepository.getTasks()) { groups, tasks ->
-            tasks.groupBy { task -> groups.find { it.id == task.groupId } }
+            groups
+                .associateWith { group -> tasks.filter { it.groupId == group.id } }
                 .map { (group, tasks) -> TaskGroup(group, tasks) }
                 .let { taskGroups ->
                     if (taskGroups.find { it.group == null } == null) {

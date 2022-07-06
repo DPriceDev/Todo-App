@@ -27,11 +27,15 @@ fun NewContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SlideSelector(
-                state.forms.map { it.displayName },
-                selected = state.selectedForm
-            ) {
-                onAction(NewContentAction.SelectContentType(it))
+            if (state.forms.size > 1) {
+                SlideSelector(
+                    state.forms.map { it.displayName },
+                    selected = state.selectedForm
+                ) {
+                    onAction(NewContentAction.SelectContentType(it))
+                }
+            } else {
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             Form(

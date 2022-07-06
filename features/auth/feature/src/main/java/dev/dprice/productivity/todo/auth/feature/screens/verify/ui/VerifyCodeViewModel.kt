@@ -11,9 +11,9 @@ import dev.dprice.productivity.todo.auth.data.model.VerifyUser
 import dev.dprice.productivity.todo.auth.feature.model.ErrorState
 import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyCodeEvent
 import dev.dprice.productivity.todo.auth.feature.screens.verify.model.VerifyState
+import dev.dprice.productivity.todo.auth.feature.usecase.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.auth.usecases.ResendVerificationCodeUseCase
 import dev.dprice.productivity.todo.auth.usecases.VerifySignUpCodeUseCase
-import dev.dprice.productivity.todo.auth.feature.usecase.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import kotlinx.coroutines.launch
@@ -107,6 +107,7 @@ class VerifyCodeViewModelImpl @Inject constructor(
             when (response) {
                 ResendCode.Done -> Timber.i("Code Resent")
                 is ResendCode.Error -> Timber.e(response.throwable, "Code resend error!")
+                else -> { /*todo: fill out other options */ }
             }
         }
     }
