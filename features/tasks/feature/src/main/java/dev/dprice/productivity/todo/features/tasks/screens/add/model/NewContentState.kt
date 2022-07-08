@@ -4,12 +4,11 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class NewContentState(
-    val forms: List<ContentForm> = listOf(
-        NewTaskForm(),
-        NewHabitForm(),
-        NewGroupForm()
+    val forms: List<FormType> = listOf(
+        FormType.TASK,
+        FormType.HABIT,
+        FormType.GROUP
     ),
-    val selectedForm: Int = 0,
-    val currentForm: ContentForm = forms[selectedForm],
+    val selectedForm: FormType = FormType.TASK,
     val isDismissed: Boolean = false
 )

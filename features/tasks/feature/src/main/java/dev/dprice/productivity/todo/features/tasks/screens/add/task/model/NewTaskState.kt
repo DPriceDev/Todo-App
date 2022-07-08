@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.features.tasks.screens.add.model
+package dev.dprice.productivity.todo.features.tasks.screens.add.task.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -9,7 +9,7 @@ import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
 import dev.dprice.productivity.todo.ui.components.FormEntry
 
-data class NewTaskForm(
+data class NewTaskState(
     val title: EntryField = EntryField(
         hintText = "Title",
         icon = Icons.Default.Title,
