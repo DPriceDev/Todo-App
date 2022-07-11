@@ -1,29 +1,30 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.NewGroupForm
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.NewGroupViewModel
 import dev.dprice.productivity.todo.features.tasks.screens.add.habit.NewHabitForm
 import dev.dprice.productivity.todo.features.tasks.screens.add.habit.NewHabitViewModel
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentState
+import dev.dprice.productivity.todo.features.tasks.screens.add.model.FormType
 import dev.dprice.productivity.todo.features.tasks.screens.add.task.NewTaskForm
 import dev.dprice.productivity.todo.features.tasks.screens.add.task.NewTaskViewModel
 import dev.dprice.productivity.todo.ui.components.SlideSelector
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NewContent(
-    state: NewContentState,
-    onAction: (NewContentAction) -> Unit
-) {
+fun NewContent() {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -31,35 +32,49 @@ fun NewContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // todo: Pick up from args
-        // navigate on click
-        // todo: get current form destination by state?
-        if (state.forms.size > 1) {
-            SlideSelector(
-                state.forms.map { it.displayName },
-                selected = state.forms.indexOf(state.selectedForm)
-            ) {
-                onAction(NewContentAction.SelectContentType(it))
+        val navController = rememberAnimatedNavController()
+
+        val backstack by navController.currentBackStackEntryAsState()
+        val currentRoute = backstack?.destination?.route
+
+        // todo: pass in from calling location?
+        val forms = listOf(
+            FormType.TASK,
+            FormType.HABIT,
+            FormType.GROUP
+        )
+
+        val selectedIndex = forms.indexOfFirst { it.route == currentRoute }
+
+        SlideSelector(
+            forms.map { it.displayName },
+            selected = if (selectedIndex == -1) 0 else selectedIndex
+        ) {
+            navController.navigate(forms[it].route) {
+                popUpTo(forms[it].route) {
+                    inclusive = true
+                }
             }
-        } else {
-            Spacer(modifier = Modifier.height(8.dp))
         }
 
-        NewContentNavigation()
+        NewContentNavigation(navController)
 
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun NewContentNavigation() {
-    val navController = rememberNavController()
-    NavHost(
+private fun NewContentNavigation(
+    navController: NavHostController
+) {
+    // todo: Build from components?
+    AnimatedNavHost(
         navController = navController,
-        startDestination = "task"
+        startDestination = FormType.TASK.route
     ) {
 
-        composable("task") {
+        composable(FormType.TASK.route) {
             val viewModel: NewTaskViewModel = hiltViewModel()
 
             NewTaskForm(
@@ -68,7 +83,7 @@ private fun NewContentNavigation() {
             )
         }
 
-        composable("habit") {
+        composable(FormType.HABIT.route) {
             val viewModel: NewHabitViewModel = hiltViewModel()
 
             NewHabitForm(
@@ -77,7 +92,7 @@ private fun NewContentNavigation() {
             )
         }
 
-        composable("group") {
+        composable(FormType.GROUP.route) {
             val viewModel: NewGroupViewModel = hiltViewModel()
 
             NewGroupForm(

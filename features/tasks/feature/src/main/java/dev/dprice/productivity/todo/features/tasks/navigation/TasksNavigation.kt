@@ -11,8 +11,6 @@ import androidx.navigation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
 import dev.dprice.productivity.todo.features.tasks.screens.add.NewContent
-import dev.dprice.productivity.todo.features.tasks.screens.add.NewContentViewModel
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.NewContentAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorScreen
@@ -64,25 +62,7 @@ fun NavGraphBuilder.tasksNavigation(
             route = NavLocation.TasksNewContent.route,
             listOf(navArgument("groupOnly") { defaultValue = false })
         ) { backstackEntry ->
-            val viewModel = hiltViewModel<NewContentViewModel>()
-
-            val isGroupOnly = backstackEntry.arguments?.getBoolean("groupOnly")
-            LaunchedEffect(key1 = isGroupOnly) {
-                isGroupOnly?.let {
-                    if (isGroupOnly) {
-                        viewModel.updateState(NewContentAction.ShowGroupOnly)
-                    }
-                }
-            }
-
-            LaunchedEffect(viewModel.state.isDismissed) {
-                if (viewModel.state.isDismissed) navController.popBackStack()
-            }
-
-            NewContent(
-                state = viewModel.state,
-                onAction = viewModel::updateState
-            )
+            NewContent()
         }
     }
 }

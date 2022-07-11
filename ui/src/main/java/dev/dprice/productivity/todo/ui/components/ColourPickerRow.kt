@@ -6,7 +6,10 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
 @Composable
 fun ColourPickerRow(
-    colour: Color,
+    colour: Color?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -36,7 +41,6 @@ fun ColourPickerRow(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,6 +62,21 @@ fun ColourPickerRow(
                 )
                 .size(48.dp)
                 .scale(scale)
+        )
+    }
+}
+
+/**
+ * Preview
+ */
+
+@Preview
+@Composable
+private fun PreviewColourPickerRow() {
+    TodoAppTheme {
+        ColourPickerRow(
+            colour = Color.Red,
+            onClick = { }
         )
     }
 }

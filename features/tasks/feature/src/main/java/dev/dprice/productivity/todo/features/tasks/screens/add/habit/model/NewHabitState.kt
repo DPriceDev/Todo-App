@@ -2,10 +2,8 @@ package dev.dprice.productivity.todo.features.tasks.screens.add.habit.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Title
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.ContentForm.Type
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
-import dev.dprice.productivity.todo.ui.components.FormEntry
 
 data class NewHabitState(
     val title: EntryField = EntryField(
@@ -15,20 +13,10 @@ data class NewHabitState(
         errorText = "Enter a title for your habit."
     ),
     val buttonState: ButtonState = ButtonState.DISABLED
-): ContentForm {
-    override val displayName: String = "New Habit"
+) {
+    val isValid = title.isValid
 
-    override val isValid = title.isValid
-
-    override val entries = listOf(
-        FormEntry.Description(text = "Enter Habit TBC..."),
-        FormEntry.Divider,
-        FormEntry.Text(id = Type.TITLE, entry = title),
-        FormEntry.Divider,
-        FormEntry.Button(id = Type.SUBMIT, state = buttonState)
-    )
-
-    override fun withEnablement(enabled: Boolean) = copy(
+    fun withEnablement(enabled: Boolean) = copy(
         title = title.copy(enabled = enabled),
         buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
     )

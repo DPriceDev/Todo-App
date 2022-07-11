@@ -5,8 +5,8 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
 @Composable
 fun IconPickerRow(
-    icon: ImageVector,
+    icon: ImageVector?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -42,7 +44,6 @@ fun IconPickerRow(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -59,7 +60,8 @@ fun IconPickerRow(
             border = BorderStroke(
                 width = 2.dp,
                 color = Yellow
-            )
+            ),
+            modifier = Modifier.clickable { onClick() }
         ) {
             Icon(
                 Icons.Default.Edit,
@@ -71,6 +73,20 @@ fun IconPickerRow(
                     .scale(scale)
             )
         }
+    }
+}
 
+/**
+ * Preview
+ */
+
+@Preview
+@Composable
+private fun PreviewIconPickerRow() {
+    TodoAppTheme {
+        IconPickerRow(
+            icon = Icons.Default.Edit,
+            onClick = { }
+        )
     }
 }

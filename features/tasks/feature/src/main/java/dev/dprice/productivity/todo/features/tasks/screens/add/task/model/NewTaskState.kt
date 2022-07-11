@@ -4,10 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Title
 import androidx.compose.ui.text.input.ImeAction
-import dev.dprice.productivity.todo.features.tasks.screens.add.model.ContentForm.Type
 import dev.dprice.productivity.todo.ui.components.ButtonState
 import dev.dprice.productivity.todo.ui.components.EntryField
-import dev.dprice.productivity.todo.ui.components.FormEntry
 
 data class NewTaskState(
     val title: EntryField = EntryField(
@@ -24,29 +22,10 @@ data class NewTaskState(
         imeAction = ImeAction.Done
     ),
     val buttonState: ButtonState = ButtonState.DISABLED
-) : ContentForm {
-    override val displayName: String = "New Task"
+) {
+    val isValid = title.isValid && details.isValid
 
-    override val isValid = title.isValid && details.isValid
-
-    override val entries = listOf(
-        FormEntry.Description(
-            text = "Create a new task! Enter a short todo for your task and an optional description if you want to add more detail."
-        ),
-        FormEntry.Divider,
-        FormEntry.Text(id = Type.TITLE, entry = title),
-        FormEntry.Text(id = Type.DETAILS, entry = details),
-        FormEntry.Divider,
-        // todo: Type - boolean, check list, slider
-        // Divider?
-        // todo: Date time
-        // todo: Repeatability
-        // todo: reminders
-        // Divider?
-        FormEntry.Button(id = Type.SUBMIT, state = buttonState)
-    )
-
-    override fun withEnablement(enabled: Boolean) = copy(
+    fun withEnablement(enabled: Boolean) = copy(
         title = title.copy(enabled = enabled),
         details = title.copy(enabled = enabled),
         buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
