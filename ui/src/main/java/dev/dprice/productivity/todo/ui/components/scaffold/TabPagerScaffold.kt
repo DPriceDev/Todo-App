@@ -49,13 +49,17 @@ private fun <T> Tabs(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        Spacer(modifier = Modifier.weight(1f))
+
         items.forEach { item ->
             Box(
-                modifier = Modifier.weight(1f),
+                //modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center,
             ) {
                 content(item, item == selected)
             }
+
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

@@ -4,12 +4,12 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.scaffold.TabPagerScaffold
@@ -21,39 +21,63 @@ fun <T> CircleWipeTabPager(
     items: List<T>,
     selected: T?,
     modifier: Modifier = Modifier,
-    duration: Int = 500,
+    duration: Int = 5000,
     tabContent: @Composable (T, Boolean) -> Offset,
     dropdownContent: @Composable (T) -> Unit
 ) {
     BoxWithConstraints {
-        val originHeight = 32f
-        val expandWidth = (this@BoxWithConstraints.maxWidth.value / 4)
-        val expandHeight = this@BoxWithConstraints.maxHeight.value + originHeight
+        val overallHeight = constraints.maxHeight
+        val tabWidth = maxWidth.value / (items.count() + 1)
+
+        // Keeps the last index to know where to expand and shrink the circle from.
+        var lastIndex by remember { mutableStateOf(1) }
+        LaunchedEffect(key1 = selected) {
+            selected?.let { lastIndex = items.indexOf(it) + 1 }
+        }
+
+        val expandWidth = tabWidth * lastIndex
+        val expandHeight = this@BoxWithConstraints.maxHeight.value
         val maxRadius = sqrt((expandWidth * expandWidth) + (expandHeight * expandHeight))
+
+        val originX = expandWidth - ((maxWidth.value - 32) / 2)
+
+
+
+        val radius by animateDpAsState(
+            targetValue = selected?.let { maxRadius.dp } ?: 0.dp,
+            animationSpec = tween(durationMillis = duration)
+        )
 
         TabPagerScaffold(
             items = items,
             selected = selected,
+            expandDuration = duration,
             modifier = modifier,
             tabContent = { item, isSelected ->
                 Tab(
                     isSelected = isSelected,
-                    duration = duration
+                    duration = duration,
+                    maxRadius = selected?.let {
+                        if (selected == item) maxRadius.dp else 0.dp // todo: need to think about this
+                    } ?: maxRadius.dp
                 ) {
                     tabContent(item, it)
                 }
             },
             dropdownContent = { item ->
-                val radius by animateDpAsState(
-                    targetValue = selected?.let { maxRadius.dp } ?: 0.dp,
-                    animationSpec = tween(durationMillis = duration)
-                )
+                BoxWithConstraints {
 
-                DropDown(
-                    item = item,
-                    radius = radius,
-                    content = dropdownContent,
-                )
+                    val tabHeight = overallHeight - constraints.maxHeight
+                    val originY = (tabHeight / 2)
+
+                    DropDown(
+                        item = item,
+                        radius = radius,
+                        originX = originX,
+                        originY = originY,
+                        content = dropdownContent
+                    )
+                }
             }
         )
     }
@@ -63,19 +87,26 @@ fun <T> CircleWipeTabPager(
 private fun <T> DropDown(
     item: T,
     radius: Dp,
+    originX: Float,
+    originY: Int,
+    modifier: Modifier = Modifier,
     content: @Composable (T) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .clip(
-                OffsetCircle(
-                    radius = radius,
-                    offsetX = 0.dp, //todo: offsetX,
-                    offsetY = 0.dp //todo: offsetY - (this.maxHeight / 2)
-                )
-            )
+    BoxWithConstraints(
+        modifier = modifier
     ) {
-        content(item)
+        Box(
+            modifier = Modifier
+                .clip(
+                    OffsetCircle(
+                        radius = radius,
+                        offsetX = originX.dp,
+                        offsetY = -(maxHeight / 2) - with(LocalDensity.current) { originY.toDp() }
+                    )
+                )
+        ) {
+            content(item)
+        }
     }
 }
 
@@ -83,31 +114,33 @@ private fun <T> DropDown(
 private fun Tab(
     isSelected: Boolean,
     duration: Int,
+    maxRadius: Dp,
     content: @Composable (isSelected: Boolean) -> Offset
 ) {
-    BoxWithConstraints {
-        val radius by animateDpAsState(
+    Box {
+        val radius = animateDpAsState(
             targetValue = if (isSelected) {
-                Size(
-                    constraints.maxWidth.toFloat(),
-                    constraints.maxHeight.toFloat()
-                ).extentRadius.dp
+                maxRadius
             } else {
                 0.dp
             },
             animationSpec = tween(durationMillis = duration)
         )
 
-        val offset = content(isSelected = false)
+//        LaunchedEffect(key1 = maxRadius) {
+//            if (maxRadius > radius.value)
+//        }
+
+        content(isSelected = false)
 
         Box(
-            modifier = Modifier.clip(
-                OffsetCircle(
-                    radius = radius,
-                    offsetY = offset.y.dp,
-                    offsetX = offset.x.dp
+            modifier = Modifier
+                .clip(
+                    OffsetCircle(
+                        radius = radius.value,
+                        //offsetY = with(LocalDensity.current) { (size.height / 2).toDp() }
+                    )
                 )
-            )
         ) {
             content(isSelected = true)
         }
