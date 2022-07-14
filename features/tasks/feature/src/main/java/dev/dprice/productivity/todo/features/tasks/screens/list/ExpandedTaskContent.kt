@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
-import dev.dprice.productivity.todo.ui.components.RoundedButton
+import dev.dprice.productivity.todo.ui.components.buttons.RoundedButton
 
 @Composable
 fun ExpandedTaskContent(

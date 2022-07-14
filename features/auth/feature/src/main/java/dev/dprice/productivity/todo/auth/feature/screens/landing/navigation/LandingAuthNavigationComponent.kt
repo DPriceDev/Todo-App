@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.landing.ui.AuthLanding
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.landingComposable(

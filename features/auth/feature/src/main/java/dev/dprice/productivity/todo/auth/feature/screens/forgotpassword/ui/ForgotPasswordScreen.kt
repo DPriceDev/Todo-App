@@ -13,10 +13,10 @@ import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.Fo
 import dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model.ForgotPasswordState
 import dev.dprice.productivity.todo.auth.feature.ui.AuthWavyScaffold
 import dev.dprice.productivity.todo.features.auth.feature.R
-import dev.dprice.productivity.todo.ui.components.RoundedButton
-import dev.dprice.productivity.todo.ui.components.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.components.TextWithClickableSuffix
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.buttons.RoundedButton
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.text.RoundedEntryCard
 
 @Composable
 fun ForgotPassword(

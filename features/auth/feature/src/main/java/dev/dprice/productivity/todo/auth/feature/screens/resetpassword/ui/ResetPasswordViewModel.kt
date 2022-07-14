@@ -15,7 +15,7 @@ import dev.dprice.productivity.todo.auth.usecases.ResetPasswordUseCase
 import dev.dprice.productivity.todo.auth.feature.usecase.UpdateCodeEntryUseCase
 import dev.dprice.productivity.todo.auth.feature.usecase.UpdatePasswordEntryUseCase
 import dev.dprice.productivity.todo.features.auth.feature.R
-import dev.dprice.productivity.todo.ui.components.ButtonState
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

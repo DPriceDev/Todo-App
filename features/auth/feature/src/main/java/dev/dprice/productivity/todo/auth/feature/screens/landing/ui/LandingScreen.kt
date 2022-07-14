@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.dprice.productivity.todo.ui.components.RoundedButton
 import dev.dprice.productivity.todo.ui.components.SpinningCircles
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.buttons.RoundedButton
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.TextBackground
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow

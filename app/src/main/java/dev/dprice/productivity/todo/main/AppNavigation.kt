@@ -13,7 +13,7 @@ import dev.dprice.productivity.todo.features.settings.ui.SettingsScreen
 import dev.dprice.productivity.todo.features.settings.ui.SettingsViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.navigation.tasksNavigation
 import dev.dprice.productivity.todo.platform.model.NavLocation
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

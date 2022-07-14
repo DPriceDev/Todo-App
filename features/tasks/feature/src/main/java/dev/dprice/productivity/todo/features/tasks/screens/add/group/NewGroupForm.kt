@@ -1,39 +1,37 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add.group
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupAction
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupState
-import dev.dprice.productivity.todo.ui.components.*
+import dev.dprice.productivity.todo.ui.components.ColourPickerRow
+import dev.dprice.productivity.todo.ui.components.FormDivider
+import dev.dprice.productivity.todo.ui.components.IconPickerRow
+import dev.dprice.productivity.todo.ui.components.TabPager
+import dev.dprice.productivity.todo.ui.components.buttons.RoundedButton
+import dev.dprice.productivity.todo.ui.components.text.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
-import kotlin.math.sqrt
 
 @Composable
 fun NewGroupForm(
@@ -77,118 +75,86 @@ fun NewGroupForm(
     }
 }
 
+enum class GroupTab {
+    ICON,
+    COLOUR
+}
+
 @Composable
 private fun GroupSelector(form: NewGroupState) {
-    BoxWithConstraints {
-        var isExpanded: Boolean by remember { mutableStateOf(false) }
 
-        val expandWidth = (this@BoxWithConstraints.maxWidth.value / 4) * 3
-        val expandHeight = this@BoxWithConstraints.maxHeight.value + 56f
-        val maxRadius = sqrt((expandWidth * expandWidth) + (expandHeight * expandHeight))
+    var selected: Int? by remember {
+        mutableStateOf(null)
+    }
 
-        val radius: Dp by animateDpAsState(
-            targetValue = if (isExpanded) maxRadius.dp else 0.dp,
-            animationSpec = tween(durationMillis = 600)
-        )
-
-        Column {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+    TabPager(
+        selected = selected,
+        items = GroupTab.values().toList(),
+        //modifier = Modifier.onFocusChanged { if (!it.hasFocus) selected = null },
+        tabContent = { tab, isSelected ->
+            Box(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)
             ) {
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    ColourPickerRow(
-                        colour = form.colour,
-                        modifier = Modifier
-                            .focusable(),
-                        onClick = { /* todo */ }
-                    )
-                }
-
-
-
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .height(72.dp)
-                            .clip(
-                                OffsetCircle(
-                                    radius = radius,
-                                    offsetY = (-4).dp
-                                )
-                            )
-                            .width(96.dp),
-                        shape = TabShape(16.dp),
-                        color = Yellow
-                    ) {
-                        
-                    }
-
-                    IconPickerRow(
+                when (tab) {
+                    GroupTab.ICON -> IconPickerRow(
                         icon = form.icon,
-                        modifier = Modifier.focusable(),
-                        onClick = { isExpanded = !isExpanded }
+                        iconColour = if (isSelected) Color.Black else Color.White,
+                        borderColour = if (isSelected) Color.Black else Yellow,
                     )
-                }
-            }
 
-            val edgeOffset = (this@BoxWithConstraints.maxWidth / 4)
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = expandVertically(
-                    expandFrom = Alignment.Top,
-                    animationSpec = tween(durationMillis = 400)
-                ),
-                exit = shrinkVertically(
-                    shrinkTowards = Alignment.Top,
-                    animationSpec = tween(durationMillis = 800)
-                ),
-            ) {
-                BoxWithConstraints {
-                    SelectorWindow(
-                        modifier = Modifier.clip(
-                            OffsetCircle(
-                                radius = radius,
-                                offsetY = (-56).dp - (maxHeight / 2),
-                                offsetX = edgeOffset
-                            )
-                        )
+                    GroupTab.COLOUR -> ColourPickerRow(
+                        colour = form.colour,
+                        borderColour = if (isSelected) Color.Black else Yellow,
                     )
                 }
             }
+        },
+        selectorContent = { tab ->
+            when (tab) {
+                GroupTab.ICON -> IconSelection()
+                GroupTab.COLOUR -> ColourSelection()
+            }
+        },
+        onSelect = {
+            selected = if (selected == it) null else it
+        }
+    )
+}
+
+@Composable
+fun IconSelection(
+    modifier: Modifier = Modifier
+) {
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(3),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        items(20) {
+            Icon(
+                Icons.Default.Edit,
+                null
+            )
         }
     }
 }
 
 @Composable
-fun SelectorWindow(
+fun ColourSelection(
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        color = Yellow,
-        shape = RoundedCornerShape(32.dp),
-        modifier = modifier
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(3),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(3),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            items(20) {
-                Icon(
-                    Icons.Default.Edit,
-                    null
-                )
-            }
+        items(20) {
+            Icon(
+                Icons.Default.Edit,
+                null
+            )
         }
     }
 }

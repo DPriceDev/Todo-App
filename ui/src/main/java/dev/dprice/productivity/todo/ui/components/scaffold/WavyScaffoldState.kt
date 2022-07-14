@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.ui.components.scaffold
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter

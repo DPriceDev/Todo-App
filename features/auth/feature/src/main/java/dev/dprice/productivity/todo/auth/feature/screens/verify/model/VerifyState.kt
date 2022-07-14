@@ -1,8 +1,8 @@
 package dev.dprice.productivity.todo.auth.feature.screens.verify.model
 
 import dev.dprice.productivity.todo.auth.feature.model.ErrorState
-import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
 
 data class VerifyState(

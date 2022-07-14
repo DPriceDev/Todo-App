@@ -22,9 +22,9 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.WarningMessage
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldStateProvider
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldStateProvider
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable

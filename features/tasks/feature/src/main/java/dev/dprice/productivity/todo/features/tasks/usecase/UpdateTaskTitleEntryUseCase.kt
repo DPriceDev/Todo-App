@@ -1,6 +1,6 @@
 package dev.dprice.productivity.todo.features.tasks.usecase
 
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 
 class UpdateTaskTitleEntryUseCase constructor(

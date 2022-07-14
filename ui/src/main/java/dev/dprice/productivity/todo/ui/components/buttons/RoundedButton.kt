@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.ui.components.buttons
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.components.LoadingDots
 import dev.dprice.productivity.todo.ui.theme.TextColour
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.buttonDisabledColour

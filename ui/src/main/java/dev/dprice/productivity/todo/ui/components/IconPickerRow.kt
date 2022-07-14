@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,8 @@ import dev.dprice.productivity.todo.ui.theme.Yellow
 fun IconPickerRow(
     icon: ImageVector?,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    iconColour: Color = Color.White,
+    borderColour: Color = Yellow
 ) {
     val scale by rememberInfiniteTransition().animateFloat(
         initialValue = 1f,
@@ -44,29 +46,22 @@ fun IconPickerRow(
 
     Column(
         modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
+            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Group Icon",
-            modifier = modifier.padding(bottom = 12.dp),
-            style = MaterialTheme.typography.body1,
-            color = Color.White
-        )
         Surface(
             color = Color.Unspecified,
             shape = RoundedCornerShape(percent = 50),
             border = BorderStroke(
                 width = 2.dp,
-                color = Yellow
-            ),
-            modifier = Modifier.clickable { onClick() }
+                color = borderColour
+            )
         ) {
             Icon(
-                Icons.Default.Edit,
+                icon ?: Icons.Default.Close,
                 contentDescription = null,
-                tint = Color.White,
+                tint = if (icon != null) iconColour else Color.Red,
                 modifier = Modifier
                     .size(48.dp)
                     .padding(8.dp)
@@ -84,9 +79,6 @@ fun IconPickerRow(
 @Composable
 private fun PreviewIconPickerRow() {
     TodoAppTheme {
-        IconPickerRow(
-            icon = Icons.Default.Edit,
-            onClick = { }
-        )
+        IconPickerRow(icon = Icons.Default.Edit)
     }
 }

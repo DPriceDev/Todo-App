@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 import dev.dprice.productivity.todo.ui.transforms.DashedEntryVisualTransformation
 
 data class ResetPasswordForm(

@@ -4,8 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Title
 import androidx.compose.ui.text.input.ImeAction
-import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 
 data class NewTaskState(
     val title: EntryField = EntryField(

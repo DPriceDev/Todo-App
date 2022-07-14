@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.screens.list.preview.TaskListStatePreviewProvider
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import kotlinx.coroutines.launch
 

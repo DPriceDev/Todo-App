@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.components.text.EntryField
+import dev.dprice.productivity.todo.ui.components.text.ExpandingEntryField
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable

@@ -16,7 +16,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewMode
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorScreen
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorViewModel
 import dev.dprice.productivity.todo.platform.model.NavLocation
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun NavGraphBuilder.tasksNavigation(

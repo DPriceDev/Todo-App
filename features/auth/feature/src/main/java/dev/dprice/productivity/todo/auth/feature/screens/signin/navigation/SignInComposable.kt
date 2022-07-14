@@ -12,7 +12,7 @@ import com.google.accompanist.navigation.animation.composable
 import dev.dprice.productivity.todo.auth.feature.model.AuthNavLocation
 import dev.dprice.productivity.todo.auth.feature.screens.signin.ui.SignIn
 import dev.dprice.productivity.todo.auth.feature.screens.signin.ui.SignInViewModelImpl
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.signInComposable(

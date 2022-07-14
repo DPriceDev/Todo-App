@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.ui.components.text
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing

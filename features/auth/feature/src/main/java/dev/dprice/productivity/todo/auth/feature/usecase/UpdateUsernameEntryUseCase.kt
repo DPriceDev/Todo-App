@@ -1,6 +1,7 @@
 package dev.dprice.productivity.todo.auth.feature.usecase
 
-import dev.dprice.productivity.todo.ui.components.EntryField
+
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 import javax.inject.Inject
 

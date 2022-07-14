@@ -2,8 +2,8 @@ package dev.dprice.productivity.todo.features.tasks.screens.add.habit.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Title
-import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 
 data class NewHabitState(
     val title: EntryField = EntryField(

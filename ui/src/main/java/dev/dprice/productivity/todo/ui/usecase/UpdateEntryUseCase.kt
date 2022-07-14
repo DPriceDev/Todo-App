@@ -1,6 +1,6 @@
 package dev.dprice.productivity.todo.ui.usecase
 
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 
 interface UpdateEntryUseCase {
     operator fun invoke(

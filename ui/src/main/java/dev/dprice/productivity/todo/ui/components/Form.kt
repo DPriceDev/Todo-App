@@ -3,8 +3,6 @@ package dev.dprice.productivity.todo.ui.components
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,12 +12,15 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
+import dev.dprice.productivity.todo.ui.components.buttons.RoundedButton
+import dev.dprice.productivity.todo.ui.components.text.EntryField
+import dev.dprice.productivity.todo.ui.components.text.RoundedEntryCard
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
@@ -34,8 +35,6 @@ sealed class FormEntry<out T> {
     data class Text<T>(val id: T, val entry: EntryField) : FormEntry<T>()
     object Divider : FormEntry<Nothing>()
     data class Button<T>(val id: T, val state: ButtonState) : FormEntry<T>()
-    data class ColourPicker<T>(val id: T, val colour: Color) : FormEntry<T>()
-    data class IconPicker<T>(val id: T, val icon: ImageVector) : FormEntry<T>()
 }
 
 sealed class FormAction<T> {
@@ -112,16 +111,6 @@ private fun <T> FormEntries(
             modifier = Modifier.focusable(),
             onClick = { onAction(FormAction.ButtonClicked(entry.id)) }
         )
-        is FormEntry.ColourPicker -> ColourPickerRow(
-            colour = entry.colour,
-            modifier = Modifier.focusable(),
-            onClick = { onAction(FormAction.ButtonClicked(entry.id)) }
-        )
-        is FormEntry.IconPicker -> IconPickerRow(
-            icon = entry.icon,
-            modifier = Modifier.focusable(),
-            onClick = { onAction(FormAction.ButtonClicked(entry.id)) }
-        )
         is FormEntry.Row -> FormRow(
             entries = entry.entries,
             onAction = onAction,
@@ -176,12 +165,6 @@ private fun PreviewForm() {
             EntryField()
         ),
         FormEntry.Divider,
-        FormEntry.Row(
-            listOf(
-                FormEntry.ColourPicker(id = "picker1", Color(0xFF4BC550)),
-                FormEntry.IconPicker(id = "picker2", Icons.Default.Edit),
-            )
-        ),
         FormEntry.Divider,
         FormEntry.Button(
             id = "Text3",

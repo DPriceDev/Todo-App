@@ -3,8 +3,9 @@ package dev.dprice.productivity.todo.auth.feature.screens.forgotpassword.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
 import dev.dprice.productivity.todo.auth.feature.model.ErrorState
-import dev.dprice.productivity.todo.ui.components.ButtonState
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
+import dev.dprice.productivity.todo.ui.components.text.EntryField
+
 
 data class ForgotPasswordState(
     val username: EntryField = EntryField(

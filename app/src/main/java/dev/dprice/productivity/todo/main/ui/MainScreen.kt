@@ -20,8 +20,8 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dev.dprice.productivity.todo.main.AppNavigation
 import dev.dprice.productivity.todo.main.model.MainState
 import dev.dprice.productivity.todo.platform.model.NavLocation
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.shapes.waveToppedShape
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme

@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.ui.components.scaffold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.ui.components.WaveBottomCard
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
 @Composable

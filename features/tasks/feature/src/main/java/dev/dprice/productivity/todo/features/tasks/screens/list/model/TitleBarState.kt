@@ -3,7 +3,7 @@ package dev.dprice.productivity.todo.features.tasks.screens.list.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import dev.dprice.productivity.todo.features.tasks.data.model.Group
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 
 data class TitleBarState(
     val searchEntry: EntryField = EntryField(

@@ -26,8 +26,8 @@ import dev.dprice.productivity.todo.features.tasks.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.screens.list.ButtonLayout
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorState
 import dev.dprice.productivity.todo.ui.components.PulsingButton
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme

@@ -5,7 +5,7 @@ import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import dev.dprice.productivity.todo.ui.components.EntryField
+import dev.dprice.productivity.todo.ui.components.text.EntryField
 
 data class SignInForm(
     val username: EntryField = EntryField(

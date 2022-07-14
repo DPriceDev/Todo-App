@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.auth.usecases.SignOutUserUseCase
-import dev.dprice.productivity.todo.ui.components.ButtonState
+import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

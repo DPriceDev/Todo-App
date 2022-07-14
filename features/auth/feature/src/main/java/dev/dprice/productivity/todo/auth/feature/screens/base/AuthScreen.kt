@@ -16,8 +16,8 @@ import dev.dprice.productivity.todo.auth.feature.screens.resetpassword.navigatio
 import dev.dprice.productivity.todo.auth.feature.screens.signin.navigation.signInComposable
 import dev.dprice.productivity.todo.auth.feature.screens.signup.navigation.signUpComposable
 import dev.dprice.productivity.todo.auth.feature.screens.verify.navigation.verifyCodeComposable
-import dev.dprice.productivity.todo.ui.components.WavyBackdropScaffold
-import dev.dprice.productivity.todo.ui.components.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
+import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
