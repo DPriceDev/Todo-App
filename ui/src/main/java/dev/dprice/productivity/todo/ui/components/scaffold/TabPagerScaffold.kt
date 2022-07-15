@@ -1,14 +1,13 @@
 package dev.dprice.productivity.todo.ui.components.scaffold
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.SubcomposeLayout
+import kotlinx.coroutines.launch
 
 @Composable
 fun <T> TabPagerScaffold(
@@ -70,13 +69,12 @@ private fun DropdownDrawer(
     animationSpec: AnimationSpec<Int>,
     content: @Composable () -> Unit
 ) {
-    // todo: does this write backwards? double render?
-    var maxHeight by remember { mutableStateOf(0) }
-
-    val height by animateIntAsState(
-        targetValue = if (isExpanded) maxHeight else 0,
-        animationSpec = animationSpec
-    )
+    val scope = rememberCoroutineScope()
+    val animation: Animatable<Int, AnimationVector1D>? by remember {
+        mutableStateOf(
+            Animatable(0, Int.VectorConverter, 0)
+        )
+    }
 
     SubcomposeLayout(
         modifier = Modifier.clipToBounds()
@@ -87,8 +85,28 @@ private fun DropdownDrawer(
 
         val placeable = measurable.firstOrNull()?.measure(looseConstraints)
 
-        maxHeight = placeable?.height ?: 0
+        val maxHeight = placeable?.height ?: 0
 
-        layout(placeable?.width ?: 0, height) { placeable?.place(0, 0) }
+        if (isExpanded && animation?.targetValue != maxHeight) {
+            scope.launch {
+                animation?.animateTo(
+                    maxHeight,
+                    animationSpec
+                )
+            }
+        }
+
+        if (!isExpanded && animation?.targetValue != 0) {
+            scope.launch {
+                animation?.animateTo(
+                    0,
+                    animationSpec
+                )
+            }
+        }
+
+        layout(placeable?.width ?: 0, animation?.value ?: 0) {
+            placeable?.place(0, 0)
+        }
     }
 }
