@@ -88,7 +88,7 @@ private fun NewContentNavigation(
             val viewModel: NewTaskViewModel = hiltViewModel()
 
             NewTaskForm(
-                form = viewModel.state,
+                state = viewModel.state,
                 onAction = viewModel::updateState
             )
         }

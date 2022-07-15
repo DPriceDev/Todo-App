@@ -1,21 +1,25 @@
 package dev.dprice.productivity.todo.features.tasks.screens.selector
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
@@ -27,8 +31,9 @@ import dev.dprice.productivity.todo.features.tasks.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.asColour
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.asImageVector
 import dev.dprice.productivity.todo.features.tasks.screens.list.ButtonLayout
+import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorAction
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorState
-import dev.dprice.productivity.todo.ui.components.PulsingButton
+import dev.dprice.productivity.todo.ui.components.animated.PulsingLayout
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
@@ -39,8 +44,8 @@ fun GroupSelectorScreen(
     state: GroupSelectorState,
     wavyState: WavyScaffoldState,
     modifier: Modifier = Modifier,
-    onSelect: (Group?) -> Unit,
-    onAddGroup: () -> Unit
+    onAddGroup: () -> Unit,
+    onAction: (GroupSelectorAction) -> Unit
 ) {
     BoxWithConstraints(
         modifier = modifier
@@ -58,7 +63,9 @@ fun GroupSelectorScreen(
             backContent = {
                 GroupSelectorContent(
                     state = state,
-                    onSelect = onSelect
+                    onSelect = { onAction(GroupSelectorAction.SelectGroup(it?.id)) },
+                    onLongPress = { onAction(GroupSelectorAction.LongPressGroup(it?.id)) },
+                    onDelete = { onAction(GroupSelectorAction.DeleteGroups) }
                 )
             }
         )
@@ -83,7 +90,9 @@ fun GroupSelectorScreen(
 private fun GroupSelectorContent(
     state: GroupSelectorState,
     modifier: Modifier = Modifier,
-    onSelect: (Group?) -> Unit
+    onSelect: (Group?) -> Unit,
+    onDelete: () -> Unit,
+    onLongPress: (Group?) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -100,6 +109,22 @@ private fun GroupSelectorContent(
                 modifier = Modifier.align(Alignment.Center),
                 style = MaterialTheme.typography.h3,
             )
+            IconButton(
+                onClick = onDelete,
+                enabled = state.groups.any { it.isSelected },
+                modifier = Modifier.padding(8.dp).align(Alignment.CenterEnd)
+            ) {
+                this@Column.AnimatedVisibility(
+                    visible = state.isEditMode,
+                    enter = fadeIn() + expandIn(expandFrom = Alignment.Center),
+                    exit = fadeOut() + shrinkOut(shrinkTowards = Alignment.Center)
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete ${state.groups.count { it.isSelected }} Groups", // todo: Plural string
+                    )
+                }
+            }
         }
 
         LazyVerticalGrid(
@@ -109,26 +134,17 @@ private fun GroupSelectorContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            itemsIndexed(state.groups) { index, (group, count) ->
-
-                if (group == null) {
-                    GroupButton(
-                        title = "All",
-                        taskCount = count,
-                        onSelect = { onSelect(null) },
-                        modifier = Modifier.weight(1f),
-                        icon = Icons.Default.DoneAll
-                    )
-                } else {
-                    GroupButton(
-                        title = group.name,
-                        taskCount = count,
-                        onSelect = { onSelect(group) },
-                        modifier = Modifier.weight(1f),
-                        colour = group.colour.asColour(),
-                        icon = group.icon.asImageVector()
-                    )
-                }
+            items(state.groups) { (group, count, isSelected) ->
+                GroupButton(
+                    title = group?.name ?: "All",
+                    isSelected = isSelected,
+                    taskCount = count,
+                    onSelect = { onSelect(group) },
+                    colour = group?.colour?.asColour() ?: MediumBlue,
+                    icon = group?.icon?.asImageVector() ?: Icons.Default.DoneAll,
+                    onLongClick = { group?.let { onLongPress(it) } },
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -137,41 +153,55 @@ private fun GroupSelectorContent(
 // todo: animate height of first time
 // todo: Share animation state from navigation?
 @Composable
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 private fun GroupButton(
     title: String,
     icon: ImageVector,
+    isSelected: Boolean,
     taskCount: Int,
     modifier: Modifier = Modifier,
     colour: Color = MediumBlue,
     contentColour: Color = Color.White,
-    onSelect: () -> Unit
+    onSelect: () -> Unit,
+    onLongClick: () -> Unit
 ) {
-    PulsingButton(
-        modifier = modifier,
-        backgroundColour = colour,
-        onClick = onSelect
-    ) {
-        Column {
-            ButtonLayout(
-                contentColour = contentColour,
-                icon = icon,
-                text = title
-            )
+    PulsingLayout {
+        Surface(
+            modifier = Modifier
+                .clip(RoundedCornerShape(size = 32.dp))
+                .combinedClickable(
+                    onClick = onSelect,
+                    onLongClick = onLongClick
+                )
+                .then(modifier),
+            border = BorderStroke(
+                color = if (isSelected) Color.Black else Color.Unspecified,
+                width = 3.dp
+            ),
+            color = colour,
+            shape = RoundedCornerShape(size = 32.dp)
+        ) {
+            Column {
+                ButtonLayout(
+                    contentColour = contentColour,
+                    icon = icon,
+                    text = title
+                )
 
-            Text(
-                text = pluralStringResource(
-                    id = R.plurals.task_count,
-                    count = taskCount,
-                    taskCount
-                ),
-                color = contentColour.copy(alpha = 0.8f),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 24.dp)
-            )
+                Text(
+                    text = pluralStringResource(
+                        id = R.plurals.task_count,
+                        count = taskCount,
+                        taskCount
+                    ),
+                    color = contentColour.copy(alpha = 0.8f),
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 24.dp)
+                )
+            }
         }
     }
 }
@@ -186,7 +216,7 @@ private fun PreviewGroupSelectorScreen() {
                 wavyState = WavyScaffoldState(
                     initialBackDropHeight = maxHeight
                 ),
-                onSelect = { },
+                onAction = { },
                 onAddGroup = { }
             )
         }

@@ -1,5 +1,6 @@
 package dev.dprice.productivity.todo.features.tasks.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -15,6 +16,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorScreen
 import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelectorViewModel
+import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorAction
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 
@@ -47,11 +49,17 @@ fun NavGraphBuilder.tasksNavigation(
                 if (viewModel.state.isDismissed) navController.popBackStack()
             }
 
+            BackHandler(
+                enabled = viewModel.state.isEditMode
+            ) {
+                viewModel.onAction(GroupSelectorAction.ExitEditMode)
+            }
+
             GroupSelectorScreen(
                 state = viewModel.state,
                 wavyState = wavyState,
                 modifier = modifier,
-                onSelect = viewModel::selectGroup,
+                onAction = viewModel::onAction,
                 onAddGroup = {
                     navController.navigate(NavLocation.TasksNewContent.withArguments(true))
                 }
@@ -61,7 +69,7 @@ fun NavGraphBuilder.tasksNavigation(
         bottomSheet(
             route = NavLocation.TasksNewContent.route,
             listOf(navArgument("groupOnly") { defaultValue = false })
-        ) { backstackEntry ->
+        ) {
             NewContent(
                 closeSheet = { navController.popBackStack() }
             )

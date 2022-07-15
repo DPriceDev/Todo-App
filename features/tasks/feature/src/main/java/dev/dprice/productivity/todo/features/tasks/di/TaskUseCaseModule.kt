@@ -65,4 +65,10 @@ class TaskUseCaseModule {
     fun provideCreateGroupUseCase(
         groupRepository: GroupRepository
     ) : CreateGroupUseCase = CreateGroupUseCase(groupRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteGroupsUseCase(
+        groupRepository: GroupRepository
+    ) : DeleteGroupsUseCase = DeleteGroupsUseCase(groupRepository)
 }

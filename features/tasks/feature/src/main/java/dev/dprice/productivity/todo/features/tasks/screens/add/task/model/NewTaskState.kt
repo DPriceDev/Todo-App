@@ -21,6 +21,7 @@ data class NewTaskState(
         maxLength = 512,
         imeAction = ImeAction.Done
     ),
+    val groupId: Int? = null,
     val buttonState: ButtonState = ButtonState.DISABLED
 ) {
     val isValid = title.isValid && details.isValid

@@ -63,6 +63,12 @@ class GroupRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override fun deleteGroups(ids: List<String>) {
+        queries.transaction {
+            ids.forEach { queries.delete(it) }
+        }
+    }
+
     companion object {
         private val CURRENT_GROUP_KEY = stringPreferencesKey("groups_current_group")
     }

@@ -16,10 +16,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -62,12 +64,14 @@ fun NewGroupForm(
 
         FormDivider(modifier = Modifier.padding(20.dp))
 
+        val groupFocusRequester = remember { FocusRequester() }
         RoundedEntryCard(
             entry = state.title,
             modifier = Modifier.onFocusChanged {
+                if (it.hasFocus) groupFocusRequester.freeFocus()
                 onAction(NewGroupAction.UpdateTitleFocus(it.hasFocus))
             },
-            onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+            onImeAction = { groupFocusRequester.requestFocus() },
             onTextChanged = { onAction(NewGroupAction.UpdateTitleText(it)) }
         )
 
@@ -75,9 +79,17 @@ fun NewGroupForm(
             selectedTab = state.selectedTab,
             icon = state.icon,
             colour = state.colour,
+            modifier = Modifier.focusRequester(groupFocusRequester),
             updateIcon = { onAction(NewGroupAction.SelectIcon(it)) },
             updateColour = { onAction(NewGroupAction.SelectColour(it)) },
-            selectTab = { onAction(NewGroupAction.SelectTab(it)) }
+            selectTab = {
+                if (it == null) {
+                    groupFocusRequester.freeFocus()
+                } else {
+                    groupFocusRequester.requestFocus()
+                }
+                onAction(NewGroupAction.SelectTab(it))
+            }
         )
 
         FormDivider(modifier = Modifier.padding(20.dp))
@@ -96,6 +108,7 @@ private fun GroupOptionTabs(
     selectedTab: GroupTab?,
     icon: Icon,
     colour: Colour,
+    modifier: Modifier = Modifier,
     updateIcon: (Icon) -> Unit,
     updateColour: (Colour) -> Unit,
     selectTab: (GroupTab?) -> Unit
@@ -104,6 +117,11 @@ private fun GroupOptionTabs(
         selected = selectedTab,
         items = GroupTab.values().toList(),
         tabOriginOffset = 12.dp,
+        modifier = Modifier
+            .onFocusChanged {
+                if (it.hasFocus && selectedTab == null) selectTab(GroupTab.ICON)
+            }
+            .then(modifier),
         tabContent = { tab, isSelected ->
             GroupTab(
                 title = stringResource(id = tab.titleId),

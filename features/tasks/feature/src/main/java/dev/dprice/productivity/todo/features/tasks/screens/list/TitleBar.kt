@@ -23,10 +23,10 @@ import dev.dprice.productivity.todo.features.tasks.screens.add.group.asImageVect
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TitleBarState
-import dev.dprice.productivity.todo.ui.components.PulsingButton
 import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.Shimmer
 import dev.dprice.productivity.todo.ui.components.SlideSelector
+import dev.dprice.productivity.todo.ui.components.buttons.PulsingButton
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
@@ -121,7 +121,7 @@ fun ButtonLayout(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Icon(
             imageVector = icon,

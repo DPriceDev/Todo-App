@@ -12,4 +12,6 @@ interface GroupRepository {
     suspend fun addGroup(group: Group)
     fun updateGroup(group: Group)
     fun deleteGroup(id: String)
+
+    fun deleteGroups(ids: List<String>)
 }
