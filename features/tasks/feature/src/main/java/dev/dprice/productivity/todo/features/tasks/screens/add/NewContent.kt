@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,9 @@ import dev.dprice.productivity.todo.ui.components.SlideSelector
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NewContent() {
+fun NewContent(
+    closeSheet: () -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -60,7 +63,10 @@ fun NewContent() {
             }
         }
 
-        NewContentNavigation(navController)
+        NewContentNavigation(
+            navController,
+            closeSheet
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -69,7 +75,8 @@ fun NewContent() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun NewContentNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    closeSheet: () -> Unit
 ) {
     // todo: Build from components?
     AnimatedNavHost(
@@ -98,8 +105,12 @@ private fun NewContentNavigation(
         composable(FormType.GROUP.route) {
             val viewModel: NewGroupViewModel = hiltViewModel()
 
+            LaunchedEffect(key1 = viewModel.state.isDismissed) {
+                if (viewModel.state.isDismissed) closeSheet()
+            }
+            
             NewGroupForm(
-                form = viewModel.state,
+                state = viewModel.state,
                 onAction = viewModel::updateState
             )
         }

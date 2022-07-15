@@ -9,7 +9,7 @@ interface GroupRepository {
     suspend fun setCurrentGroup(id: String?)
     fun getCurrentGroup() : Flow<Group?>
 
-    fun addGroup(group: Group)
+    suspend fun addGroup(group: Group)
     fun updateGroup(group: Group)
     fun deleteGroup(id: String)
 }

@@ -1,22 +1,19 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.features.tasks.screens.add.group
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,7 +27,7 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
 @Composable
-fun IconPickerRow(
+fun IconTabIcon(
     icon: ImageVector?,
     modifier: Modifier = Modifier,
     iconColour: Color = Color.White,
@@ -52,7 +49,7 @@ fun IconPickerRow(
     ) {
         Surface(
             color = Color.Unspecified,
-            shape = RoundedCornerShape(percent = 50),
+            shape = CircleShape,
             border = BorderStroke(
                 width = 2.dp,
                 color = borderColour
@@ -79,6 +76,6 @@ fun IconPickerRow(
 @Composable
 private fun PreviewIconPickerRow() {
     TodoAppTheme {
-        IconPickerRow(icon = Icons.Default.Edit)
+        IconTabIcon(icon = Icons.Default.Edit)
     }
 }

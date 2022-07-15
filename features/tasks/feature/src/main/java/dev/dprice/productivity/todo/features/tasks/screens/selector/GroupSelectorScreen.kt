@@ -17,18 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.R
 import dev.dprice.productivity.todo.features.tasks.data.model.Group
+import dev.dprice.productivity.todo.features.tasks.screens.add.group.asColour
+import dev.dprice.productivity.todo.features.tasks.screens.add.group.asImageVector
 import dev.dprice.productivity.todo.features.tasks.screens.list.ButtonLayout
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorState
 import dev.dprice.productivity.todo.ui.components.PulsingButton
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
-import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 
@@ -114,7 +116,8 @@ private fun GroupSelectorContent(
                         title = "All",
                         taskCount = count,
                         onSelect = { onSelect(null) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        icon = Icons.Default.DoneAll
                     )
                 } else {
                     GroupButton(
@@ -122,9 +125,8 @@ private fun GroupSelectorContent(
                         taskCount = count,
                         onSelect = { onSelect(group) },
                         modifier = Modifier.weight(1f),
-                        colour = group.colour?.let {
-                            Color(it.red, it.green, it.blue)
-                        } ?: DarkBlue
+                        colour = group.colour.asColour(),
+                        icon = group.icon.asImageVector()
                     )
                 }
             }
@@ -138,6 +140,7 @@ private fun GroupSelectorContent(
 @OptIn(ExperimentalComposeUiApi::class)
 private fun GroupButton(
     title: String,
+    icon: ImageVector,
     taskCount: Int,
     modifier: Modifier = Modifier,
     colour: Color = MediumBlue,
@@ -152,7 +155,7 @@ private fun GroupButton(
         Column {
             ButtonLayout(
                 contentColour = contentColour,
-                icon = Icons.Default.DoneAll,
+                icon = icon,
                 text = title
             )
 

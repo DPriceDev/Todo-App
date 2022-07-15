@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.ui.components
+package dev.dprice.productivity.todo.features.tasks.screens.add.group
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,10 +24,10 @@ import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
 import dev.dprice.productivity.todo.ui.theme.Yellow
 
 @Composable
-fun ColourPickerRow(
+fun ColourTabIcon(
     colour: Color?,
     modifier: Modifier = Modifier,
-    borderColour: Color = Yellow
+    borderColour: Color = Yellow,
 ) {
     val scale by rememberInfiniteTransition().animateFloat(
         initialValue = 1f,
@@ -48,7 +49,7 @@ fun ColourPickerRow(
                 .border(
                     width = 2.dp,
                     color = borderColour,
-                    shape = RoundedCornerShape(percent = 50)
+                    shape = CircleShape
                 )
                 .size(48.dp)
                 .scale(scale)
@@ -64,6 +65,6 @@ fun ColourPickerRow(
 @Composable
 private fun PreviewColourPickerRow() {
     TodoAppTheme {
-        ColourPickerRow(colour = Color.Red)
+        ColourTabIcon(colour = Color.Red)
     }
 }

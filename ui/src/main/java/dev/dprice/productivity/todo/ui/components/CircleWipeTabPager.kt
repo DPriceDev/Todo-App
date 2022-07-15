@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.ui.components.scaffold.TabPagerScaffold
 import dev.dprice.productivity.todo.ui.shapes.OffsetCircle
@@ -22,7 +20,7 @@ fun <T> CircleWipeTabPager(
     modifier: Modifier = Modifier,
     duration: Int = 800,
     tabOriginOffset: Dp = 0.dp,
-    tabContent: @Composable (T, Boolean) -> Offset,
+    tabContent: @Composable (T, Boolean) -> Unit,
     dropdownContent: @Composable (T) -> Unit
 ) {
     BoxWithConstraints {
@@ -105,29 +103,6 @@ fun <T> CircleWipeTabPager(
 }
 
 @Composable
-private fun <T> DropDown(
-    item: T,
-    radius: Dp,
-    originX: Float,
-    originY: Int,
-    expandHeight: Int,
-    content: @Composable (T) -> Unit
-) {
-    val height = with(LocalDensity.current) { expandHeight.toDp() }
-    Box(
-        modifier = Modifier.clip(
-            OffsetCircle(
-                radius = radius,
-                offsetX = originX.dp,
-                offsetY = -(height / 2) - with(LocalDensity.current) { originY.toDp() }
-            )
-        )
-    ) {
-        content(item)
-    }
-}
-
-@Composable
 private fun Tab(
     isSelected: Boolean,
     isExpanded: Boolean,
@@ -135,10 +110,9 @@ private fun Tab(
     originOffset: Dp,
     radius: Dp,
     height: Int,
-    content: @Composable (isSelected: Boolean) -> Offset
+    content: @Composable (isSelected: Boolean) -> Unit
 ) {
-    val pixelRadius = height / 2
-    val tabRadius = with(LocalDensity.current) { pixelRadius.dp }
+    val tabRadius = with(LocalDensity.current) { (height / 2).dp }
 
     Box {
         val builtRadius by animateDpAsState(
@@ -162,5 +136,25 @@ private fun Tab(
     }
 }
 
-val IntSize.extentRadius
-    get() = sqrt((height * height) + (width * width).toDouble()) / 2
+@Composable
+private fun <T> DropDown(
+    item: T,
+    radius: Dp,
+    originX: Float,
+    originY: Int,
+    expandHeight: Int,
+    content: @Composable (T) -> Unit
+) {
+    val height = with(LocalDensity.current) { expandHeight.toDp() }
+    Box(
+        modifier = Modifier.clip(
+            OffsetCircle(
+                radius = radius,
+                offsetX = originX.dp,
+                offsetY = -(height / 2) - with(LocalDensity.current) { originY.toDp() }
+            )
+        )
+    ) {
+        content(item)
+    }
+}

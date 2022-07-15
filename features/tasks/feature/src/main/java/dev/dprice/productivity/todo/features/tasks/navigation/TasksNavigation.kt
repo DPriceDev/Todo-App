@@ -62,7 +62,9 @@ fun NavGraphBuilder.tasksNavigation(
             route = NavLocation.TasksNewContent.route,
             listOf(navArgument("groupOnly") { defaultValue = false })
         ) { backstackEntry ->
-            NewContent()
+            NewContent(
+                closeSheet = { navController.popBackStack() }
+            )
         }
     }
 }

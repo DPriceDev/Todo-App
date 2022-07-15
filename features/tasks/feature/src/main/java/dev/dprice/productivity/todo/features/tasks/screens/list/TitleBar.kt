@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.features.tasks.screens.add.group.asColour
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TitleBarState
@@ -50,9 +51,7 @@ fun TitleBar(
 
             PulsingButton(
                 modifier = Modifier.weight(1f),
-                backgroundColour = state.currentGroup?.colour?.let {
-                    Color(it.red, it.green, it.blue)
-                } ?: DarkBlue,
+                backgroundColour = state.currentGroup?.colour?.asColour() ?: DarkBlue,
                 onClick = openGroupSelector
             ) {
                 Shimmer {

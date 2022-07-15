@@ -12,12 +12,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.dprice.productivity.todo.features.tasks.GroupItem
+import dev.dprice.productivity.todo.features.tasks.GroupsQueries
 import dev.dprice.productivity.todo.features.tasks.TaskItem
 import dev.dprice.productivity.todo.features.tasks.TasksQueries
 import dev.dprice.productivity.todo.features.tasks.data.GroupRepository
 import dev.dprice.productivity.todo.features.tasks.data.TaskRepository
 import dev.dprice.productivity.todo.features.tasks.dataimpl.TaskRepositoryImpl
 import dev.dprice.productivity.todo.features.tasks.dataimpl.TasksDatabase
+import dev.dprice.productivity.todo.features.tasks.dataimpl.converters.ColourAdapter
+import dev.dprice.productivity.todo.features.tasks.dataimpl.converters.IconAdapter
 import dev.dprice.productivity.todo.features.tasks.dataimpl.converters.LocalDateTimeAdapter
 import dev.dprice.productivity.todo.features.tasks.dataimpl.groups.GroupRepositoryImpl
 import dev.dprice.productivity.todo.platform.di.Default
@@ -47,12 +51,20 @@ object TaskDataModule {
     @Singleton
     fun provideTaskDatabase(driver: SqlDriver): TasksDatabase = TasksDatabase(
         driver,
+        GroupItem.Adapter(
+            iconAdapter = IconAdapter(),
+            colourAdapter = ColourAdapter()
+        ),
         TaskItem.Adapter(dateAdapter = LocalDateTimeAdapter())
     )
 
     @Provides
     @Singleton
     fun provideTasksQueries(database: TasksDatabase) = database.tasksQueries
+
+    @Provides
+    @Singleton
+    fun provideGroupsQueries(database: TasksDatabase) = database.groupsQueries
 
     @Provides
     @Singleton
@@ -72,8 +84,9 @@ object TaskDataModule {
     @Singleton
     fun provideGroupRepository(
         @Named("TasksDataStore") datastore: DataStore<Preferences>,
-        @IO ioDispatcher: CoroutineDispatcher
+        @IO ioDispatcher: CoroutineDispatcher,
+        queries: GroupsQueries
     ) : GroupRepository {
-        return GroupRepositoryImpl(datastore, ioDispatcher)
+        return GroupRepositoryImpl(datastore, ioDispatcher, queries)
     }
 }

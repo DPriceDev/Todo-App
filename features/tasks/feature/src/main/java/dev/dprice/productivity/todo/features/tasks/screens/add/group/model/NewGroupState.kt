@@ -1,9 +1,11 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add.group.model
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Title
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import dev.dprice.productivity.todo.features.tasks.R
+import dev.dprice.productivity.todo.features.tasks.data.model.Colour
+import dev.dprice.productivity.todo.features.tasks.data.model.Icon
 import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import dev.dprice.productivity.todo.ui.components.text.EntryField
 
@@ -15,10 +17,10 @@ data class NewGroupState(
         errorText = "Enter a title for your group."
     ),
     val buttonState: ButtonState = ButtonState.DISABLED,
-    val colour: Color? = null,
-    val colours: List<Color> = emptyList(),
-    val icon: ImageVector? = null,
-    val icons: List<ImageVector> = emptyList()
+    val colour: Colour = Colour.DEFAULT,
+    val icon: Icon = Icon.NONE,
+    val selectedTab: GroupTab? = null,
+    val isDismissed: Boolean = false
 ) {
     val isValid = title.isValid
 
@@ -26,4 +28,9 @@ data class NewGroupState(
         title = title.copy(enabled = enabled),
         buttonState = if (enabled) ButtonState.ENABLED else ButtonState.LOADING
     )
+
+    enum class GroupTab(@StringRes val titleId: Int) {
+        ICON(R.string.form_group_icon_title),
+        COLOUR(R.string.form_group_colour_title)
+    }
 }

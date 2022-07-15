@@ -7,7 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.layoutId
 import kotlinx.coroutines.launch
 
@@ -28,9 +27,10 @@ fun <T> TabPagerScaffold(
     var tabsHeight by remember { mutableStateOf(0) }
     var dropdownHeight by remember { mutableStateOf(0) }
 
-    // Keep the last selected tab for shrinking the tabs
     var lastSelected: T? by remember { mutableStateOf(selected) }
-    LaunchedEffect(key1 = selected) { selected?.let { lastSelected = it } }
+    LaunchedEffect(key1 = selected) {
+        selected?.let { lastSelected = it }
+    }
 
     Layout(
         modifier = modifier,
@@ -55,12 +55,12 @@ fun <T> TabPagerScaffold(
         }
     ) { measurables, constraints ->
         val placeables = measurables.map { measurable ->
-            val placeable = measurable.measure(constraints)
-            when (measurable.layoutId as LayoutId) {
-                LayoutId.TABS -> tabsHeight = placeable.height
-                LayoutId.DROPDOWN -> dropdownHeight = placeable.height
+             measurable.measure(constraints).apply {
+                when (measurable.layoutId as LayoutId) {
+                    LayoutId.TABS -> tabsHeight = height
+                    LayoutId.DROPDOWN -> dropdownHeight = height
+                }
             }
-            placeable
         }
 
         val width = placeables.maxBy { it.width }.width
@@ -114,34 +114,22 @@ private fun DropdownDrawer(
         )
     }
 
-    SubcomposeLayout(
+    Layout(
         modifier = Modifier
             .clipToBounds()
-            .then(modifier)
-    ) { constraints ->
-
+            .then(modifier),
+        content = { content(dropdownHeight) }
+    ) { measurables, constraints ->
         val looseConstraints = constraints.copy(minWidth = 0, minHeight = 0)
-        val measurable = subcompose(Unit) { content(dropdownHeight) }
-
-        val placeable = measurable.firstOrNull()?.measure(looseConstraints)
-
+        val placeable = measurables.firstOrNull()?.measure(looseConstraints)
         dropdownHeight = placeable?.height ?: 0
 
-        if (isExpanded && animation?.targetValue != dropdownHeight) {
-            scope.launch {
-                animation?.animateTo(
-                    dropdownHeight,
-                    animationSpec
-                )
+        when {
+            isExpanded && animation?.targetValue != dropdownHeight -> scope.launch {
+                animation?.animateTo(dropdownHeight, animationSpec)
             }
-        }
-
-        if (!isExpanded && animation?.targetValue != 0) {
-            scope.launch {
-                animation?.animateTo(
-                    0,
-                    animationSpec
-                )
+            !isExpanded && animation?.targetValue != 0 -> scope.launch {
+                animation?.animateTo(0, animationSpec)
             }
         }
 
