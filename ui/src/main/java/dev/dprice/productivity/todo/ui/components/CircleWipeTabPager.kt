@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
@@ -30,8 +29,9 @@ fun <T> CircleWipeTabPager(
     tabContent: @Composable (T, Boolean) -> Offset,
     dropdownContent: @Composable (T) -> Unit
 ) {
+    var totalHeight by remember { mutableStateOf(0) }
+
     BoxWithConstraints {
-        val overallHeight = constraints.maxHeight
         val tabWidth = maxWidth.value / (items.count() + 1)
 
         var isExpanded by remember { mutableStateOf(false) }
@@ -47,7 +47,7 @@ fun <T> CircleWipeTabPager(
         }
 
         val expandWidth = tabWidth * lastIndex
-        val expandHeight = this@BoxWithConstraints.maxHeight.value + tabOriginOffset.value
+        val expandHeight = with(LocalDensity.current) { totalHeight } + tabOriginOffset.value
         val maxRadius = sqrt((expandWidth * expandWidth) + (expandHeight * expandHeight))
 
         val offsetX = expandWidth - ((maxWidth.value) / 2)
@@ -67,28 +67,31 @@ fun <T> CircleWipeTabPager(
                 easing = if (selected == null) CubicBezierEasing(1f, 0f, 0.54f, 1f) else FastOutSlowInEasing
             ),
             modifier = modifier,
-            tabContent = { item, isSelected ->
+            tabContent = { item, isSelected, height, _ ->
                 Tab(
                     isSelected = isSelected,
                     isExpanded = isExpanded,
                     duration = duration,
                     radius = if (item == lastSelected) radius else 0.dp,
-                    originOffset = tabOriginOffset
+                    originOffset = tabOriginOffset,
+                    height = height
                 ) {
                     tabContent(item, it)
                 }
             },
-            dropdownContent = { item ->
+            dropdownContent = { item, height, tabHeight ->
                 BoxWithConstraints {
-                    val tabHeight = overallHeight - constraints.maxHeight
                     val originY = (tabHeight / 2) - with(LocalDensity.current) { tabOriginOffset.toPx().toInt() }
+
+                    totalHeight = height + tabHeight
 
                     DropDown(
                         item = item,
                         radius = radius,
                         originX = originX,
                         originY = originY,
-                        content = dropdownContent
+                        content = dropdownContent,
+                        expandHeight = height
                     )
                 }
             }
@@ -102,20 +105,18 @@ private fun <T> DropDown(
     radius: Dp,
     originX: Float,
     originY: Int,
+    expandHeight: Int,
     content: @Composable (T) -> Unit
 ) {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val height = with(LocalDensity.current) { size.height.toDp() }
+    val height = with(LocalDensity.current) { expandHeight.toDp() }
     Box(
-        modifier = Modifier
-            .onGloballyPositioned { size = it.size }
-            .clip(
-                OffsetCircle(
-                    radius = radius,
-                    offsetX = originX.dp,
-                    offsetY = -(height / 2) - with(LocalDensity.current) { originY.toDp() }
-                )
+        modifier = Modifier.clip(
+            OffsetCircle(
+                radius = radius,
+                offsetX = originX.dp,
+                offsetY = -(height / 2) - with(LocalDensity.current) { originY.toDp() }
             )
+        )
     ) {
         content(item)
     }
@@ -128,15 +129,13 @@ private fun Tab(
     duration: Int,
     originOffset: Dp,
     radius: Dp,
+    height: Int,
     content: @Composable (isSelected: Boolean) -> Offset
 ) {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val pixelRadius = with(size) { sqrt((height * height) + (width * width).toDouble()) / 2 }
+    val pixelRadius = height / 2
     val tabRadius = with(LocalDensity.current) { pixelRadius.dp }
 
-    Box(
-        modifier = Modifier.onGloballyPositioned { size = it.size / 2 }
-    ) {
+    Box {
         val builtRadius by animateDpAsState(
             targetValue = if (isSelected) tabRadius else 0.dp,
             animationSpec = tween(durationMillis = (duration * 0.5f).toInt())
