@@ -1,5 +1,6 @@
 package dev.dprice.productivity.todo.ui.components.scaffold
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,7 @@ fun <T> TabPagerScaffold(
     items: List<T>,
     selected: T?,
     modifier: Modifier = Modifier,
-    expandDuration: Int = 500,
+    animationSpec: AnimationSpec<Int> = tween(durationMillis = 500),
     tabContent: @Composable (T, Boolean) -> Unit,
     dropdownContent: @Composable (T) -> Unit
 ) {
@@ -31,7 +32,7 @@ fun <T> TabPagerScaffold(
 
         DropdownDrawer(
             isExpanded = selected != null,
-            duration = expandDuration,
+            animationSpec = animationSpec,
             content = {
                 lastSelected?.let { item -> dropdownContent(item) }
             }
@@ -46,16 +47,15 @@ private fun <T> Tabs(
     content: @Composable (T, Boolean) -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
         items.forEach { item ->
-            Box(
-                //modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center,
-            ) {
+            Box(contentAlignment = Alignment.Center) {
                 content(item, item == selected)
             }
 
@@ -67,14 +67,15 @@ private fun <T> Tabs(
 @Composable
 private fun DropdownDrawer(
     isExpanded: Boolean,
-    duration: Int,
+    animationSpec: AnimationSpec<Int>,
     content: @Composable () -> Unit
 ) {
+    // todo: does this write backwards? double render?
     var maxHeight by remember { mutableStateOf(0) }
 
     val height by animateIntAsState(
         targetValue = if (isExpanded) maxHeight else 0,
-        animationSpec = tween(durationMillis = duration)
+        animationSpec = animationSpec
     )
 
     SubcomposeLayout(

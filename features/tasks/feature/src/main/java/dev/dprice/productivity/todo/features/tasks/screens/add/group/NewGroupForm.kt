@@ -104,6 +104,7 @@ private fun GroupOptionTabs(
     CircleWipeTabPager(
         selected = selected,
         items = GroupTab.values().toList(),
+        tabOriginOffset = 12.dp,
         tabContent = { tab, isSelected ->
             GroupTab(
                 title = tab.title,
@@ -153,7 +154,7 @@ private fun GroupTab(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = title,
+            text = if(isSelected) "" else title,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
