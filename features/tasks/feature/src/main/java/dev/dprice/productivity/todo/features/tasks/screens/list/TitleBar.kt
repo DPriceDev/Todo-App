@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.asColour
+import dev.dprice.productivity.todo.features.tasks.screens.add.group.asImageVector
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TitleBarState
@@ -57,7 +58,7 @@ fun TitleBar(
                 Shimmer {
                     ButtonLayout(
                         contentColour = Color.White,
-                        icon = Icons.Default.DoneAll,
+                        icon = state.currentGroup?.icon?.asImageVector() ?: Icons.Default.DoneAll,
                         text = state.currentGroup?.name ?: "All"
                     )
                 }

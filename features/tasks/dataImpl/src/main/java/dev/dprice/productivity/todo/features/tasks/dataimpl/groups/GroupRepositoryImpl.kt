@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
@@ -34,16 +33,14 @@ class GroupRepositoryImpl @Inject constructor(
     override fun getCurrentGroup(): Flow<Group?> = datastore
         .data
         .map { it[CURRENT_GROUP_KEY] }
-        .combine(getGroups()) { id, groups ->
-            Timber.tag("Davids Log").e("group!")
-            groups.find { it.id == id }
-        }
+        .combine(getGroups()) { id, groups -> groups.find { it.id == id } }
 
     override suspend fun setCurrentGroup(id: String?) {
         withContext(ioDispatcher) {
             datastore.edit { preferences ->
-                id?.let { preferences[CURRENT_GROUP_KEY] == it }
-                    ?: preferences.remove(CURRENT_GROUP_KEY)
+                id?.let {
+                    preferences.putAll(CURRENT_GROUP_KEY to it)
+                } ?: preferences.remove(CURRENT_GROUP_KEY)
             }
         }
     }

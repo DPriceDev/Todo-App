@@ -23,5 +23,6 @@ class GetAllTaskGroupsUseCase(
                         taskGroups
                     }
                 }
+                .sortedBy { it.group?.name }
         }
 }
