@@ -1,9 +1,6 @@
 package dev.dprice.productivity.todo.ui.components
 
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.*
@@ -18,7 +15,6 @@ import dev.dprice.productivity.todo.ui.components.scaffold.TabPagerScaffold
 import dev.dprice.productivity.todo.ui.shapes.OffsetCircle
 import kotlin.math.sqrt
 
-// todo: animate duration multiplied by radius divided by height to match both animations
 @Composable
 fun <T> CircleWipeTabPager(
     items: List<T>,
@@ -29,10 +25,7 @@ fun <T> CircleWipeTabPager(
     tabContent: @Composable (T, Boolean) -> Offset,
     dropdownContent: @Composable (T) -> Unit
 ) {
-    var totalHeight by remember { mutableStateOf(0) }
-
     BoxWithConstraints {
-        val tabWidth = maxWidth.value / (items.count() + 1)
 
         var isExpanded by remember { mutableStateOf(false) }
         var lastIndex by remember { mutableStateOf(1) }
@@ -46,18 +39,7 @@ fun <T> CircleWipeTabPager(
             }
         }
 
-        val expandWidth = tabWidth * lastIndex
-        val expandHeight = with(LocalDensity.current) { totalHeight } + tabOriginOffset.value
-        val maxRadius = sqrt((expandWidth * expandWidth) + (expandHeight * expandHeight))
-
-        val offsetX = expandWidth - ((maxWidth.value) / 2)
-        val originX = if (offsetX > 0) offsetX + 16 else offsetX - 16
-
-        val radius by animateDpAsState(
-            targetValue = selected?.let { maxRadius.dp } ?: 0.dp,
-            animationSpec = tween(durationMillis = duration),
-            finishedListener = { isExpanded = it > 0.dp }
-        )
+        val radiusAnimation = remember { Animatable(0.dp, Dp.VectorConverter) }
 
         TabPagerScaffold(
             items = items,
@@ -72,7 +54,7 @@ fun <T> CircleWipeTabPager(
                     isSelected = isSelected,
                     isExpanded = isExpanded,
                     duration = duration,
-                    radius = if (item == lastSelected) radius else 0.dp,
+                    radius = if (item == lastSelected) radiusAnimation.value else 0.dp,
                     originOffset = tabOriginOffset,
                     height = height
                 ) {
@@ -80,20 +62,43 @@ fun <T> CircleWipeTabPager(
                 }
             },
             dropdownContent = { item, height, tabHeight ->
-                BoxWithConstraints {
-                    val originY = (tabHeight / 2) - with(LocalDensity.current) { tabOriginOffset.toPx().toInt() }
+                val tabWidth = maxWidth.value / (items.count() + 1)
+                val expandWidth = tabWidth * lastIndex
+                val offsetX = expandWidth - ((maxWidth.value) / 2)
 
-                    totalHeight = height + tabHeight
 
-                    DropDown(
-                        item = item,
-                        radius = radius,
-                        originX = originX,
-                        originY = originY,
-                        content = dropdownContent,
-                        expandHeight = height
-                    )
+                val originX = if (offsetX > 0) offsetX + 16 else offsetX - 16
+
+                val totalHeight = height + tabHeight
+                val expandHeight = with(LocalDensity.current) { totalHeight.toDp().value } + tabOriginOffset.value
+                val maxRadius = sqrt((expandWidth * expandWidth) + (expandHeight * expandHeight))
+
+                LaunchedEffect(key1 = selected, key2 = height) {
+                    if (selected != null && !isExpanded && radiusAnimation.targetValue != maxRadius.dp) {
+                        radiusAnimation.animateTo(
+                            targetValue = maxRadius.dp,
+                            animationSpec = tween(durationMillis = duration)
+                        )
+                        isExpanded = true
+                    } else if (selected == null && radiusAnimation.targetValue != 0.dp) {
+                        radiusAnimation.animateTo(
+                            targetValue = 0.dp,
+                            animationSpec = tween(durationMillis = duration)
+                        )
+                        isExpanded = false
+                    }
                 }
+
+                val originY = (tabHeight / 2) - with(LocalDensity.current) { tabOriginOffset.toPx().toInt() }
+
+                DropDown(
+                    item = item,
+                    radius = radiusAnimation.value,
+                    originX = originX,
+                    originY = originY,
+                    content = dropdownContent,
+                    expandHeight = height
+                )
             }
         )
     }
