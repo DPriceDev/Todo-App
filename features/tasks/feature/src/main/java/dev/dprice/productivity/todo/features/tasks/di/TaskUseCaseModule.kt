@@ -71,4 +71,16 @@ class TaskUseCaseModule {
     fun provideDeleteGroupsUseCase(
         groupRepository: GroupRepository
     ) : DeleteGroupsUseCase = DeleteGroupsUseCase(groupRepository)
+
+    @Provides
+    @Singleton
+    fun provideMarkGroupsAsDeletedUseCase(
+        groupRepository: GroupRepository
+    ) : MarkGroupsAsDeletedUseCase = MarkGroupsAsDeletedUseCase(groupRepository)
+
+    @Provides
+    @Singleton
+    fun provideMarkGroupsAsNotDeletedUseCase(
+        groupRepository: GroupRepository
+    ) : MarkGroupsAsNotDeletedUseCase = MarkGroupsAsNotDeletedUseCase(groupRepository)
 }

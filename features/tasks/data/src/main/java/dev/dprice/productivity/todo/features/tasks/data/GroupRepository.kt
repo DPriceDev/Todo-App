@@ -10,8 +10,9 @@ interface GroupRepository {
     fun getCurrentGroup() : Flow<Group?>
 
     suspend fun addGroup(group: Group)
-    fun updateGroup(group: Group)
-    fun deleteGroup(id: String)
+    suspend fun updateGroup(group: Group)
 
-    fun deleteGroups(ids: List<String>)
+    suspend fun updateGroupsDeleted(isDeleted: Boolean, ids: List<String>)
+
+    suspend fun deleteGroups(ids: List<String>)
 }

@@ -9,4 +9,6 @@ sealed class GroupSelectorAction {
     object DeleteGroups : GroupSelectorAction()
 
     object ExitEditMode : GroupSelectorAction()
+
+    object UndoDelete : GroupSelectorAction()
 }

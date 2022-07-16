@@ -50,20 +50,29 @@ class GroupRepositoryImpl @Inject constructor(
             group.id,
             group.name,
             group.colour,
-            group.icon
+            group.icon,
+            group.isDeleted
         )
         // todo: add to server
     }
 
-    override fun updateGroup(group: Group) {
-        TODO("Not yet implemented")
+    override suspend fun updateGroup(group: Group) {
+        queries.insert(
+            group.id,
+            group.name,
+            group.colour,
+            group.icon,
+            group.isDeleted
+        )
     }
 
-    override fun deleteGroup(id: String) {
-        TODO("Not yet implemented")
+    override suspend fun updateGroupsDeleted(isDeleted: Boolean, ids: List<String>) {
+        queries.transaction {
+            ids.forEach { id -> queries.updateIsDeleted(isDeleted, id) }
+        }
     }
 
-    override fun deleteGroups(ids: List<String>) {
+    override suspend fun deleteGroups(ids: List<String>) {
         queries.transaction {
             ids.forEach { queries.delete(it) }
         }
@@ -74,12 +83,10 @@ class GroupRepositoryImpl @Inject constructor(
     }
 }
 
-// todo: Update with new fields
-fun GroupItem.toGroup() : Group {
-    return Group(
-        id = id,
-        name = title,
-        colour = colour,
-        icon = icon
-    )
-}
+fun GroupItem.toGroup() = Group(
+    id = id,
+    name = title,
+    colour = colour,
+    icon = icon,
+    isDeleted = isDeleted
+)

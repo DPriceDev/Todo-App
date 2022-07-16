@@ -38,6 +38,7 @@ import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
 import dev.dprice.productivity.todo.ui.theme.MediumBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @Composable
 fun GroupSelectorScreen(
@@ -212,7 +213,9 @@ private fun PreviewGroupSelectorScreen() {
     TodoAppTheme {
         BoxWithConstraints {
             GroupSelectorScreen(
-                state = GroupSelectorState(),
+                state = GroupSelectorState(
+                    messageFlow = MutableSharedFlow()
+                ),
                 wavyState = WavyScaffoldState(
                     initialBackDropHeight = maxHeight
                 ),

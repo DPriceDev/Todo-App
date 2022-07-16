@@ -1,6 +1,8 @@
 package dev.dprice.productivity.todo.features.tasks.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,8 +21,9 @@ import dev.dprice.productivity.todo.features.tasks.screens.selector.GroupSelecto
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorAction
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.compositions.LocalSnackBarHostState
 
-@OptIn(ExperimentalMaterialNavigationApi::class)
+@OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.tasksNavigation(
     wavyState: WavyScaffoldState,
     navController: NavHostController,
@@ -53,6 +56,21 @@ fun NavGraphBuilder.tasksNavigation(
                 enabled = viewModel.state.isEditMode
             ) {
                 viewModel.onAction(GroupSelectorAction.ExitEditMode)
+            }
+
+            val localSnackBar = LocalSnackBarHostState.current
+            LaunchedEffect(key1 = viewModel.state.messageFlow) {
+
+                viewModel.state.messageFlow.collect { message ->
+                    val result = localSnackBar.showSnackbar(
+                        message,
+                        actionLabel = "Undo"
+                    )
+
+                    if (result == SnackbarResult.ActionPerformed) {
+                        viewModel.onAction(GroupSelectorAction.UndoDelete)
+                    }
+                }
             }
 
             GroupSelectorScreen(

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -22,6 +24,7 @@ import dev.dprice.productivity.todo.main.model.MainState
 import dev.dprice.productivity.todo.platform.model.NavLocation
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyBackdropScaffold
 import dev.dprice.productivity.todo.ui.components.scaffold.WavyScaffoldState
+import dev.dprice.productivity.todo.ui.compositions.LocalSnackBarHostState
 import dev.dprice.productivity.todo.ui.shapes.waveToppedShape
 import dev.dprice.productivity.todo.ui.theme.DarkBlue
 import dev.dprice.productivity.todo.ui.theme.TodoAppTheme
@@ -47,7 +50,13 @@ fun MainScreen(
         sheetContentColor = Color.White
     ) {
         Scaffold(
-           // bottomBar = { BottomNavigationBar(navController = navController) }
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = LocalSnackBarHostState.current
+                ) {
+                    Snackbar(it)
+                }
+            }
         ) { padding ->
             Box {
                 val wavyState = remember { WavyScaffoldState() }

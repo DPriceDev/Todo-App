@@ -9,9 +9,11 @@ import dev.dprice.productivity.todo.features.tasks.data.model.TaskGroup
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorAction
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.GroupSelectorState
 import dev.dprice.productivity.todo.features.tasks.screens.selector.model.SelectorGroup
-import dev.dprice.productivity.todo.features.tasks.usecase.DeleteGroupsUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.GetAllTaskGroupsUseCase
+import dev.dprice.productivity.todo.features.tasks.usecase.MarkGroupsAsDeletedUseCase
+import dev.dprice.productivity.todo.features.tasks.usecase.MarkGroupsAsNotDeletedUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.SetCurrentGroupUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -19,14 +21,21 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
+// todo: Duplicate group
+// todo: How to delete the group eventually? should call delete after snackbar?
 @HiltViewModel
 class GroupSelectorViewModel @Inject constructor(
     getTaskGroupsUseCase: GetAllTaskGroupsUseCase,
     private val setCurrentGroupUseCase: SetCurrentGroupUseCase,
-    private val deleteGroupsUseCase: DeleteGroupsUseCase
+    private val markGroupsAsDeletedUseCase: MarkGroupsAsDeletedUseCase,
+    private val markGroupsAsNotDeletedUseCase: MarkGroupsAsNotDeletedUseCase
 ): ViewModel() {
 
-    private val viewModelState = mutableStateOf(GroupSelectorState())
+    private var lastDeletedGroupIds: List<String> = emptyList()
+    private val messageFlow = MutableSharedFlow<String>()
+    private val viewModelState = mutableStateOf(
+        GroupSelectorState(messageFlow = messageFlow)
+    )
     val state: GroupSelectorState by viewModelState
 
     init {
@@ -45,6 +54,7 @@ class GroupSelectorViewModel @Inject constructor(
             }
             GroupSelectorAction.DeleteGroups -> deleteGroups()
             GroupSelectorAction.ExitEditMode -> exitEditMode()
+            GroupSelectorAction.UndoDelete -> unDeleteGroups()
         }
     }
 
@@ -92,10 +102,17 @@ class GroupSelectorViewModel @Inject constructor(
                 .filter { it.isSelected }
                 .mapNotNull { it.group?.id }
 
-            deleteGroupsUseCase(ids)
+            lastDeletedGroupIds = ids
+            markGroupsAsDeletedUseCase(ids)
+            messageFlow.emit("${ ids.size } Group${ if (ids.size > 1) "s" else "" } Deleted") // todo: Plural string?
+            exitEditMode()
+        }
+    }
 
-            // todo: Show toast?
-
+    private fun unDeleteGroups() {
+        viewModelScope.launch {
+            markGroupsAsNotDeletedUseCase(lastDeletedGroupIds)
+            lastDeletedGroupIds = emptyList()
             exitEditMode()
         }
     }

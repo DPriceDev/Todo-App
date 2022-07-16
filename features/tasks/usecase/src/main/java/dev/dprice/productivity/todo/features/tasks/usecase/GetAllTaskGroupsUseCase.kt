@@ -14,6 +14,7 @@ class GetAllTaskGroupsUseCase(
         .getGroups()
         .combine(taskRepository.getTasks()) { groups, tasks ->
             groups
+                .filter { !it.isDeleted }
                 .associateWith { group -> tasks.filter { it.groupId == group.id } }
                 .map { (group, tasks) -> TaskGroup(group, tasks) }
                 .let { taskGroups ->

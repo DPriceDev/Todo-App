@@ -5,7 +5,8 @@ CREATE TABLE groupItem (
     id TEXT NOT NULL PRIMARY KEY,
     title TEXT NOT NULL,
     colour TEXT AS Colour NOT NULL,
-    icon TEXT AS Icon NOT NULL
+    icon TEXT AS Icon NOT NULL,
+    isDeleted INTEGER AS Boolean NOT NULL DEFAULT 0
 );
 
 CREATE INDEX group_id ON groupItem(id);
@@ -14,9 +15,14 @@ selectAll:
 SELECT *
 FROM groupItem;
 
+updateIsDeleted:
+UPDATE groupItem
+SET isDeleted = ?
+WHERE id = ?;
+
 insert:
-INSERT OR REPLACE INTO groupItem(id, title, colour, icon)
-VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO groupItem(id, title, colour, icon, isDeleted)
+VALUES (?, ?, ?, ?, ?);
 
 delete:
 DELETE FROM groupItem WHERE id = ?;
