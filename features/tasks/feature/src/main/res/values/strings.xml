@@ -13,10 +13,5 @@
     <!-- New Task Form -->
     <string name="task_form_description">Example text</string>
     <string name="form_task_group_title">Task group</string>
-
-    <!-- New Group Form -->
-    <string name="group_form_description">Create a new group for your tasks! Assign it a title and an icon and colour to keep track of it easier.</string>
     <string name="form_create_button">Create</string>
-    <string name="form_group_icon_title">Group icon</string>
-    <string name="form_group_colour_title">Group colour</string>
 </resources>

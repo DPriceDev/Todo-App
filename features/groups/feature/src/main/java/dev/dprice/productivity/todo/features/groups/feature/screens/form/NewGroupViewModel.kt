@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.features.tasks.screens.add.group
+package dev.dprice.productivity.todo.features.groups.feature.screens.form
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dprice.productivity.todo.features.groups.data.model.Colour
 import dev.dprice.productivity.todo.features.groups.data.model.Icon
-import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupAction
-import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupState
-import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskTitleEntryUseCase
+import dev.dprice.productivity.todo.features.groups.feature.screens.form.model.NewGroupAction
+import dev.dprice.productivity.todo.features.groups.feature.screens.form.model.NewGroupState
+import dev.dprice.productivity.todo.features.groups.feature.usecase.UpdateGroupTitleEntryUseCase
+import dev.dprice.productivity.todo.features.groups.usecase.CreateGroupUseCase
 import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import dev.dprice.productivity.todo.ui.components.text.EntryField
 import kotlinx.coroutines.launch
@@ -17,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewGroupViewModel @Inject constructor(
-    private val updateTaskTitleEntryUseCase: UpdateTaskTitleEntryUseCase,
-    private val createGroupUseCase: dev.dprice.productivity.todo.features.groups.usecase.CreateGroupUseCase
+    private val updateTitleEntryUseCase: UpdateGroupTitleEntryUseCase,
+    private val createGroupUseCase: CreateGroupUseCase
 ): ViewModel() {
 
     private val viewModelState = mutableStateOf(NewGroupState())
@@ -36,12 +37,12 @@ class NewGroupViewModel @Inject constructor(
     }
 
     private fun updateTitleFocus(newFocus: Boolean) {
-        val entry = updateTaskTitleEntryUseCase(state.title, newFocus = newFocus)
+        val entry = updateTitleEntryUseCase(state.title,newFocus = newFocus)
         updateTitleEntry(entry)
     }
 
     private fun updateTitleText(newText: String) {
-        val entry = updateTaskTitleEntryUseCase(state.title, newTitle = newText)
+        val entry = updateTitleEntryUseCase(state.title, newTitle = newText)
         updateTitleEntry(entry)
     }
 

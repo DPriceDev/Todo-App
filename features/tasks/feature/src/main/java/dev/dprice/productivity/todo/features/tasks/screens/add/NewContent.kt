@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,8 +15,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import dev.dprice.productivity.todo.features.tasks.screens.add.group.NewGroupForm
-import dev.dprice.productivity.todo.features.tasks.screens.add.group.NewGroupViewModel
 import dev.dprice.productivity.todo.features.tasks.screens.add.habit.NewHabitForm
 import dev.dprice.productivity.todo.features.tasks.screens.add.habit.NewHabitViewModel
 import dev.dprice.productivity.todo.features.tasks.screens.add.model.FormType
@@ -103,16 +100,16 @@ private fun NewContentNavigation(
         }
 
         composable(FormType.GROUP.route) {
-            val viewModel: NewGroupViewModel = hiltViewModel()
-
-            LaunchedEffect(key1 = viewModel.state.isDismissed) {
-                if (viewModel.state.isDismissed) closeSheet()
-            }
-            
-            NewGroupForm(
-                state = viewModel.state,
-                onAction = viewModel::updateState
-            )
+//            NewGroupViewModel = hiltViewModel()
+//
+//            LaunchedEffect(key1 = viewModel.state.isDismissed) {
+//                if (viewModel.state.isDismissed) closeSheet()
+//            }
+//
+//            NewGroupForm(
+//                state = viewModel.state,
+//                onAction = viewModel::updateState
+//            )
         }
     }
 }

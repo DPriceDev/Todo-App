@@ -6,8 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.dprice.productivity.todo.features.groups.data.GroupRepository
 import dev.dprice.productivity.todo.features.groups.feature.usecase.GetAllTaskGroupsUseCase
+import dev.dprice.productivity.todo.features.groups.feature.usecase.UpdateGroupTitleEntryUseCase
 import dev.dprice.productivity.todo.features.groups.usecase.*
 import dev.dprice.productivity.todo.features.tasks.usecase.GetAllTasksUseCase
+import dev.dprice.productivity.todo.ui.usecase.UpdateEntryUseCase
 import javax.inject.Singleton
 
 @Module
@@ -66,4 +68,11 @@ object GroupUseCaseModule {
             getGroupsUseCase,
             getAllTasksUseCase
         )
+
+    @Provides
+    @Singleton
+    fun provideUpdateGroupTitleEntryUseCase(
+        updateEntryUseCase: UpdateEntryUseCase
+    ): UpdateGroupTitleEntryUseCase = UpdateGroupTitleEntryUseCase(updateEntryUseCase)
+
 }

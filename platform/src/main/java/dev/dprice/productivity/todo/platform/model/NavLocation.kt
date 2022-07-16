@@ -12,8 +12,6 @@ sealed class NavLocation(
     object Tasks : NavLocation("tasks")
     object TasksList : NavLocation("tasks/list")
     object TasksDetail : NavLocation("tasks/detail")
-    object Groups : NavLocation("group")
-    object TasksGroup : NavLocation("group/selector")
     object TasksNewContent : NavLocation("tasks/new?groupOnly={groupOnly}") {
         fun withArguments(isGroupOnly: Boolean) = "tasks/new?groupOnly=$isGroupOnly"
     }

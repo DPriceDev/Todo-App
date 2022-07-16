@@ -17,6 +17,7 @@ include(":features:tasks:data")
 include(":features:tasks:dataImpl")
 
 include(":features:groups:feature")
+include(":features:groups:api")
 include(":features:groups:usecase")
 include(":features:groups:data")
 include(":features:groups:dataImpl")

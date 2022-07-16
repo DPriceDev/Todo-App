@@ -1,11 +1,11 @@
-package dev.dprice.productivity.todo.features.tasks.screens.add.group.model
+package dev.dprice.productivity.todo.features.groups.feature.screens.form.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Title
-import dev.dprice.productivity.todo.features.tasks.R
 import dev.dprice.productivity.todo.features.groups.data.model.Colour
 import dev.dprice.productivity.todo.features.groups.data.model.Icon
+import dev.dprice.productivity.todo.features.groups.feature.R
 import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import dev.dprice.productivity.todo.ui.components.text.EntryField
 

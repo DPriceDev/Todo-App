@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import dev.dprice.productivity.todo.features.groups.api.model.GroupNavLocation
 import dev.dprice.productivity.todo.features.tasks.screens.add.NewContent
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListScreen
 import dev.dprice.productivity.todo.features.tasks.screens.list.TaskListViewModelImpl
@@ -33,7 +34,7 @@ fun NavGraphBuilder.tasksNavigation(
                 wavyState = wavyState,
                 onAction = viewModel::updateState,
                 openAddTaskSheet = { navController.navigate(NavLocation.TasksNewContent.route) },
-                openGroupSelector = { navController.navigate(NavLocation.TasksGroup.route) }
+                openGroupSelector = { navController.navigate(GroupNavLocation.GroupSelector.route) }
             )
         }
 

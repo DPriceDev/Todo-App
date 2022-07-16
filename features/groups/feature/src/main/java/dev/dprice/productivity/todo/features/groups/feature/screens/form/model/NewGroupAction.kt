@@ -1,4 +1,4 @@
-package dev.dprice.productivity.todo.features.tasks.screens.add.group.model
+package dev.dprice.productivity.todo.features.groups.feature.screens.form.model
 
 import dev.dprice.productivity.todo.features.groups.data.model.Colour
 import dev.dprice.productivity.todo.features.groups.data.model.Icon
