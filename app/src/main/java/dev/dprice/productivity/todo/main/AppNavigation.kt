@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.navigation.animation.navigation
 import dev.dprice.productivity.todo.auth.feature.navigation.authNavigation
+import dev.dprice.productivity.todo.features.groups.feature.navigation.groupsNavigation
 import dev.dprice.productivity.todo.features.settings.ui.SettingsScreen
 import dev.dprice.productivity.todo.features.settings.ui.SettingsViewModelImpl
 import dev.dprice.productivity.todo.features.tasks.navigation.tasksNavigation
@@ -34,6 +35,12 @@ fun AppNavigation(
             startDestination = NavLocation.Tasks.route
         ) {
             tasksNavigation(
+                navController = navController,
+                modifier = modifier,
+                wavyState = wavyState
+            )
+
+            groupsNavigation(
                 navController = navController,
                 modifier = modifier,
                 wavyState = wavyState

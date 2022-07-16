@@ -12,10 +12,8 @@ import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.asColour
@@ -23,6 +21,7 @@ import dev.dprice.productivity.todo.features.tasks.screens.add.group.asImageVect
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TitleBarState
+import dev.dprice.productivity.todo.ui.ButtonLayout
 import dev.dprice.productivity.todo.ui.components.SearchableTitleBar
 import dev.dprice.productivity.todo.ui.components.Shimmer
 import dev.dprice.productivity.todo.ui.components.SlideSelector
@@ -108,36 +107,6 @@ private fun DateSelector() {
             style = MaterialTheme.typography.h4
         )
         Icon(imageVector = Icons.Default.ArrowRight, contentDescription = null)
-    }
-}
-
-@Composable
-fun ButtonLayout(
-    icon: ImageVector,
-    contentColour: Color,
-    text: String
-) {
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = contentColour,
-        )
-        Text(
-            text = text,
-            color = contentColour,
-            style = MaterialTheme.typography.body1,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
     }
 }
 

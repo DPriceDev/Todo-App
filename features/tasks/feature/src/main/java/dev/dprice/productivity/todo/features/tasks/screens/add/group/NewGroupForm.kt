@@ -29,9 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dprice.productivity.todo.features.groups.data.model.Colour
+import dev.dprice.productivity.todo.features.groups.data.model.Icon
 import dev.dprice.productivity.todo.features.tasks.R
-import dev.dprice.productivity.todo.features.tasks.data.model.Colour
-import dev.dprice.productivity.todo.features.tasks.data.model.Icon
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupAction
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupState
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupState.GroupTab

@@ -1,7 +1,7 @@
 package dev.dprice.productivity.todo.features.tasks.screens.add.group.model
 
-import dev.dprice.productivity.todo.features.tasks.data.model.Colour
-import dev.dprice.productivity.todo.features.tasks.data.model.Icon
+import dev.dprice.productivity.todo.features.groups.data.model.Colour
+import dev.dprice.productivity.todo.features.groups.data.model.Icon
 
 sealed class NewGroupAction {
 

@@ -5,13 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.features.tasks.data.model.Group
+import dev.dprice.productivity.todo.features.groups.data.model.Group
 import dev.dprice.productivity.todo.features.tasks.data.model.Task
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskFilter
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListAction
 import dev.dprice.productivity.todo.features.tasks.screens.list.model.TaskListState
 import dev.dprice.productivity.todo.features.tasks.usecase.DeleteTaskUseCase
-import dev.dprice.productivity.todo.features.tasks.usecase.GetCurrentGroupUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.GetCurrentTasksUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ interface TaskListViewModel {
 @HiltViewModel
 class TaskListViewModelImpl @Inject constructor(
     getCurrentTasksUseCase: GetCurrentTasksUseCase,
-    getCurrentGroupUseCase: GetCurrentGroupUseCase,
+    getCurrentGroupUseCase: dev.dprice.productivity.todo.features.groups.usecase.GetCurrentGroupUseCase,
     private val deleteTaskListUseCase: DeleteTaskUseCase,
     private val updateTaskListUseCase: UpdateTaskUseCase
 ) : ViewModel(),

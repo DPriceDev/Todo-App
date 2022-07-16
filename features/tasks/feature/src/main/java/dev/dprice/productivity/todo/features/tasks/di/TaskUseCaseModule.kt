@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.dprice.productivity.todo.features.tasks.data.GroupRepository
+import dev.dprice.productivity.todo.features.groups.usecase.GetCurrentGroupUseCase
 import dev.dprice.productivity.todo.features.tasks.data.TaskRepository
 import dev.dprice.productivity.todo.features.tasks.usecase.*
 import javax.inject.Singleton
@@ -22,12 +22,18 @@ class TaskUseCaseModule {
     @Provides
     @Singleton
     fun bindGetTaskListUseCase(
-        taskRepository: TaskRepository,
-        groupRepository: GroupRepository
+        getAllTasksUseCase: GetAllTasksUseCase,
+        getCurrentGroupUseCase: GetCurrentGroupUseCase
     ) : GetCurrentTasksUseCase = GetCurrentTasksUseCaseImpl(
-        taskRepository,
-        groupRepository
+        getAllTasksUseCase,
+        getCurrentGroupUseCase
     )
+
+    @Provides
+    @Singleton
+    fun bindGetAllTasksUseCase(
+        taskRepository: TaskRepository
+    ) : GetAllTasksUseCase = GetAllTasksUseCase(taskRepository)
 
     @Provides
     @Singleton
@@ -40,47 +46,4 @@ class TaskUseCaseModule {
     fun bindUpdateTaskUseCase(
         taskRepository: TaskRepository
     ) : UpdateTaskUseCase = UpdateTaskUseCaseImpl(taskRepository)
-
-    @Provides
-    @Singleton
-    fun provideGetTaskGroupsUseCase(
-        groupRepository: GroupRepository,
-        taskRepository: TaskRepository
-    ) : GetAllTaskGroupsUseCase = GetAllTaskGroupsUseCase(groupRepository, taskRepository)
-
-    @Provides
-    @Singleton
-    fun provideGetCurrentTaskGroupUseCase(
-        groupRepository: GroupRepository
-    ) : GetCurrentGroupUseCase = GetCurrentGroupUseCase(groupRepository)
-
-    @Provides
-    @Singleton
-    fun provideSetCurrentTaskGroupUseCase(
-        groupRepository: GroupRepository
-    ) : SetCurrentGroupUseCase = SetCurrentGroupUseCase(groupRepository)
-
-    @Provides
-    @Singleton
-    fun provideCreateGroupUseCase(
-        groupRepository: GroupRepository
-    ) : CreateGroupUseCase = CreateGroupUseCase(groupRepository)
-
-    @Provides
-    @Singleton
-    fun provideDeleteGroupsUseCase(
-        groupRepository: GroupRepository
-    ) : DeleteGroupsUseCase = DeleteGroupsUseCase(groupRepository)
-
-    @Provides
-    @Singleton
-    fun provideMarkGroupsAsDeletedUseCase(
-        groupRepository: GroupRepository
-    ) : MarkGroupsAsDeletedUseCase = MarkGroupsAsDeletedUseCase(groupRepository)
-
-    @Provides
-    @Singleton
-    fun provideMarkGroupsAsNotDeletedUseCase(
-        groupRepository: GroupRepository
-    ) : MarkGroupsAsNotDeletedUseCase = MarkGroupsAsNotDeletedUseCase(groupRepository)
 }

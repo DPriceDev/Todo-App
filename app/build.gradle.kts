@@ -106,13 +106,15 @@ android {
 }
 
 dependencies {
-    implementation(projects.ui)
-    implementation(projects.platform)
     implementation(projects.features.tasks.feature)
     implementation(projects.features.tasks.dataImpl)
+    implementation(projects.features.groups.feature)
+    implementation(projects.features.groups.dataImpl)
     implementation(projects.features.settings.feature)
     implementation(projects.features.auth.feature)
     implementation(projects.features.auth.data)
+    implementation(projects.ui)
+    implementation(projects.platform)
     implementation(projects.core)
     androidTestImplementation(projects.ui.test)
 

@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.dprice.productivity.todo.features.tasks.data.model.Colour
-import dev.dprice.productivity.todo.features.tasks.data.model.Icon
+import dev.dprice.productivity.todo.features.groups.data.model.Colour
+import dev.dprice.productivity.todo.features.groups.data.model.Icon
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupAction
 import dev.dprice.productivity.todo.features.tasks.screens.add.group.model.NewGroupState
-import dev.dprice.productivity.todo.features.tasks.usecase.CreateGroupUseCase
 import dev.dprice.productivity.todo.features.tasks.usecase.UpdateTaskTitleEntryUseCase
 import dev.dprice.productivity.todo.ui.components.buttons.ButtonState
 import dev.dprice.productivity.todo.ui.components.text.EntryField
@@ -19,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NewGroupViewModel @Inject constructor(
     private val updateTaskTitleEntryUseCase: UpdateTaskTitleEntryUseCase,
-    private val createGroupUseCase: CreateGroupUseCase
+    private val createGroupUseCase: dev.dprice.productivity.todo.features.groups.usecase.CreateGroupUseCase
 ): ViewModel() {
 
     private val viewModelState = mutableStateOf(NewGroupState())

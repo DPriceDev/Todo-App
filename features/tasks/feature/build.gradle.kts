@@ -4,5 +4,7 @@ apply {
 
 dependencies {
     "implementation"(projects.features.tasks.usecase)
+    "implementation"(projects.features.groups.usecase)
+    "implementation"(projects.features.groups.data)
     "implementation"(projects.features.tasks.data)
 }

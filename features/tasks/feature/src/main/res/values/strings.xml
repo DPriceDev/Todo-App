@@ -10,11 +10,6 @@
     <string name="filter_weekly">Weekly</string>
     <string name="filter_monthly">Monthly</string>
 
-    <plurals name="task_count">
-        <item quantity="one">%d task</item>
-        <item quantity="other">%d tasks</item>
-    </plurals>
-
     <!-- New Task Form -->
     <string name="task_form_description">Example text</string>
     <string name="form_task_group_title">Task group</string>
